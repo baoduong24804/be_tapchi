@@ -1,23 +1,27 @@
 package com.be.tapchi.pjtapchi.api;
 
 public class ApiResponse<T> {
-    private int status;      // Trạng thái HTTP
-    private String message;  // Thông báo cho người dùng
-    private T data;          // Dữ liệu trả về
+    private boolean success;
+    private String message;
+    private T data;
 
-    public ApiResponse(int status, String message, T data) {
-        this.status = status;
+    // Constructors
+    public ApiResponse() {
+    }
+
+    public ApiResponse(boolean success, String message, T data) {
+        this.success = success;
         this.message = message;
         this.data = data;
     }
 
-    // Getter và Setter
-    public int getStatus() {
-        return status;
+    // Getters and Setters
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public String getMessage() {
@@ -36,4 +40,3 @@ public class ApiResponse<T> {
         this.data = data;
     }
 }
-
