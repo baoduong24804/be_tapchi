@@ -18,24 +18,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "taikhoan")
-public class Taikhoan {
+@Table(name = "banggiaqc")
+public class BangGiaQC {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Taikhoan_id")
-    private Long taikhoan_id;
+    @Column(name = "banggiaqc_id")
+    private Long bangGiaQCId;
 
-    @Column(name = "Username", nullable = false, unique = true, length = 100)
-    private String username;
+    @Column(name = "songay", nullable = false)
+    private Integer soNgay;
 
-    @Column(name = "Password", nullable = false, length = 100)
-    private String password;
+    @Column(name = "giatien", nullable = false)
+    private Float giaTien;
 
-    @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "tengoi", nullable = false, length = 100)
+    private String tenGoi;
+
+    @OneToMany(mappedBy = "bangGiaQC", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<QuangCao> quangCao;
+    private List<HopDong> hopDong;
 }

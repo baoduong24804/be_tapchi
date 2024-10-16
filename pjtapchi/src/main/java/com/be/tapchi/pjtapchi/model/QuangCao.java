@@ -1,38 +1,52 @@
 package com.be.tapchi.pjtapchi.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.util.Date;
+import java.util.List;
 
-@Data
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "quangcao")
 public class QuangCao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "QuangCao_id")
+    @Column(name = "quangcao_id")
     private Long quangCaoId;
 
-    @Column(name = "TenQuangCao", nullable = false, length = 255)
-    private String tenQuangCao;
+    @Column(nullable = false, length = 255, name = "tieude")
+    private String tieuDe;
 
-    @Column(name = "MoTa", length = 255)
-    private String moTa;
+    @Column(nullable = false, columnDefinition = "TEXT", name = "url")
+    private String url;
 
-    @Column(name = "HinhAnh", length = 255)
-    private String hinhAnh;
+    @Column(nullable = false, name = "status")
+    private int status;
 
-    @Column(name = "NgayBatDau")
-    private Date ngayBatDau;
+    @OneToMany(mappedBy = "quangCao", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // Khóa ngoại đến HopDong
+    @JsonIgnore
+    private List<HopDong> hopDong;
 
-    @Column(name = "NgayKetThuc")
-    private Date ngayKetThuc;
-
-    @ManyToOne
-    @JoinColumn(name = "HopDong_id", nullable = false)
-    private HopDong hopDong; // Mối quan hệ với HopDong
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Taikhoan_id", nullable = false)
+    private Taikhoan taiKhoan;
 }

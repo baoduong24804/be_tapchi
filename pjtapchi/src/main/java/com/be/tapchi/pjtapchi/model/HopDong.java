@@ -1,36 +1,46 @@
 package com.be.tapchi.pjtapchi.model;
 
-import jakarta.persistence.*;
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Date;
-import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "hopdong")
 public class HopDong {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "HopDong_id")
-    private Long hopDongId;
+    @Column(name = "hopdong_id")
+    private Long hopDongId; // Chỉnh sửa tên biến cho nhất quán
 
-    @Column(name = "TenHopDong", nullable = false, length = 255)
-    private String tenHopDong;
+    @Column(name = "ngaybatdauhd", nullable = false)
+    private LocalDate ngayBatDauHD;
 
-    @Column(name = "NgayKy")
-    private Date ngayKy;
+    @Column(name = "ngayketthuchd", nullable = false)
+    private LocalDate ngayKetThucHD;
 
-    @Column(name = "NgayKetThuc")
-    private Date ngayKetThuc;
+    @Column(name = "status", nullable = false)
+    private int status;
 
-    @Column(name = "TongGiaTri", nullable = false)
-    private Double tongGiaTri;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "quangcao_id", nullable = false)
+    private QuangCao quangCao; 
 
-    @OneToMany(mappedBy = "hopDong", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<QuangCao> quangCaoList; // Mối quan hệ 1-N với QuangCao
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "banggiaqc_id", nullable = false)
+    private BangGiaQC bangGiaQC;
 }
