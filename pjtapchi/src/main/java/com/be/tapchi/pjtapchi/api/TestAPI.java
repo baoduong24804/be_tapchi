@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.service.EmailService;
 import com.be.tapchi.pjtapchi.service.TaiKhoanService;
 
 import java.util.List;
@@ -34,5 +35,15 @@ public class TestAPI {
         }
 
     }
+
+    @Autowired
+    EmailService emailService;
+
+    @GetMapping("email")
+    public String getMethodName() {
+        emailService.sendActivationEmail("tvugiang@gmail.com", "aaa");
+        return "Thanh cong";
+    }
+    
 
 }
