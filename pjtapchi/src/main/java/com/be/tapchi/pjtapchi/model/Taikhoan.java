@@ -1,6 +1,8 @@
 package com.be.tapchi.pjtapchi.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,6 +13,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -34,6 +39,15 @@ public class Taikhoan {
 
     @Column(name = "Password", nullable = false, length = 100)
     private String password;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "taikhoan_vaitro",
+        joinColumns = @JoinColumn(name = "taikhoan_id"),
+        inverseJoinColumns = @JoinColumn(name = "vaitro_id")
+    )
+    private Set<Vaitro> vaitro = new HashSet<>();
 
     @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore

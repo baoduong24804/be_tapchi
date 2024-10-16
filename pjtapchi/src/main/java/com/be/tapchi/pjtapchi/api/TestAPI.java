@@ -8,6 +8,8 @@ import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.service.EmailService;
 import com.be.tapchi.pjtapchi.service.TaiKhoanService;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +45,11 @@ public class TestAPI {
     @GetMapping("users")
     public ResponseEntity<ApiResponse<List<Taikhoan>>> getExample() {
         List<Taikhoan> list = taiKhoanService.getAllTaiKhoans();
-        ApiResponse<List<Taikhoan>> response = new ApiResponse<>(true, "Fetch successful", list);
-
-        if (list.isEmpty()) {
+        System.out.println(list.get(0));
+        ApiResponse<List<Taikhoan>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
+        if (!list.isEmpty()) {
             
+        
             return ResponseEntity.ok().body(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
