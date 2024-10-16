@@ -8,19 +8,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "VaiTro")
+@Table(name = "Vaitro")
 public class Vaitro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "VaiTro_id")
-    private Long vaiTroId;
+    @Column(name = "vaitro_id")
+    private Long vaitroId;
 
-    @Column(name = "TenRole", nullable = false)
-    private String tenRole;
+    @Column(name = "tenrole", nullable = false)
+    private String tenrole;
+
+
 }
