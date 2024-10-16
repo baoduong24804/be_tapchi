@@ -1,38 +1,44 @@
 package com.be.tapchi.pjtapchi.model;
 
+import java.sql.Date;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.Date;
+import lombok.Setter;
 
-@Data
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "quangcao")
+@Table(name = "QuangCao")
 public class QuangCao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "QuangCao_id")
     private Long quangCaoId;
 
-    @Column(name = "TenQuangCao", nullable = false, length = 255)
-    private String tenQuangCao;
+    @Column(nullable = false, length = 255)
+    private String tieuDe;
 
-    @Column(name = "MoTa", length = 255)
-    private String moTa;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String url;
 
-    @Column(name = "HinhAnh", length = 255)
-    private String hinhAnh;
+    @Column(nullable = false)
+    private int status;
 
-    @Column(name = "NgayBatDau")
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date ngayBatDau;
 
-    @Column(name = "NgayKetThuc")
+    @Column
+    @Temporal(TemporalType.DATE)
     private Date ngayKetThuc;
 
-    @ManyToOne
-    @JoinColumn(name = "HopDong_id", nullable = false)
-    private HopDong hopDong; // Mối quan hệ với HopDong
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "taiKhoan_id", nullable = false)
+    private Taikhoan taiKhoan;
+
 }

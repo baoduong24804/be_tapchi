@@ -2,35 +2,40 @@ package com.be.tapchi.pjtapchi.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.Date;
-import java.util.List;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.Date;
+
 @Entity
-@Table(name = "hopdong")
+// @Getter
+// @Setter
+// @AllArgsConstructor
+// @NoArgsConstructor
+@Table(name = "HopDong")
 public class HopDong {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "HopDong_id")
-    private Long hopDongId;
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long hopDongId;
 
-    @Column(name = "TenHopDong", nullable = false, length = 255)
-    private String tenHopDong;
+@Column(nullable = false)
+@Temporal(TemporalType.DATE)
+private Date ngayBatDauHD;
 
-    @Column(name = "NgayKy")
-    private Date ngayKy;
+@Column(nullable = false)
+@Temporal(TemporalType.DATE)
+private Date ngayKetThucHD;
 
-    @Column(name = "NgayKetThuc")
-    private Date ngayKetThuc;
+@Column(nullable = false)
+private int status;
 
-    @Column(name = "TongGiaTri", nullable = false)
-    private Double tongGiaTri;
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "quangCao_id", nullable = false)
+private QuangCao quangCao;
 
-    @OneToMany(mappedBy = "hopDong", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<QuangCao> quangCaoList; // Mối quan hệ 1-N với QuangCao
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "bangGiaQC_id", nullable = false)
+//private BangGiaQC bangGiaQC;
 }

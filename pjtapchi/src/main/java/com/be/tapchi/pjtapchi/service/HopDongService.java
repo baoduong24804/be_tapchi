@@ -1,14 +1,16 @@
 package com.be.tapchi.pjtapchi.service;
 
-import com.be.tapchi.pjtapchi.model.HopDong;
-import com.be.tapchi.pjtapchi.repository.HopDongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.be.tapchi.pjtapchi.model.HopDong;
+import com.be.tapchi.pjtapchi.repository.HopDongRepository;
+
 import java.util.List;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class HopDongService {
 
     @Autowired
@@ -18,8 +20,8 @@ public class HopDongService {
         return hopDongRepository.findAll();
     }
 
-    public Optional<HopDong> getHopDongById(Long id) {
-        return hopDongRepository.findById(id);
+    public HopDong getHopDongById(Long id) {
+        return hopDongRepository.findById(id).orElse(null);
     }
 
     public HopDong saveHopDong(HopDong hopDong) {
