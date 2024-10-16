@@ -11,10 +11,9 @@ import com.be.tapchi.pjtapchi.repository.BangGiaQCRepository;
 
 @Service
 public class BangGiaQCService {
-
+    @Autowired
     private final BangGiaQCRepository bangGiaQCRepository;
 
-    @Autowired
     public BangGiaQCService(BangGiaQCRepository bangGiaQCRepository) {
         this.bangGiaQCRepository = bangGiaQCRepository;
     }

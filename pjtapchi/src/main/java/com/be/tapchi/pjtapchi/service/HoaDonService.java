@@ -11,10 +11,10 @@ import com.be.tapchi.pjtapchi.repository.HoaDonRepository;
 
 @Service
 public class HoaDonService {
-
+    @Autowired
     private final HoaDonRepository hoaDonRepository;
 
-    @Autowired
+
     public HoaDonService(HoaDonRepository hoaDonRepository) {
         this.hoaDonRepository = hoaDonRepository;
     }
