@@ -1,5 +1,6 @@
 package com.be.tapchi.pjtapchi.api;
 
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,12 +9,27 @@ import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.service.EmailService;
 import com.be.tapchi.pjtapchi.service.TaiKhoanService;
 
+=======
+>>>>>>> e9af9c8d07f5780231192b6132f8b77954a78bee
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.be.tapchi.pjtapchi.model.BangGiaQC;
+import com.be.tapchi.pjtapchi.model.HoaDon;
+import com.be.tapchi.pjtapchi.model.HopDong;
+import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.service.BangGiaQCService;
+import com.be.tapchi.pjtapchi.service.HoaDonService;
+import com.be.tapchi.pjtapchi.service.HopDongService;
+import com.be.tapchi.pjtapchi.service.TaiKhoanService;
+
+
 
 
 @RestController
@@ -22,6 +38,13 @@ public class TestAPI {
     @Autowired
     private TaiKhoanService taiKhoanService;
 
+    @Autowired
+    private BangGiaQCService bangGiaQCService;
+
+    @Autowired
+    private HoaDonService hoaDonService;
+    @Autowired
+    private HopDongService hpService;
     @GetMapping("users")
     public ResponseEntity<ApiResponse<List<Taikhoan>>> getExample() {
         List<Taikhoan> list = taiKhoanService.getAllTaiKhoans();
@@ -36,6 +59,7 @@ public class TestAPI {
 
     }
 
+<<<<<<< HEAD
     @Autowired
     EmailService emailService;
 
@@ -45,5 +69,32 @@ public class TestAPI {
         return "Thanh cong";
     }
     
+=======
+    @GetMapping("advertisement")
+    public List<BangGiaQC> getAll(){
+        return bangGiaQCService.findAll();
+    }
+
+    @GetMapping("hoadon")
+    public List<HoaDon> getAll2() {
+        List<HoaDon> ls = hoaDonService.findAll();
+        try {
+           if(ls != null){
+            System.out.println("Có dữ liệu");
+           }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ls;
+    }
+
+    @GetMapping("hopdong")
+    public List<HopDong> getAll3() {
+        return hpService.getAllHopDongs();
+    }
+    
+    
+    
+>>>>>>> e9af9c8d07f5780231192b6132f8b77954a78bee
 
 }
