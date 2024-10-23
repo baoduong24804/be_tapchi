@@ -7,4 +7,5 @@ import com.be.tapchi.pjtapchi.model.Vaitro;
 
 @Repository
 public interface VaiTroRepository extends JpaRepository<Vaitro, Long> {
+    Vaitro findBytenrole(String name);
 }

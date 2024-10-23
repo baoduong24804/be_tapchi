@@ -29,4 +29,11 @@ public class TaiKhoanService {
     public void deleteTaiKhoan(Long id) {
         taiKhoanRepository.deleteById(id);
     }
+    public Taikhoan findByUsername(String username){
+        return taiKhoanRepository.findByUsername(username);
+    }
+
+    public boolean existsByUsername(String username){
+        return taiKhoanRepository.existsByUsername(username);
+    }
 }

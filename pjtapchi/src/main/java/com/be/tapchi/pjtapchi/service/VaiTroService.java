@@ -11,10 +11,10 @@ import com.be.tapchi.pjtapchi.repository.VaiTroRepository;
 
 @Service
 public class VaiTroService {
-
+    @Autowired
     private final VaiTroRepository vaiTroRepository;
 
-    @Autowired
+    
     public VaiTroService(VaiTroRepository vaiTroRepository) {
         this.vaiTroRepository = vaiTroRepository;
     }
@@ -33,5 +33,9 @@ public class VaiTroService {
 
     public void deleteById(Long id) {
         vaiTroRepository.deleteById(id);
+    }
+
+    public Vaitro findByName(String name){
+        return vaiTroRepository.findBytenrole(name);
     }
 }

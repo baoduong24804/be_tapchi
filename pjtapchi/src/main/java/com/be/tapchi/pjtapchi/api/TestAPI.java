@@ -46,7 +46,7 @@ public class TestAPI {
     public ResponseEntity<ApiResponse<List<Taikhoan>>> getExample() {
         List<Taikhoan> list = taiKhoanService.getAllTaiKhoans();
         System.out.println(list.get(0));
-        ApiResponse<List<Taikhoan>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
+        ApiResponse<List<Taikhoan>> response = new ApiResponse<>(true, "Fetch user successful", list);
         if (!list.isEmpty()) {
             
         
