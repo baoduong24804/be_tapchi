@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/api/TestAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/api/TestAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/api/TestAPIBaiBao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/api/TestAPIBaiBao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/EmailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Binhluan.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Binhluan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Taikhoan.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Taikhoan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Theloai.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Theloai.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Thich.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Thich.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +42,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/baoduong24804/be_tapchi.git&quot;,
+    &quot;url&quot;: &quot;https://github.com/baoduong24804/be_tapchi&quot;,
     &quot;accountId&quot;: &quot;993a5683-a023-4d77-9143-0e92804bcab5&quot;
   }
 }</component>
@@ -71,17 +73,18 @@
     "HTTP Request.PjtapchiApplication | #2.executor": "Run",
     "HTTP Request.PjtapchiApplication | #3.executor": "Run",
     "HTTP Request.PjtapchiApplication | #4.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #6.executor": "Run",
     "JUnit.TestBaiBaoTest.executor": "Run",
     "JUnit.TestBaiBaoTest.testGetExampleReturnsEmptyList.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
+    "RequestMappingsPanelWidth0": "890",
+    "RequestMappingsPanelWidth1": "890",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.PjtapchiApplication.executor": "Run",
     "code.cleanup.on.save": "true",
-    "git-widget-placeholder": "hisu",
+    "git-widget-placeholder": "#5 on hisu",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/dev/be_tapchi",
     "node.js.detected.package.eslint": "true",
@@ -106,16 +109,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.PjtapchiApplication">
-    <configuration name="PjtapchiApplication | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" requestIdentifier="#1" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="PjtapchiApplication | #2" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="2" requestIdentifier="#2" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="PjtapchiApplication | #3" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="3" requestIdentifier="#3" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="PjtapchiApplication | #4" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="4" requestIdentifier="#4" runType="Run single request">
+    <configuration name="PjtapchiApplication | #6" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="6" requestIdentifier="#6" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="TestBaiBaoTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -143,10 +137,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.PjtapchiApplication | #2" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #3" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #4" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #1" />
+        <item itemvalue="HTTP Request.PjtapchiApplication | #6" />
         <item itemvalue="JUnit.TestBaiBaoTest" />
       </list>
     </recent_temporary>
@@ -176,6 +167,8 @@
       <workItem from="1729150889255" duration="2376000" />
       <workItem from="1729154618408" duration="1781000" />
       <workItem from="1729692310474" duration="382000" />
+      <workItem from="1729693306209" duration="715000" />
+      <workItem from="1729696369894" duration="4426000" />
     </task>
     <servers />
   </component>

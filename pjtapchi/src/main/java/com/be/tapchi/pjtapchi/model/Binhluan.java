@@ -1,5 +1,6 @@
 package com.be.tapchi.pjtapchi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -31,17 +32,19 @@ public class Binhluan {
     /**
      * The account (Taikhoan) associated with the comment.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "taikhoan_id")
-    private Taikhoan taikhoan;
+    @JsonIgnore
+    private Taikhoan taiKhoan;
 
     /**
      * The article (Baibao) associated with the comment.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "baibao_id")
+    @JsonIgnore
     private Baibao baibao;
 
     /**
@@ -61,4 +64,5 @@ public class Binhluan {
      */
     @Column(name = "status", nullable = false)
     private Integer status;
+
 }
