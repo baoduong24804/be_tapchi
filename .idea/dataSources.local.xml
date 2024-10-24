@@ -10,8 +10,8 @@
       <user-name>postgres</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="database" qname="@">
-            <node kind="schema" qname="@" />
+          <node kind="database" qname="tapchi">
+            <node kind="schema" qname="public" />
           </node>
         </introspection-scope>
       </schema-mapping>

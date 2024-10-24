@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="" />
+    <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ad7048ed-271c-4788-8367-691d8ae95e75.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ad7048ed-271c-4788-8367-691d8ae95e75.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Taikhoan.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Taikhoan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/BaiBaoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/BaiBaoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/BaibaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/BaibaoService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -89,7 +98,7 @@
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.44367817",
     "rearrange.code.on.save": "true",
-    "settings.editor.selected.configurable": "actions.on.save",
+    "settings.editor.selected.configurable": "editor.preferences.gutterIcons",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -160,6 +169,7 @@
       <workItem from="1729692310474" duration="382000" />
       <workItem from="1729693306209" duration="715000" />
       <workItem from="1729696369894" duration="4609000" />
+      <workItem from="1729759411863" duration="4310000" />
     </task>
     <servers />
   </component>

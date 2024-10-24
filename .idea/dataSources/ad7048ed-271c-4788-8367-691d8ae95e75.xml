@@ -3,15 +3,7 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.52">
     <root id="1">
       <DateStyle>dmy</DateStyle>
-      <Grants>1||-9223372036854775808|c|G
-1||10|c|G
-1||10|C|G
-1||10|T|G
-4||-9223372036854775808|c|G
-4||10|c|G
-4||10|C|G
-4||10|T|G</Grants>
-      <IntrospectionStateNumber>810</IntrospectionStateNumber>
+      <IntrospectionStateNumber>826</IntrospectionStateNumber>
       <ServerVersion>17.0</ServerVersion>
       <StartupTime>1729661839</StartupTime>
       <TimeZones>true ACDT
@@ -803,7 +795,6 @@ false Zulu
       <OwnerName>postgres</OwnerName>
     </database>
     <database id="3" parent="1" name="tapchi">
-      <Current>1</Current>
       <Grants>11||10|C|G
 11||-9223372036854775808|U|G
 11||10|U|G
@@ -813,8 +804,8 @@ false Zulu
 14751||10|C|G
 14751||-9223372036854775808|U|G
 14751||10|U|G</Grants>
-      <IntrospectionStateNumber>810</IntrospectionStateNumber>
-      <ObjectId>16609</ObjectId>
+      <IntrospectionStateNumber>826</IntrospectionStateNumber>
+      <ObjectId>16831</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
     <role id="4" parent="1" name="cc">
@@ -4244,1202 +4235,1249 @@ false Zulu
     <schema id="266" parent="3" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>810</IntrospectionStateNumber>
-      <LastIntrospectionLocalTimestamp>2024-10-23.14:22:23</LastIntrospectionLocalTimestamp>
+      <IntrospectionStateNumber>826</IntrospectionStateNumber>
+      <LastIntrospectionLocalTimestamp>2024-10-24.08:59:48</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>532</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
     </schema>
     <sequence id="267" parent="266" name="baibao_baibao_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16662</ObjectId>
+      <ObjectId>16888</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="268" parent="266" name="banggiaqc_banggiaqc_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16771</ObjectId>
+      <ObjectId>17002</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="269" parent="266" name="binhluan_binhluan_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16719</ObjectId>
+      <ObjectId>16950</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="270" parent="266" name="danhmuc_danhmuc_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16676</ObjectId>
+      <ObjectId>16907</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="271" parent="266" name="danhmucbaibao_danhmucbaibao_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16685</ObjectId>
+      <ObjectId>16916</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="272" parent="266" name="hoadon_hoadon_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16795</ObjectId>
+      <ObjectId>17026</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="273" parent="266" name="hopdong_hopdong_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16778</ObjectId>
+      <ObjectId>17009</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="274" parent="266" name="kiemduyet_kiemduyet_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16738</ObjectId>
+      <ObjectId>16969</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="275" parent="266" name="quangcao_quangcao_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16757</ObjectId>
+      <ObjectId>16988</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="276" parent="266" name="taikhoan_hopdong_taikhoan_hopdong_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16812</ObjectId>
+      <ObjectId>17043</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
     <sequence id="277" parent="266" name="taikhoan_taikhoan_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16617</ObjectId>
+      <ObjectId>16839</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <sequence id="278" parent="266" name="theloai_theloai_id_seq">
+    <sequence id="278" parent="266" name="taikhoan_vaitro_taikhoan_vaitro_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16655</ObjectId>
+      <ObjectId>16864</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <sequence id="279" parent="266" name="thich_thich_id_seq">
+    <sequence id="279" parent="266" name="theloai_theloai_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16702</ObjectId>
+      <ObjectId>16881</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <sequence id="280" parent="266" name="vaitro_vaitro_id_seq">
+    <sequence id="280" parent="266" name="thich_thich_id_seq">
       <DasType>integer|0s</DasType>
-      <ObjectId>16610</ObjectId>
+      <ObjectId>16933</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <table id="281" parent="266" name="baibao">
-      <ObjectId>16663</ObjectId>
-      <StateNumber>789</StateNumber>
+    <sequence id="281" parent="266" name="vaitro_vaitro_id_seq">
+      <DasType>integer|0s</DasType>
+      <ObjectId>16832</ObjectId>
+      <SequenceIdentity>1</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>817</StateNumber>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <table id="282" parent="266" name="baibao">
+      <ObjectId>16889</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="282" parent="266" name="banggiaqc">
-      <ObjectId>16772</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="283" parent="266" name="banggiaqc">
+      <ObjectId>17003</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="283" parent="266" name="binhluan">
-      <ObjectId>16720</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="284" parent="266" name="binhluan">
+      <ObjectId>16951</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="284" parent="266" name="danhmuc">
-      <ObjectId>16677</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="285" parent="266" name="danhmuc">
+      <ObjectId>16908</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="285" parent="266" name="danhmucbaibao">
-      <ObjectId>16686</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="286" parent="266" name="danhmucbaibao">
+      <ObjectId>16917</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="286" parent="266" name="hoadon">
-      <ObjectId>16796</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="287" parent="266" name="hoadon">
+      <ObjectId>17027</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="287" parent="266" name="hopdong">
-      <ObjectId>16779</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="288" parent="266" name="hopdong">
+      <ObjectId>17010</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="288" parent="266" name="kiemduyet">
-      <ObjectId>16739</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="289" parent="266" name="kiemduyet">
+      <ObjectId>16970</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="289" parent="266" name="quangcao">
-      <ObjectId>16758</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="290" parent="266" name="quangcao">
+      <ObjectId>16989</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="290" parent="266" name="taikhoan">
-      <ObjectId>16618</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="291" parent="266" name="taikhoan">
+      <ObjectId>16840</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="291" parent="266" name="taikhoan_hopdong">
-      <ObjectId>16813</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="292" parent="266" name="taikhoan_hopdong">
+      <ObjectId>17044</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="292" parent="266" name="taikhoan_vaitro">
-      <ObjectId>16642</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="293" parent="266" name="taikhoan_vaitro">
+      <ObjectId>16865</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="293" parent="266" name="taikhoanchitiet">
-      <ObjectId>16626</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="294" parent="266" name="taikhoanchitiet">
+      <ObjectId>16848</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="294" parent="266" name="theloai">
-      <ObjectId>16656</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="295" parent="266" name="theloai">
+      <ObjectId>16882</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="295" parent="266" name="thich">
-      <ObjectId>16703</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="296" parent="266" name="thich">
+      <ObjectId>16934</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <table id="296" parent="266" name="vaitro">
-      <ObjectId>16611</ObjectId>
-      <StateNumber>789</StateNumber>
+    <table id="297" parent="266" name="vaitro">
+      <ObjectId>16833</ObjectId>
+      <StateNumber>817</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <column id="297" parent="281" name="baibao_id">
+    <column id="298" parent="282" name="baibao_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;baibao_baibao_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16662</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16888</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="298" parent="281" name="tieude">
+    <column id="299" parent="282" name="taikhoan_id">
+      <DasType>integer|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>817</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="300" parent="282" name="tieude">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StateNumber>789</StateNumber>
-      <TypeId>1043</TypeId>
-    </column>
-    <column id="299" parent="281" name="noidung">
-      <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="300" parent="281" name="ngaydang">
+    <column id="301" parent="282" name="noidung">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>4</Position>
+      <StateNumber>817</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="302" parent="282" name="ngaydang">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <Position>5</Position>
+      <StateNumber>817</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="301" parent="281" name="url">
+    <column id="303" parent="282" name="url">
       <DasType>varchar(255)|0s</DasType>
-      <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <Position>6</Position>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="302" parent="281" name="status">
+    <column id="304" parent="282" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
-      <Position>6</Position>
-      <StateNumber>789</StateNumber>
-      <TypeId>23</TypeId>
-    </column>
-    <column id="303" parent="281" name="theloai_id">
-      <DasType>integer|0s</DasType>
       <Position>7</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="304" parent="281" name="baibao_theloai_id_fkey">
+    <column id="305" parent="282" name="theloai_id">
+      <DasType>integer|0s</DasType>
+      <Position>8</Position>
+      <StateNumber>817</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <foreign-key id="306" parent="282" name="baibao_taikhoan_id_fkey">
+      <ColNames>taikhoan_id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16897</ObjectId>
+      <StateNumber>817</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>16840</RefTableId>
+    </foreign-key>
+    <foreign-key id="307" parent="282" name="baibao_theloai_id_fkey">
       <ColNames>theloai_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16671</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>16902</ObjectId>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16656</RefTableId>
+      <RefTableId>16882</RefTableId>
     </foreign-key>
-    <index id="305" parent="281" name="baibao_pkey">
+    <index id="308" parent="282" name="baibao_pkey">
       <ColNames>baibao_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16669</ObjectId>
+      <ObjectId>16895</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="306" parent="281" name="baibao_pkey">
+    <key id="309" parent="282" name="baibao_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16670</ObjectId>
+      <ObjectId>16896</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16669</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16895</UnderlyingIndexId>
     </key>
-    <column id="307" parent="282" name="banggiaqc_id">
+    <column id="310" parent="283" name="banggiaqc_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;banggiaqc_banggiaqc_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16771</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>17002</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="308" parent="282" name="songay">
+    <column id="311" parent="283" name="songay">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="309" parent="282" name="giatien">
+    <column id="312" parent="283" name="giatien">
       <DasType>double precision|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>701</TypeId>
     </column>
-    <column id="310" parent="282" name="tengoi">
+    <column id="313" parent="283" name="tengoi">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="311" parent="282" name="banggiaqc_pkey">
+    <index id="314" parent="283" name="banggiaqc_pkey">
       <ColNames>banggiaqc_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16776</ObjectId>
+      <ObjectId>17007</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="312" parent="282" name="banggiaqc_pkey">
+    <key id="315" parent="283" name="banggiaqc_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16777</ObjectId>
+      <ObjectId>17008</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16776</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>17007</UnderlyingIndexId>
     </key>
-    <column id="313" parent="283" name="binhluan_id">
+    <column id="316" parent="284" name="binhluan_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;binhluan_binhluan_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16719</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16950</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="314" parent="283" name="taikhoan_id">
+    <column id="317" parent="284" name="taikhoan_id">
       <DasType>integer|0s</DasType>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="315" parent="283" name="baibao_id">
+    <column id="318" parent="284" name="baibao_id">
       <DasType>integer|0s</DasType>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="316" parent="283" name="thoigianbl">
+    <column id="319" parent="284" name="thoigianbl">
       <DasType>timestamp|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1114</TypeId>
     </column>
-    <column id="317" parent="283" name="noidung">
+    <column id="320" parent="284" name="noidung">
       <DasType>text|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>25</TypeId>
     </column>
-    <column id="318" parent="283" name="status">
+    <column id="321" parent="284" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="319" parent="283" name="binhluan_taikhoan_id_fkey">
+    <foreign-key id="322" parent="284" name="binhluan_taikhoan_id_fkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16728</ObjectId>
+      <ObjectId>16959</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16618</RefTableId>
+      <RefTableId>16840</RefTableId>
     </foreign-key>
-    <foreign-key id="320" parent="283" name="binhluan_baibao_id_fkey">
+    <foreign-key id="323" parent="284" name="binhluan_baibao_id_fkey">
       <ColNames>baibao_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16733</ObjectId>
+      <ObjectId>16964</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16663</RefTableId>
+      <RefTableId>16889</RefTableId>
     </foreign-key>
-    <index id="321" parent="283" name="binhluan_pkey">
+    <index id="324" parent="284" name="binhluan_pkey">
       <ColNames>binhluan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16726</ObjectId>
+      <ObjectId>16957</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="322" parent="283" name="binhluan_pkey">
+    <key id="325" parent="284" name="binhluan_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16727</ObjectId>
+      <ObjectId>16958</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16726</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16957</UnderlyingIndexId>
     </key>
-    <column id="323" parent="284" name="danhmuc_id">
+    <column id="326" parent="285" name="danhmuc_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;danhmuc_danhmuc_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16676</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16907</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="324" parent="284" name="tieude">
+    <column id="327" parent="285" name="tieude">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="325" parent="284" name="mota">
+    <column id="328" parent="285" name="mota">
       <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="326" parent="284" name="url">
+    <column id="329" parent="285" name="url">
       <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="327" parent="284" name="status">
+    <column id="330" parent="285" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="328" parent="284" name="ngaytao">
+    <column id="331" parent="285" name="ngaytao">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <index id="329" parent="284" name="danhmuc_pkey">
+    <index id="332" parent="285" name="danhmuc_pkey">
       <ColNames>danhmuc_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16683</ObjectId>
+      <ObjectId>16914</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="330" parent="284" name="danhmuc_pkey">
+    <key id="333" parent="285" name="danhmuc_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16684</ObjectId>
+      <ObjectId>16915</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16683</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16914</UnderlyingIndexId>
     </key>
-    <column id="331" parent="285" name="danhmucbaibao_id">
+    <column id="334" parent="286" name="danhmucbaibao_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;danhmucbaibao_danhmucbaibao_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16685</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16916</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="332" parent="285" name="danhmuc_id">
+    <column id="335" parent="286" name="danhmuc_id">
       <DasType>integer|0s</DasType>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="333" parent="285" name="baibao_id">
+    <column id="336" parent="286" name="baibao_id">
       <DasType>integer|0s</DasType>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="334" parent="285" name="danhmucbaibao_danhmuc_id_fkey">
+    <foreign-key id="337" parent="286" name="danhmucbaibao_danhmuc_id_fkey">
       <ColNames>danhmuc_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16692</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>16923</ObjectId>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16677</RefTableId>
+      <RefTableId>16908</RefTableId>
     </foreign-key>
-    <foreign-key id="335" parent="285" name="danhmucbaibao_baibao_id_fkey">
+    <foreign-key id="338" parent="286" name="danhmucbaibao_baibao_id_fkey">
       <ColNames>baibao_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16697</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>16928</ObjectId>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16663</RefTableId>
+      <RefTableId>16889</RefTableId>
     </foreign-key>
-    <index id="336" parent="285" name="danhmucbaibao_pkey">
+    <index id="339" parent="286" name="danhmucbaibao_pkey">
       <ColNames>danhmucbaibao_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16690</ObjectId>
+      <ObjectId>16921</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="337" parent="285" name="danhmucbaibao_pkey">
+    <key id="340" parent="286" name="danhmucbaibao_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16691</ObjectId>
+      <ObjectId>16922</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16690</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16921</UnderlyingIndexId>
     </key>
-    <column id="338" parent="286" name="hoadon_id">
+    <column id="341" parent="287" name="hoadon_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;hoadon_hoadon_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16795</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>17026</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="339" parent="286" name="taikhoan_id">
+    <column id="342" parent="287" name="taikhoan_id">
       <DasType>integer|0s</DasType>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="340" parent="286" name="hopdong_id">
+    <column id="343" parent="287" name="hopdong_id">
       <DasType>integer|0s</DasType>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="341" parent="286" name="tongtien">
+    <column id="344" parent="287" name="tongtien">
       <DasType>double precision|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>701</TypeId>
     </column>
-    <column id="342" parent="286" name="status">
+    <column id="345" parent="287" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="343" parent="286" name="ngaytao">
+    <column id="346" parent="287" name="ngaytao">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <foreign-key id="344" parent="286" name="hoadon_taikhoan_id_fkey">
+    <foreign-key id="347" parent="287" name="hoadon_taikhoan_id_fkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16802</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>17033</ObjectId>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16618</RefTableId>
+      <RefTableId>16840</RefTableId>
     </foreign-key>
-    <foreign-key id="345" parent="286" name="hoadon_hopdong_id_fkey">
+    <foreign-key id="348" parent="287" name="hoadon_hopdong_id_fkey">
       <ColNames>hopdong_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16807</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>17038</ObjectId>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16779</RefTableId>
+      <RefTableId>17010</RefTableId>
     </foreign-key>
-    <index id="346" parent="286" name="hoadon_pkey">
+    <index id="349" parent="287" name="hoadon_pkey">
       <ColNames>hoadon_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16800</ObjectId>
+      <ObjectId>17031</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="347" parent="286" name="hoadon_pkey">
+    <key id="350" parent="287" name="hoadon_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16801</ObjectId>
+      <ObjectId>17032</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16800</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>17031</UnderlyingIndexId>
     </key>
-    <column id="348" parent="287" name="hopdong_id">
+    <column id="351" parent="288" name="hopdong_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;hopdong_hopdong_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16778</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>17009</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="349" parent="287" name="ngaybatdauhd">
+    <column id="352" parent="288" name="ngaybatdauhd">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="350" parent="287" name="ngayketthuchd">
+    <column id="353" parent="288" name="ngayketthuchd">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="351" parent="287" name="status">
+    <column id="354" parent="288" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="352" parent="287" name="quangcao_id">
+    <column id="355" parent="288" name="quangcao_id">
       <DasType>integer|0s</DasType>
       <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="353" parent="287" name="banggiaqc_id">
+    <column id="356" parent="288" name="banggiaqc_id">
       <DasType>integer|0s</DasType>
       <Position>6</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="354" parent="287" name="hopdong_quangcao_id_fkey">
+    <foreign-key id="357" parent="288" name="hopdong_quangcao_id_fkey">
       <ColNames>quangcao_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16785</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>17016</ObjectId>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16758</RefTableId>
+      <RefTableId>16989</RefTableId>
     </foreign-key>
-    <foreign-key id="355" parent="287" name="hopdong_banggiaqc_id_fkey">
+    <foreign-key id="358" parent="288" name="hopdong_banggiaqc_id_fkey">
       <ColNames>banggiaqc_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16790</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>17021</ObjectId>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16772</RefTableId>
+      <RefTableId>17003</RefTableId>
     </foreign-key>
-    <index id="356" parent="287" name="hopdong_pkey">
+    <index id="359" parent="288" name="hopdong_pkey">
       <ColNames>hopdong_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16783</ObjectId>
+      <ObjectId>17014</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="357" parent="287" name="hopdong_pkey">
+    <key id="360" parent="288" name="hopdong_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16784</ObjectId>
+      <ObjectId>17015</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16783</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>17014</UnderlyingIndexId>
     </key>
-    <column id="358" parent="288" name="kiemduyet_id">
+    <column id="361" parent="289" name="kiemduyet_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;kiemduyet_kiemduyet_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16738</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16969</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="359" parent="288" name="taikhoan_id">
+    <column id="362" parent="289" name="taikhoan_id">
       <DasType>integer|0s</DasType>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="360" parent="288" name="baibao_id">
+    <column id="363" parent="289" name="baibao_id">
       <DasType>integer|0s</DasType>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="361" parent="288" name="ghichu">
+    <column id="364" parent="289" name="ghichu">
       <DasType>text|0s</DasType>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>25</TypeId>
     </column>
-    <column id="362" parent="288" name="ngaykiemduyet">
+    <column id="365" parent="289" name="ngaykiemduyet">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="363" parent="288" name="status">
+    <column id="366" parent="289" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="364" parent="288" name="kiemduyet_taikhoan_id_fkey">
+    <foreign-key id="367" parent="289" name="kiemduyet_taikhoan_id_fkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16747</ObjectId>
+      <ObjectId>16978</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16618</RefTableId>
+      <RefTableId>16840</RefTableId>
     </foreign-key>
-    <foreign-key id="365" parent="288" name="kiemduyet_baibao_id_fkey">
+    <foreign-key id="368" parent="289" name="kiemduyet_baibao_id_fkey">
       <ColNames>baibao_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16752</ObjectId>
+      <ObjectId>16983</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16663</RefTableId>
+      <RefTableId>16889</RefTableId>
     </foreign-key>
-    <index id="366" parent="288" name="kiemduyet_pkey">
+    <index id="369" parent="289" name="kiemduyet_pkey">
       <ColNames>kiemduyet_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16745</ObjectId>
+      <ObjectId>16976</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="367" parent="288" name="kiemduyet_pkey">
+    <key id="370" parent="289" name="kiemduyet_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16746</ObjectId>
+      <ObjectId>16977</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16745</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16976</UnderlyingIndexId>
     </key>
-    <column id="368" parent="289" name="quangcao_id">
+    <column id="371" parent="290" name="quangcao_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;quangcao_quangcao_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16757</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16988</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="369" parent="289" name="tieude">
+    <column id="372" parent="290" name="tieude">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="370" parent="289" name="url">
+    <column id="373" parent="290" name="url">
       <DasType>text|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>25</TypeId>
     </column>
-    <column id="371" parent="289" name="status">
+    <column id="374" parent="290" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="372" parent="289" name="taikhoan_id">
+    <column id="375" parent="290" name="taikhoan_id">
       <DasType>integer|0s</DasType>
       <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="373" parent="289" name="quangcao_taikhoan_id_fkey">
+    <foreign-key id="376" parent="290" name="quangcao_taikhoan_id_fkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16766</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>16997</ObjectId>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16618</RefTableId>
+      <RefTableId>16840</RefTableId>
     </foreign-key>
-    <index id="374" parent="289" name="quangcao_pkey">
+    <index id="377" parent="290" name="quangcao_pkey">
       <ColNames>quangcao_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16764</ObjectId>
+      <ObjectId>16995</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="375" parent="289" name="quangcao_pkey">
+    <key id="378" parent="290" name="quangcao_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16765</ObjectId>
+      <ObjectId>16996</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16764</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16995</UnderlyingIndexId>
     </key>
-    <column id="376" parent="290" name="taikhoan_id">
+    <column id="379" parent="291" name="taikhoan_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;taikhoan_taikhoan_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16617</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16839</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="377" parent="290" name="username">
+    <column id="380" parent="291" name="username">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="378" parent="290" name="password">
+    <column id="381" parent="291" name="password">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="379" parent="290" name="taikhoan_pkey">
+    <index id="382" parent="291" name="taikhoan_pkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16622</ObjectId>
+      <ObjectId>16844</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="380" parent="290" name="taikhoan_username_key">
+    <index id="383" parent="291" name="taikhoan_username_key">
       <ColNames>username</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16624</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>16846</ObjectId>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="381" parent="290" name="taikhoan_pkey">
+    <key id="384" parent="291" name="taikhoan_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16623</ObjectId>
+      <ObjectId>16845</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16622</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16844</UnderlyingIndexId>
     </key>
-    <key id="382" parent="290" name="taikhoan_username_key">
+    <key id="385" parent="291" name="taikhoan_username_key">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16625</ObjectId>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16624</UnderlyingIndexId>
+      <ObjectId>16847</ObjectId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16846</UnderlyingIndexId>
     </key>
-    <column id="383" parent="291" name="taikhoan_hopdong_id">
+    <column id="386" parent="292" name="taikhoan_hopdong_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;taikhoan_hopdong_taikhoan_hopdong_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16812</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>17043</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="384" parent="291" name="tenhopdong">
+    <column id="387" parent="292" name="tenhopdong">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="385" parent="291" name="ngaymua">
+    <column id="388" parent="292" name="ngaymua">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="386" parent="291" name="status">
+    <column id="389" parent="292" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="387" parent="291" name="taikhoan_id">
+    <column id="390" parent="292" name="taikhoan_id">
       <DasType>integer|0s</DasType>
       <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="388" parent="291" name="hopdong_id">
+    <column id="391" parent="292" name="hopdong_id">
       <DasType>integer|0s</DasType>
       <Position>6</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="389" parent="291" name="taikhoan_hopdong_taikhoan_id_fkey">
+    <foreign-key id="392" parent="292" name="taikhoan_hopdong_taikhoan_id_fkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16819</ObjectId>
+      <ObjectId>17050</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16618</RefTableId>
+      <RefTableId>16840</RefTableId>
     </foreign-key>
-    <foreign-key id="390" parent="291" name="taikhoan_hopdong_hopdong_id_fkey">
+    <foreign-key id="393" parent="292" name="taikhoan_hopdong_hopdong_id_fkey">
       <ColNames>hopdong_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16824</ObjectId>
+      <ObjectId>17055</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16779</RefTableId>
+      <RefTableId>17010</RefTableId>
     </foreign-key>
-    <index id="391" parent="291" name="taikhoan_hopdong_pkey">
+    <index id="394" parent="292" name="taikhoan_hopdong_pkey">
       <ColNames>taikhoan_hopdong_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16817</ObjectId>
+      <ObjectId>17048</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="392" parent="291" name="taikhoan_hopdong_pkey">
+    <key id="395" parent="292" name="taikhoan_hopdong_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16818</ObjectId>
+      <ObjectId>17049</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16817</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>17048</UnderlyingIndexId>
     </key>
-    <column id="393" parent="292" name="mavaitro">
+    <column id="396" parent="293" name="taikhoan_vaitro_id">
       <DasType>integer|0s</DasType>
+      <DefaultExpression>nextval(&apos;taikhoan_vaitro_taikhoan_vaitro_id_seq&apos;::regclass)</DefaultExpression>
+      <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16864</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="394" parent="292" name="taikhoan_id">
+    <column id="397" parent="293" name="vaitro_id">
       <DasType>integer|0s</DasType>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="395" parent="292" name="taikhoan_vaitro_mavaitro_fkey">
-      <ColNames>mavaitro</ColNames>
+    <column id="398" parent="293" name="taikhoan_id">
+      <DasType>integer|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>817</StateNumber>
+      <TypeId>23</TypeId>
+    </column>
+    <foreign-key id="399" parent="293" name="taikhoan_vaitro_vaitro_id_fkey">
+      <ColNames>vaitro_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16645</ObjectId>
+      <ObjectId>16871</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16611</RefTableId>
+      <RefTableId>16833</RefTableId>
     </foreign-key>
-    <foreign-key id="396" parent="292" name="taikhoan_vaitro_taikhoan_id_fkey">
+    <foreign-key id="400" parent="293" name="taikhoan_vaitro_taikhoan_id_fkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16650</ObjectId>
+      <ObjectId>16876</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16618</RefTableId>
+      <RefTableId>16840</RefTableId>
     </foreign-key>
-    <column id="397" parent="293" name="taikhoan_id">
+    <index id="401" parent="293" name="taikhoan_vaitro_pkey">
+      <ColNames>taikhoan_vaitro_id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16869</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>817</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="402" parent="293" name="taikhoan_vaitro_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>16870</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16869</UnderlyingIndexId>
+    </key>
+    <column id="403" parent="294" name="taikhoan_id">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="398" parent="293" name="hovaten">
+    <column id="404" parent="294" name="hovaten">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="399" parent="293" name="sdt">
+    <column id="405" parent="294" name="sdt">
       <DasType>varchar(15)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="400" parent="293" name="email">
+    <column id="406" parent="294" name="email">
       <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="401" parent="293" name="url">
+    <column id="407" parent="294" name="url">
       <DasType>varchar(255)|0s</DasType>
       <Position>5</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <column id="402" parent="293" name="ngaytao">
+    <column id="408" parent="294" name="ngaytao">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1082</TypeId>
     </column>
-    <column id="403" parent="293" name="status">
+    <column id="409" parent="294" name="status">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>7</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <foreign-key id="404" parent="293" name="taikhoanchitiet_taikhoan_id_fkey">
+    <foreign-key id="410" parent="294" name="taikhoanchitiet_taikhoan_id_fkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16637</ObjectId>
+      <ObjectId>16859</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16618</RefTableId>
+      <RefTableId>16840</RefTableId>
     </foreign-key>
-    <index id="405" parent="293" name="taikhoanchitiet_pkey">
+    <index id="411" parent="294" name="taikhoanchitiet_pkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16631</ObjectId>
+      <ObjectId>16853</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="406" parent="293" name="taikhoanchitiet_sdt_key">
+    <index id="412" parent="294" name="taikhoanchitiet_sdt_key">
       <ColNames>sdt</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16633</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>16855</ObjectId>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <index id="407" parent="293" name="taikhoanchitiet_email_key">
+    <index id="413" parent="294" name="taikhoanchitiet_email_key">
       <ColNames>email</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16635</ObjectId>
-      <StateNumber>789</StateNumber>
+      <ObjectId>16857</ObjectId>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="408" parent="293" name="taikhoanchitiet_pkey">
+    <key id="414" parent="294" name="taikhoanchitiet_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16632</ObjectId>
+      <ObjectId>16854</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16631</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16853</UnderlyingIndexId>
     </key>
-    <key id="409" parent="293" name="taikhoanchitiet_sdt_key">
+    <key id="415" parent="294" name="taikhoanchitiet_sdt_key">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16634</ObjectId>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16633</UnderlyingIndexId>
+      <ObjectId>16856</ObjectId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16855</UnderlyingIndexId>
     </key>
-    <key id="410" parent="293" name="taikhoanchitiet_email_key">
+    <key id="416" parent="294" name="taikhoanchitiet_email_key">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16636</ObjectId>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16635</UnderlyingIndexId>
+      <ObjectId>16858</ObjectId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16857</UnderlyingIndexId>
     </key>
-    <column id="411" parent="294" name="theloai_id">
+    <column id="417" parent="295" name="theloai_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;theloai_theloai_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16655</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16881</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="412" parent="294" name="tenloai">
+    <column id="418" parent="295" name="tenloai">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="413" parent="294" name="theloai_pkey">
+    <index id="419" parent="295" name="theloai_pkey">
       <ColNames>theloai_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16660</ObjectId>
+      <ObjectId>16886</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="414" parent="294" name="theloai_pkey">
+    <key id="420" parent="295" name="theloai_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16661</ObjectId>
+      <ObjectId>16887</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16660</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16886</UnderlyingIndexId>
     </key>
-    <column id="415" parent="295" name="thich_id">
+    <column id="421" parent="296" name="thich_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;thich_thich_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16702</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16933</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="416" parent="295" name="taikhoan_id">
+    <column id="422" parent="296" name="taikhoan_id">
       <DasType>integer|0s</DasType>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="417" parent="295" name="baibao_id">
+    <column id="423" parent="296" name="baibao_id">
       <DasType>integer|0s</DasType>
       <Position>3</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="418" parent="295" name="thoigianthich">
+    <column id="424" parent="296" name="thoigianthich">
       <DasType>timestamp|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1114</TypeId>
     </column>
-    <foreign-key id="419" parent="295" name="thich_taikhoan_id_fkey">
+    <foreign-key id="425" parent="296" name="thich_taikhoan_id_fkey">
       <ColNames>taikhoan_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16709</ObjectId>
+      <ObjectId>16940</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16618</RefTableId>
+      <RefTableId>16840</RefTableId>
     </foreign-key>
-    <foreign-key id="420" parent="295" name="thich_baibao_id_fkey">
+    <foreign-key id="426" parent="296" name="thich_baibao_id_fkey">
       <ColNames>baibao_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16714</ObjectId>
+      <ObjectId>16945</ObjectId>
       <OnDelete>cascade</OnDelete>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>16663</RefTableId>
+      <RefTableId>16889</RefTableId>
     </foreign-key>
-    <index id="421" parent="295" name="thich_pkey">
+    <index id="427" parent="296" name="thich_pkey">
       <ColNames>thich_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16707</ObjectId>
+      <ObjectId>16938</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="422" parent="295" name="thich_pkey">
+    <key id="428" parent="296" name="thich_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16708</ObjectId>
+      <ObjectId>16939</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16707</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16938</UnderlyingIndexId>
     </key>
-    <column id="423" parent="296" name="vaitro_id">
+    <column id="429" parent="297" name="vaitro_id">
       <DasType>integer|0s</DasType>
       <DefaultExpression>nextval(&apos;vaitro_vaitro_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>789</StateNumber>
-      <SequenceId>16610</SequenceId>
+      <StateNumber>817</StateNumber>
+      <SequenceId>16832</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="424" parent="296" name="tenrole">
+    <column id="430" parent="297" name="tenrole">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <TypeId>1043</TypeId>
     </column>
-    <index id="425" parent="296" name="vaitro_pkey">
+    <index id="431" parent="297" name="vaitro_pkey">
       <ColNames>vaitro_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16615</ObjectId>
+      <ObjectId>16837</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
+      <StateNumber>817</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="426" parent="296" name="vaitro_pkey">
+    <key id="432" parent="297" name="vaitro_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>16616</ObjectId>
+      <ObjectId>16838</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>789</StateNumber>
-      <UnderlyingIndexId>16615</UnderlyingIndexId>
+      <StateNumber>817</StateNumber>
+      <UnderlyingIndexId>16837</UnderlyingIndexId>
     </key>
   </database-model>
 </dataSource>

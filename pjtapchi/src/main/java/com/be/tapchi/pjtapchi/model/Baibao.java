@@ -67,4 +67,8 @@ public class Baibao {
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Thich> thich;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "taikhoan_id")
+    private Taikhoan taikhoan;
+
 }
