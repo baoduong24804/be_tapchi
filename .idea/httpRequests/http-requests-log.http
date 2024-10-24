@@ -1,0 +1,130 @@
+GET http://localhost:8081/api/email
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-17T155908.200.txt
+
+###
+
+GET http://localhost:8081/api/email
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-17T155656.200.txt
+
+###
+
+GET http://localhost:8081/api/email
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-17T155631.200.txt
+
+###
+
+GET http://localhost:8081/api/theloai
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-17T155611.404.json
+
+###
+
+GET http://localhost:8081/api/baibao
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-17T155607.500.json
+
+###
+
+GET http://localhost:8081/api/email
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-17T155053.200.txt
+
+###
+
+GET http://localhost:8081/api/email
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-16T141756.200.txt
+
+###
+
+POST http://localhost:8080/api/baibao
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-16T004604.400.json
+
+###
+
+POST http://localhost:8080/api/baibao
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-16T004325.400.json
+
+###
+
+POST http://localhost:8080/api/baibao
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-16T002620.400.json
+
+###
+
+POST http://localhost:8080/api/baibao
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-16T002609.400.json
+
+###
+
+POST http://localhost:8080/api/baibao
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-16T002205.400.json
+
+###
+
+POST http://localhost:8080/api/baibao
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-10-16T001258.500.json
+
+###
+

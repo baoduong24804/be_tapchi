@@ -1,5 +1,6 @@
 package com.be.tapchi.pjtapchi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +30,11 @@ public class Theloai {
      */
     @Column(name = "tenloai", nullable = false, length = 100)
     private String tenloai;
+
+    // Khóa ngoại đến Baibao
+
+    @OneToMany(mappedBy = "theloai", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private java.util.List<Baibao> baibao;
+
 }

@@ -1,26 +1,14 @@
 package com.be.tapchi.pjtapchi.model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -43,13 +31,45 @@ public class Taikhoan {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "taikhoan_vaitro",
-        joinColumns = @JoinColumn(name = "taikhoan_id"),
-        inverseJoinColumns = @JoinColumn(name = "vaitro_id")
+            name = "taikhoan_vaitro",
+            joinColumns = @JoinColumn(name = "taikhoan_id"),
+            inverseJoinColumns = @JoinColumn(name = "vaitro_id")
     )
     private Set<Vaitro> vaitro = new HashSet<>();
 
+    /**
+     * List of QuangCao entities associated with this Taikhoan.
+     * Mapped by the 'taiKhoan' field in the QuangCao entity.
+     * Cascade type is ALL and fetch type is EAGER.
+     */
     @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<QuangCao> quangCao;
+
+    /**
+     * List of Binhluan entities associated with this Taikhoan.
+     * Mapped by the 'taiKhoan' field in the Binhluan entity.
+     * Cascade type is ALL and fetch type is EAGER.
+     */
+    @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Binhluan> binhLuan;
+
+    /**
+     * List of Thich entities associated with this Taikhoan.
+     * Mapped by the 'taiKhoan' field in the Thich entity.
+     * Cascade type is ALL and fetch type is EAGER.
+     */
+    @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Thich> thich;
+
+    /**
+     * List of Baibao entities associated with this Taikhoan.
+     * Mapped by the 'taiKhoan' field in the Baibao entity.
+     * Cascade type is ALL and fetch type is EAGER.
+     */
+    @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Baibao> baiBao;
 }

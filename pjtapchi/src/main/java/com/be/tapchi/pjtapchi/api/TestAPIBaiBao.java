@@ -75,4 +75,28 @@ public class TestAPIBaiBao {
         bbService.saveBaibao(baibao);
         return ResponseEntity.ok().body(new ApiResponse<>(true, "Create baibao successful", null));
     }
+
+    // Create a new theloai
+    @PostMapping("taotheloai")
+    public ResponseEntity<ApiResponse<Object>> CreateTheloai(@RequestBody @Validated Theloai theloai) {
+        if (theloai == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false, "Request body is missing", null));
+        }
+        theloai.setTenloai("Test");
+        theloaiService.saveTheloai(theloai);
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Create theloai successful", null));
+    }
+
+    // Create a new binhluan
+    @PostMapping("binhluan")
+    public ResponseEntity<ApiResponse<Object>> CreateBinhluan(@RequestBody @Validated Binhluan binhluan) {
+        if (binhluan == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false, "Request body is missing", null));
+        }
+        binhluan.setNoidung("Test");
+        binhluan.setStatus(1);
+        BinhluanService.saveBinhluan(binhluan);
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Create binhluan successful", null));
+    }
+    
 }
