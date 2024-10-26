@@ -23,8 +23,10 @@ public class Thich {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "BaiBao_id", nullable = false)
-    private Baibao baiBao;
+    private Baibao baibao;
 
     @Column(name = "ThoiGianThich", nullable = false)
     private LocalDateTime thoiGianThich;
+
+
 }

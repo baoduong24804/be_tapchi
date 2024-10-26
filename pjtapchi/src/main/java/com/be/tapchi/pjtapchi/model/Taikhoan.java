@@ -72,4 +72,5 @@ public class Taikhoan {
     @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Baibao> baiBao;
+
 }
