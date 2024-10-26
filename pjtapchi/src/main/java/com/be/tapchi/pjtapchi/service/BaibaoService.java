@@ -45,6 +45,7 @@ public class BaibaoService {
         return baiBaoRepository.save(baibao);
     }
 
+
     /**
      * Xóa Baibao theo ID.
      *
@@ -54,5 +55,64 @@ public class BaibaoService {
         baiBaoRepository.deleteById(id);
     }
 
-   
+    /**
+     * Lấy danh sách Baibao theo thể loại.
+     *
+     * @param TheLoai thể loại của Baibao
+     * @return danh sách Baibao theo thể loại
+     */
+    public List<Baibao> getBaiBaoByTheLoai(String TheLoai) {
+        return baiBaoRepository.findByTheLoai(TheLoai);
+    }
+
+    /**
+     * Lấy danh sách Baibao theo tác giả.
+     *
+     * @param TacGia tác giả của Baibao
+     * @return danh sách Baibao theo tác giả
+     */
+    public List<Baibao> getBaiBaoByTacGia(String TacGia) {
+        return baiBaoRepository.findByTacGia(TacGia);
+    }
+
+    /**
+     * Lấy danh sách Baibao theo tiêu đề.
+     *
+     * @param TieuDe tiêu đề của Baibao
+     * @return danh sách Baibao theo tiêu đề
+     */
+    public List<Baibao> getBaiBaoByTieuDe(String TieuDe) {
+        return baiBaoRepository.findByTieuDeContaining(TieuDe);
+    }
+
+    /**
+     * Lấy danh sách Baibao theo trạng thái kiểm duyệt.
+     *
+     * @param KiemDuyet trạng thái kiểm duyệt của Baibao
+     * @return danh sách Baibao theo trạng thái kiểm duyệt
+     */
+    public List<Baibao> getBaiBaoByKiemDuyet(Boolean KiemDuyet) {
+        return baiBaoRepository.findByKiemDuyet(KiemDuyet);
+    }
+
+    /**
+     * Lấy danh sách Baibao theo thể loại ID
+     *
+     * @param id của thể loại
+     * @return danh sách Baibao theo thể loại ID
+     */
+    public List<Baibao> getBaiBaoByTheLoaiId(Long id) {
+        return baiBaoRepository.findByTheLoaiID(id);
+    }
+
+    /**
+     * Lấy danh sách Baibao theo tác giả id
+     *
+     * @param id của tác giả
+     * @return danh sách Baibao theo tác giả id
+     */
+    public List<Baibao> getBaiBaoByTacGiaId(Long id) {
+        return baiBaoRepository.findByTacGiaID(id);
+    }
+
 }

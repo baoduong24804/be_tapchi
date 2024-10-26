@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Represents a Baibao entity.
@@ -58,17 +57,18 @@ public class Baibao {
      * The category of the Baibao.
      */
     @ManyToOne(fetch = FetchType.EAGER)
-
     @JoinColumn(name = "theloai_id")
     private Theloai theloai;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Binhluan> binhluan;
+
+    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Thich> thich;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taikhoan_id")
     private Taikhoan taikhoan;
 
-    @ManyToMany
-    @JoinTable(name = "danhmucbaibao", joinColumns = @JoinColumn(name = "danhmuc_id"), inverseJoinColumns = @JoinColumn(name = "baibao_id"))
-    private Set<DanhMuc> danhMucs = new HashSet<>();
- 
 }

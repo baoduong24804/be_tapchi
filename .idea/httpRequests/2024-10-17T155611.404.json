@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "message": "Fetch the loai successful",
+  "data": [
+    {
+      "id": 1,
+      "tenloai": "Thể thao"
+    },
+    {
+      "id": 2,
+      "tenloai": "Công nghệ"
+    },
+    {
+      "id": 3,
+      "tenloai": "Giải trí"
+    },
+    {
+      "id": 4,
+      "tenloai": "Kinh tế"
+    },
+    {
+      "id": 5,
+      "tenloai": "Giáo dục"
+    }
+  ]
+}
