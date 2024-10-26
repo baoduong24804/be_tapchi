@@ -34,3 +34,5 @@ build/
 .vscode/
 .idea/
 /src/main/resources/application.properties
+/.vscode/
+/.idea/
