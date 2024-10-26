@@ -71,4 +71,7 @@ public class Baibao {
     @JoinColumn(name = "taikhoan_id")
     private Taikhoan taikhoan;
 
+    @ManyToMany(mappedBy = "baiBaos")
+    private List<DanhMuc> danhMucs;
+    
 }
