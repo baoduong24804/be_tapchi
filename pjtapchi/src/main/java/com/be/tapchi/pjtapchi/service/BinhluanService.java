@@ -30,9 +30,9 @@ public class BinhluanService {
      * @param id BaiBaoId
      * @return danh sách các Binhluan theo BaiBaoId
      */
-    public List<Binhluan> getBinhluanByBaiBaoId(Long id) {
-        return binhluanRepository.findByBaibao_Id(id);
-    }
+//    public List<Binhluan> getBinhluanByBaiBaoId(Long id) {
+//        return binhluanRepository.findByBaibao_Id(id);
+//    }
 
     /**
      * Lưu một Binhluan.

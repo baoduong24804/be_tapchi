@@ -24,8 +24,7 @@ public class Baibao {
      * The unique identifier for the Baibao.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "baibao_id_gen")
-    @SequenceGenerator(name = "baibao_id_gen", sequenceName = "baibao_baibao_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "baibao_id", nullable = false)
     private Integer id;
     /**
@@ -53,25 +52,6 @@ public class Baibao {
      */
     @Column(name = "status", nullable = false)
     private Integer status;
-    /**
-     * The category of the Baibao.
-     */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "theloai_id")
-    private Theloai theloai;
 
-
-    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Binhluan> binhluan;
-
-    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Thich> thich;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "taikhoan_id")
-    private Taikhoan taikhoan;
-
-    @ManyToMany(mappedBy = "baiBaos")
-    private List<DanhMuc> danhMucs;
     
 }

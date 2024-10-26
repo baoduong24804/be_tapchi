@@ -36,11 +36,4 @@ public class HopDong {
     @Column(name = "status", nullable = false)
     private int status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "quangcao_id", nullable = false)
-    private QuangCao quangCao; 
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "banggiaqc_id", nullable = false)
-    private BangGiaQC bangGiaQC;
 }

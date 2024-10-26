@@ -37,40 +37,4 @@ public class Taikhoan {
     )
     private Set<Vaitro> vaitro = new HashSet<>();
 
-    /**
-     * List of QuangCao entities associated with this Taikhoan.
-     * Mapped by the 'taiKhoan' field in the QuangCao entity.
-     * Cascade type is ALL and fetch type is EAGER.
-     */
-    @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<QuangCao> quangCao;
-
-    /**
-     * List of Binhluan entities associated with this Taikhoan.
-     * Mapped by the 'taiKhoan' field in the Binhluan entity.
-     * Cascade type is ALL and fetch type is EAGER.
-     */
-    @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Binhluan> binhLuan;
-
-    /**
-     * List of Thich entities associated with this Taikhoan.
-     * Mapped by the 'taiKhoan' field in the Thich entity.
-     * Cascade type is ALL and fetch type is EAGER.
-     */
-    @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Thich> thich;
-
-    /**
-     * List of Baibao entities associated with this Taikhoan.
-     * Mapped by the 'taiKhoan' field in the Baibao entity.
-     * Cascade type is ALL and fetch type is EAGER.
-     */
-    @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Baibao> baiBao;
-
 }

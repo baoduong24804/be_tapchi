@@ -7,5 +7,5 @@ import java.util.List;
 
 //Extending JpaRepository interface for Binhluan entity to perform CRUD operations.
 public interface BinhluanRepository extends JpaRepository<Binhluan, Long> {
-    List<Binhluan> findByBaibao_Id(Long id);
+    //List<Binhluan> findByBaibao_Id(Long id);
 }

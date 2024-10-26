@@ -42,11 +42,8 @@ public class QuangCao {
     @Column(nullable = false, name = "status")
     private int status;
 
-    @OneToMany(mappedBy = "quangCao", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // Khóa ngoại đến HopDong
-    @JsonIgnore
-    private List<HopDong> hopDong;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Taikhoan_id", nullable = false)
-    private Taikhoan taiKhoan;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "Taikhoan_id", nullable = false)
+//    private Taikhoan taiKhoan;
 }

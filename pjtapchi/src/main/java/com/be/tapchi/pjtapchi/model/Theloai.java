@@ -20,8 +20,7 @@ public class Theloai {
      * The unique identifier for the category.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "theloai_id_gen")
-    @SequenceGenerator(name = "theloai_id_gen", sequenceName = "theloai_theloai_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "theloai_id", nullable = false)
     private Integer id;
 
@@ -31,10 +30,6 @@ public class Theloai {
     @Column(name = "tenloai", nullable = false, length = 100)
     private String tenloai;
 
-    // Khóa ngoại đến Baibao
 
-    @OneToMany(mappedBy = "theloai", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
-    private java.util.List<Baibao> baibao;
 
 }

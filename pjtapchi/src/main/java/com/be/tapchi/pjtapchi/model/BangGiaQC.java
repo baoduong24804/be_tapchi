@@ -38,7 +38,5 @@ public class BangGiaQC {
     @Column(name = "tengoi", nullable = false, length = 100)
     private String tenGoi;
 
-    @OneToMany(mappedBy = "bangGiaQC", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<HopDong> hopDong;
+
 }

@@ -28,14 +28,6 @@ public class HoaDon {
     @Column(name = "hoadon_id")
     private Long hoaDonId;
 
-    @ManyToOne
-    @JoinColumn(name = "taikhoan_id")
-    private Taikhoan taiKhoan;
-
-    @ManyToOne
-    @JoinColumn(name = "hopdong_id")
-    private HopDong hopDong;
-
     @Column(name = "tongtien", nullable = false)
     private Float tongTien;
 

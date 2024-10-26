@@ -38,11 +38,5 @@ public class DanhMuc {
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
-    // @ManyToMany
-    // @JoinTable(name = "danhmucbaibao", joinColumns = @JoinColumn(name =
-    // "danhmuc_id"), inverseJoinColumns = @JoinColumn(name = "baibao_id"))
-    // private Set<Baibao> baibaos = new HashSet<>();
 
-    @ManyToMany(mappedBy = "danhMucs")
-    private Set<Baibao> baiBaos = new HashSet<>();
 }

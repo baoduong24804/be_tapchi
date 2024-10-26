@@ -14,8 +14,6 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "binhluan")
 public class Binhluan {
@@ -24,19 +22,18 @@ public class Binhluan {
      * The unique identifier for the comment.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "binhluan_id_gen")
-    @SequenceGenerator(name = "binhluan_id_gen", sequenceName = "binhluan_binhluan_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "binhluan_id", nullable = false)
     private Integer id;
 
     /**
      * The account (Taikhoan) associated with the comment.
      */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "taikhoan_id")
-    @JsonIgnore
-    private Taikhoan taiKhoan;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JoinColumn(name = "taikhoan_id")
+//    @JsonIgnore
+//    private Taikhoan taiKhoan;
 
     /**
      * The article (Baibao) associated with the comment.

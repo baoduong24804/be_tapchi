@@ -2,10 +2,12 @@ package com.be.tapchi.pjtapchi.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -17,13 +19,7 @@ public class Thich {
     @Column(name = "Thich_id")
     private Long thichId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TaiKhoan_id", nullable = false)
-    private Taikhoan taiKhoan;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "BaiBao_id", nullable = false)
-    private Baibao baibao;
 
     @Column(name = "ThoiGianThich", nullable = false)
     private LocalDateTime thoiGianThich;
