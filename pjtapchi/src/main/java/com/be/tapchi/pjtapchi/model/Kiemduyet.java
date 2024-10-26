@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 
 /**
@@ -13,52 +15,34 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "kiemduyet")
 public class Kiemduyet {
 
-    /**
-     * The unique identifier for the Kiemduyet entity.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "kiemduyet_id_gen")
     @SequenceGenerator(name = "kiemduyet_id_gen", sequenceName = "kiemduyet_kiemduyet_id_seq", allocationSize = 1)
     @Column(name = "kiemduyet_id", nullable = false)
     private Integer id;
 
-    /**
-     * The associated Taikhoan entity.
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "taikhoan_id")
+    @JoinColumn(name = "taikhoan_id") // Ensure this column exists in the database
+    @JsonIgnore // Prevent serialization
     private Taikhoan taikhoan;
 
-    /**
-     * The associated Baibao entity.
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "baibao_id")
+    @JoinColumn(name = "baibao_id") // Ensure this column exists in the database
+    @JsonIgnore // Prevent serialization
     private Baibao baibao;
 
-    /**
-     * Notes or comments related to the Kiemduyet entity.
-     */
-    @Column(name = "ghichu", length = Integer.MAX_VALUE)
+    @Column(name = "ghichu", length = 255) // Change to an appropriate length if necessary
     private String ghichu;
 
-    /**
-     * The date when the Kiemduyet was performed.
-     */
     @Column(name = "ngaykiemduyet", nullable = false)
     private LocalDate ngaykiemduyet;
 
-    /**
-     * The status of the Kiemduyet.
-     */
     @Column(name = "status", nullable = false)
     private Integer status;
 }
