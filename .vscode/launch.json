@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-PjtapchiApplication<pjtapchi>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.be.tapchi.pjtapchi.PjtapchiApplication",
+      "projectName": "pjtapchi",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

@@ -40,16 +40,19 @@ public class Taikhoan {
     @Column(name = "Password", nullable = false, length = 100)
     private String password;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "taikhoan_vaitro",
-        joinColumns = @JoinColumn(name = "taikhoan_id"),
-        inverseJoinColumns = @JoinColumn(name = "vaitro_id")
-    )
+    @JoinTable(name = "taikhoan_vaitro", joinColumns = @JoinColumn(name = "taikhoan_id"), inverseJoinColumns = @JoinColumn(name = "vaitro_id"))
     private Set<Vaitro> vaitro = new HashSet<>();
 
     @OneToMany(mappedBy = "taiKhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<QuangCao> quangCao;
+    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Baibao> baiBao;
+    // @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL, fetch =
+    // FetchType.EAGER)
+    // @JsonIgnore
+    // private List<Kiemduyet> kiemDuyet;
+
 }

@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Dịch vụ KiemduyetService cung cấp các phương thức để thao tác với đối tượng Kiemduyet.
+ * Dịch vụ KiemduyetService cung cấp các phương thức để thao tác với đối tượng
+ * Kiemduyet.
  */
 @Service
 public class KiemduyetService {
@@ -39,7 +40,8 @@ public class KiemduyetService {
      * Lấy một đối tượng Kiemduyet theo ID.
      *
      * @param id ID của đối tượng Kiemduyet cần lấy
-     * @return đối tượng Kiemduyet nếu tìm thấy, hoặc Optional rỗng nếu không tìm thấy
+     * @return đối tượng Kiemduyet nếu tìm thấy, hoặc Optional rỗng nếu không tìm
+     *         thấy
      */
     public Optional<Kiemduyet> getKiemduyetById(Long id) {
         return kiemduyetRepository.findById(id);
