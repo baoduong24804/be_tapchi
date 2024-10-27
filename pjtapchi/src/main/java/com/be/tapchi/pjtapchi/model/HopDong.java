@@ -1,19 +1,13 @@
 package com.be.tapchi.pjtapchi.model;
 
-import java.time.LocalDate;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -36,4 +30,14 @@ public class HopDong {
     @Column(name = "status", nullable = false)
     private int status;
 
+    @OneToMany(mappedBy = "hopDong", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<QuangCao> QuangCao = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "banggiaqc_id", nullable = false, insertable = false, updatable = false)
+    private Set<BangGiaQC> bangGiaQC = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hoadon_id", nullable = false)
+    private HoaDon hoaDon;
 }

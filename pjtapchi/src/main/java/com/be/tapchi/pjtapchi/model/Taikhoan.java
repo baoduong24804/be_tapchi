@@ -37,4 +37,24 @@ public class Taikhoan {
     )
     private Set<Vaitro> vaitro = new HashSet<>();
 
+    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<QuangCao> quangcao;
+
+    //    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private List<DanhMuc> danhmuc;
+//
+//    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private List<BangGiaQC> banggiaqc;
+//
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    @JsonIgnore
+    private List<Baibao> dsbaibao;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    @JsonIgnore
+    private List<HoaDon> hoadon;
+
 }

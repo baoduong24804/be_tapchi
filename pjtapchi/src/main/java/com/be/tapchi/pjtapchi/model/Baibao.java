@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Represents a Baibao entity.
@@ -53,5 +52,11 @@ public class Baibao {
     @Column(name = "status", nullable = false)
     private Integer status;
 
-    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "theloai_id", nullable = false)
+    private Theloai theloai;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Taikhoan_id", nullable = false)
+    private Taikhoan taikhoan;
 }
