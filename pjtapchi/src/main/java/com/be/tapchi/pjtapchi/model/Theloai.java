@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * Represents a category (Theloai) entity.
  */
@@ -30,6 +32,8 @@ public class Theloai {
     @Column(name = "tenloai", nullable = false, length = 100)
     private String tenloai;
 
-
+    @OneToMany(mappedBy = "theloai", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Baibao> dsbaibao;
 
 }
