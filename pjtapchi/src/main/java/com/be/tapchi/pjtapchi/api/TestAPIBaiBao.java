@@ -6,12 +6,14 @@ import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
 import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.model.HopDong;
+import com.be.tapchi.pjtapchi.model.Kiemduyet;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Theloai;
 import com.be.tapchi.pjtapchi.repository.DanhMucBaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
 import com.be.tapchi.pjtapchi.repository.HoaDonRepository;
 import com.be.tapchi.pjtapchi.repository.HopDongRepository;
+import com.be.tapchi.pjtapchi.repository.KiemduyetRepository;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
 import com.be.tapchi.pjtapchi.service.HopDongService;
@@ -43,6 +45,8 @@ public class TestAPIBaiBao {
     private DanhMucRepository danhMucRepository;
     @Autowired
     private DanhMucBaiBaoRepository danhMucBaiBaoRepository;
+    @Autowired
+    private KiemduyetRepository kiemduyetRepository;
 
     @GetMapping("baibao")
     public ResponseEntity<ApiResponse<List<Baibao>>> getExample() {
@@ -139,6 +143,18 @@ public class TestAPIBaiBao {
     public ResponseEntity<ApiResponse<List<Danhmucbaibao>>> getExample5() {
         List<Danhmucbaibao> list = danhMucBaiBaoRepository.findAll();
         ApiResponse<List<Danhmucbaibao>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
+
+        if (list.isEmpty()) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    @GetMapping("kiemduyet")
+    public ResponseEntity<ApiResponse<List<Kiemduyet>>> getExample6() {
+        List<Kiemduyet> list = kiemduyetRepository.findAll();
+        ApiResponse<List<Kiemduyet>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
 
         if (list.isEmpty()) {
             return ResponseEntity.ok().body(response);

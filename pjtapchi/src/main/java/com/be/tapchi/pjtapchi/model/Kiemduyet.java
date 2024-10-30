@@ -33,4 +33,13 @@ public class Kiemduyet {
 
     @Column(name = "status", nullable = false)
     private Integer status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "taikhoan_id")
+    private Taikhoan taikhoan;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "baibao_id")
+    private Baibao baibao;
+
 }
