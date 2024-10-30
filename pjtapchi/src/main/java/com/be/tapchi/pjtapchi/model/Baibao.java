@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Represents a Baibao entity.
@@ -56,7 +59,23 @@ public class Baibao {
     @JoinColumn(name = "theloai_id", nullable = false)
     private Theloai theloai;
 
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Taikhoan_id", nullable = false)
     private Taikhoan taikhoan;
+
+    
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "binhluan_id", nullable = false, insertable = false, updatable = false)
+    private List<Binhluan> binhluans;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "baibao_id", nullable = false, insertable = false, updatable = false)
+    private List<Thich> thichs;
+
+    // @OneToMany(fetch = FetchType.EAGER)
+    // @JoinColumn(name = "baibaos", nullable = false, insertable = false, updatable = false)
+    // private List<Baibao> baibaos;
+
+
 }

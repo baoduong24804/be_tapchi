@@ -2,8 +2,15 @@ package com.be.tapchi.pjtapchi.api;
 
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.Binhluan;
+import com.be.tapchi.pjtapchi.model.DanhMuc;
+import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
+import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.model.HopDong;
+import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Theloai;
+import com.be.tapchi.pjtapchi.repository.DanhMucBaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
+import com.be.tapchi.pjtapchi.repository.HoaDonRepository;
 import com.be.tapchi.pjtapchi.repository.HopDongRepository;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
@@ -16,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,13 +36,19 @@ public class TestAPIBaiBao {
     @Autowired
     private TheloaiService theloaiService;
     @Autowired
-    private HopDongService hopDongService;
+    private HoaDonRepository hoaDonRepository;
     @Autowired
     private HopDongRepository hopDongRepository;
+    @Autowired
+    private DanhMucRepository danhMucRepository;
+    @Autowired
+    private DanhMucBaiBaoRepository danhMucBaiBaoRepository;
 
     @GetMapping("baibao")
     public ResponseEntity<ApiResponse<List<Baibao>>> getExample() {
+        
         List<Baibao> list = bbService.getAllBaibaos();
+
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
 
         if (list.isEmpty()) {
@@ -89,6 +103,42 @@ public class TestAPIBaiBao {
     public ResponseEntity<ApiResponse<List<HopDong>>> getExample2() {
         List<HopDong> list = hopDongRepository.findAll();
         ApiResponse<List<HopDong>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
+
+        if (list.isEmpty()) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    @GetMapping("hoadon")
+    public ResponseEntity<ApiResponse<List<HoaDon>>> getExample3() {
+        List<HoaDon> list = hoaDonRepository.findAll();
+        ApiResponse<List<HoaDon>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
+
+        if (list.isEmpty()) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    @GetMapping("danhmuc")
+    public ResponseEntity<ApiResponse<List<DanhMuc>>> getExample4() {
+        List<DanhMuc> list = danhMucRepository.findAll();
+        ApiResponse<List<DanhMuc>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
+
+        if (list.isEmpty()) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    @GetMapping("danhmucbaibao")
+    public ResponseEntity<ApiResponse<List<Danhmucbaibao>>> getExample5() {
+        List<Danhmucbaibao> list = danhMucBaiBaoRepository.findAll();
+        ApiResponse<List<Danhmucbaibao>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
 
         if (list.isEmpty()) {
             return ResponseEntity.ok().body(response);

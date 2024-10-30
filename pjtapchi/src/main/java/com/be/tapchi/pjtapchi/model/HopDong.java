@@ -30,14 +30,14 @@ public class HopDong {
     @Column(name = "status", nullable = false)
     private int status;
 
-    @OneToMany(mappedBy = "hopDong", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<QuangCao> QuangCao = new HashSet<>();
+    // @OneToMany(mappedBy = "quangcao_id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    // private Set<QuangCao> QuangCao = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "banggiaqc_id", nullable = false, insertable = false, updatable = false)
-    private Set<BangGiaQC> bangGiaQC = new HashSet<>();
+    // @OneToMany(fetch = FetchType.EAGER)
+    // @JoinColumn(name = "banggiaqc_id", nullable = false, insertable = false, updatable = false)
+    // private Set<BangGiaQC> bangGiaQC = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hoadon_id", nullable = false)
-    private HoaDon hoaDon;
+    // @OneToOne(fetch = FetchType.EAGER)
+    // @JoinColumn(name = "hoadon_id", nullable = false)
+    // private HoaDon hoaDon;
 }

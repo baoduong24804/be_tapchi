@@ -22,13 +22,16 @@ public class Taikhoan {
     @Column(name = "Taikhoan_id")
     private Long taikhoan_id;
 
+    @JsonIgnore
     @Column(name = "Username", nullable = false, unique = true, length = 100)
     private String username;
 
+    @JsonIgnore
     @Column(name = "Password", nullable = false, length = 100)
     private String password;
 
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "taikhoan_vaitro",
@@ -49,6 +52,7 @@ public class Taikhoan {
 //    @JsonIgnore
 //    private List<BangGiaQC> banggiaqc;
 //
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Baibao> dsbaibao;
@@ -56,5 +60,17 @@ public class Taikhoan {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     @JsonIgnore
     private List<HoaDon> hoadon;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    @JsonIgnore
+    private List<Binhluan> binhluans;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    @JsonIgnore
+    private List<Thich> thichs;
+
+    // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    // @JsonIgnore
+    // private List<TaikhoanHopdong> taikhoanHopdongs;
 
 }

@@ -21,8 +21,11 @@ public class Thich {
 
 
 
-    @Column(name = "ThoiGianThich", nullable = false)
-    private LocalDateTime thoiGianThich;
+    @Column(name = "Thoigianthich", nullable = false)
+    private LocalDateTime thoigianthich;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Taikhoan_id", nullable = false)
+    private Taikhoan taikhoan;
 
 }

@@ -17,7 +17,7 @@ public class HoaDon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hoadon_id")
-    private Long hoaDonId;
+    private Long hoadonId;
 
     @Column(name = "tongtien", nullable = false)
     private Float tongTien;
@@ -30,10 +30,10 @@ public class HoaDon {
     private Date ngayTao;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hopdong_id", nullable = false)
+    @JoinColumn(name = "hopdongId", nullable = false)
     private HopDong hopDong;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hoadon", nullable = false)
+    @JoinColumn(name = "taikhoan_id", nullable = false)
     private Taikhoan taikhoan;
 }

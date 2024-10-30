@@ -20,7 +20,7 @@ public class DanhMuc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "danhmuc_id")
-    private Long danhMucId;
+    private Long danhmucId;
 
     @Column(name = "tieude", nullable = false, length = 255)
     private String tieuDe;
@@ -37,6 +37,13 @@ public class DanhMuc {
     @Column(name = "ngaytao", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
+
+   
+    @OneToMany(mappedBy = "danhmuc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Danhmucbaibao> danhmucbaibaos;
+
+    // @OneToMany(mappedBy = "baibao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // private List<Baibao> baibaos;
 
 
 }
