@@ -30,29 +30,16 @@ public class Taikhoan {
     @Column(name = "Password", nullable = false, length = 100)
     private String password;
 
-
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "taikhoan_vaitro",
-            joinColumns = @JoinColumn(name = "taikhoan_id"),
-            inverseJoinColumns = @JoinColumn(name = "vaitro_id")
-    )
+    @JoinTable(name = "taikhoan_vaitro", joinColumns = @JoinColumn(name = "taikhoan_id"), inverseJoinColumns = @JoinColumn(name = "vaitro_id"))
     private Set<Vaitro> vaitro = new HashSet<>();
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<QuangCao> quangcao;
 
-    //    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<DanhMuc> danhmuc;
-//
-//    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<BangGiaQC> banggiaqc;
-//
-
+    //
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Baibao> dsbaibao;
