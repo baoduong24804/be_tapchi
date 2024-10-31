@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Dịch vụ cho thực thể Theloai.
@@ -32,8 +31,8 @@ public class TheloaiService {
      * @param id ID của thể loại.
      * @return Thể loại tương ứng với ID.
      */
-    public Optional<Theloai> getTheloaiById(Long id) {
-        return theloaiRepository.findById(id);
+    public Theloai getTheloaiById(Integer id) {
+        return theloaiRepository.findTheloaiById(id);
     }
 
     /**
@@ -51,7 +50,7 @@ public class TheloaiService {
      *
      * @param id ID của thể loại cần xóa.
      */
-    public void deleteTheloai(Long id) {
+    public void deleteTheloai(Integer id) {
         theloaiRepository.deleteById(id);
     }
 }

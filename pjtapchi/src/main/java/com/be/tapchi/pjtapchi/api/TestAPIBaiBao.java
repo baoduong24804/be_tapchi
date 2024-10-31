@@ -21,6 +21,11 @@ import com.be.tapchi.pjtapchi.service.TheloaiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +55,7 @@ public class TestAPIBaiBao {
 
     @GetMapping("baibao")
     public ResponseEntity<ApiResponse<List<Baibao>>> getExample() {
-        
+
         List<Baibao> list = bbService.getAllBaibaos();
 
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
@@ -88,11 +93,10 @@ public class TestAPIBaiBao {
 
     // Create a new baibao
     @PostMapping("baibao")
-    public ResponseEntity<ApiResponse<Object>> CreateBaibao(@RequestBody
-                                                            @Validated Baibao baibao) {
+    public ResponseEntity<ApiResponse<Object>> CreateBaibao(@RequestBody @Validated Baibao baibao) {
         if (baibao == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new
-                    ApiResponse<>(false, "Request body is missing", null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(false, "Request body is missing", null));
         }
         baibao.setTieude("Test");
         baibao.setNoidung("Test");
@@ -107,6 +111,18 @@ public class TestAPIBaiBao {
     public ResponseEntity<ApiResponse<List<HopDong>>> getExample2() {
         List<HopDong> list = hopDongRepository.findAll();
         ApiResponse<List<HopDong>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
+
+        if (list.isEmpty()) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    @GetMapping("baobaotheloai/{id}")
+    public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaoByTheLoaiId(@PathVariable Integer id) {
+        List<Baibao> list = bbService.getBaibaoByTheLoaiID(id);
+        ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch baibao by the loai successful", list);
 
         if (list.isEmpty()) {
             return ResponseEntity.ok().body(response);
@@ -162,6 +178,5 @@ public class TestAPIBaiBao {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
-
 
 }

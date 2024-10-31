@@ -27,6 +27,24 @@ public class Binhluan {
     private Integer id;
 
     /**
+     * The account (Taikhoan) associated with the comment.
+     */
+    // @ManyToOne(fetch = FetchType.EAGER)
+    // @OnDelete(action = OnDeleteAction.CASCADE)
+    // @JoinColumn(name = "taikhoan_id")
+    // @JsonIgnore
+    // private Taikhoan taiKhoan;
+
+    /**
+     * The article (Baibao) associated with the comment.
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "baibao_id")
+    @JsonIgnore
+    private Baibao baibao;
+
+    /**
      * The timestamp when the comment was made.
      */
     @Column(name = "thoigianbl", nullable = false)
@@ -47,7 +65,6 @@ public class Binhluan {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Taikhoan_id", nullable = false)
     private Taikhoan taikhoan;
-
 
     // @ManyToOne(fetch = FetchType.EAGER)
     // @JoinColumn(name = "baibao_id", nullable = false)
