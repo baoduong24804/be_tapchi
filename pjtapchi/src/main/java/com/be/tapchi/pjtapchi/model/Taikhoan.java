@@ -39,7 +39,6 @@ public class Taikhoan {
     @JsonIgnore
     private List<QuangCao> quangcao;
 
-    //
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Baibao> dsbaibao;
