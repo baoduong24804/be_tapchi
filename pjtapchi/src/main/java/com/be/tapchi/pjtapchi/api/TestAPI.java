@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.be.tapchi.pjtapchi.model.BangGiaQC;
 import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.model.HopDong;
+import com.be.tapchi.pjtapchi.model.Kiemduyet;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.service.BangGiaQCService;
 import com.be.tapchi.pjtapchi.service.HoaDonService;
@@ -42,20 +43,18 @@ public class TestAPI {
    @Autowired
    private HoaDonService hoaDonService;
 
-   @GetMapping("users")
-   public ResponseEntity<ApiResponse<List<Taikhoan>>> getExample() {
-       List<Taikhoan> list = taiKhoanService.getAllTaiKhoans();
-       System.out.println(list.get(0));
-       ApiResponse<List<Taikhoan>> response = new ApiResponse<>(true, "Fetch user successful", list);
-       if (!list.isEmpty()) {
+   @GetMapping("taikhoan")
+    public ResponseEntity<ApiResponse<List<Taikhoan>>> getExample6() {
+        List<Taikhoan> list = taiKhoanService.getAllTaiKhoans();
+        ApiResponse<List<Taikhoan>> response = new ApiResponse<>(true, "Fetch baibao successful", list);
 
+        if (list.isEmpty()) {
+            return ResponseEntity.ok().body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
 
-           return ResponseEntity.ok().body(response);
-       } else {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-       }
-
-   }
 
    @Autowired
    EmailService emailService;

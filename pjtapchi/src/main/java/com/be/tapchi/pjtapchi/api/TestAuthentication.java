@@ -35,7 +35,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 @RestController
 public class TestAuthentication {
 
-@Autowired
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired

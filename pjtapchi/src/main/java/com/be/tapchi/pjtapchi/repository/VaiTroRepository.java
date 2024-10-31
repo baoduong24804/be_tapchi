@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.be.tapchi.pjtapchi.model.Vaitro;
 
 @Repository
-public interface VaiTroRepository extends JpaRepository<Vaitro, Long> {
+public interface VaiTroRepository extends JpaRepository<Vaitro, Integer> {
     Vaitro findBytenrole(String name);
 }

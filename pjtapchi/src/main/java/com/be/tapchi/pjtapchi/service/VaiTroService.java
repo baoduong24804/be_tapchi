@@ -23,7 +23,7 @@ public class VaiTroService {
         return vaiTroRepository.findAll();
     }
 
-    public Optional<Vaitro> findById(Long id) {
+    public Optional<Vaitro> findById(Integer id) {
         return vaiTroRepository.findById(id);
     }
 
@@ -31,7 +31,7 @@ public class VaiTroService {
         return vaiTroRepository.save(vaiTro);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         vaiTroRepository.deleteById(id);
     }
 
