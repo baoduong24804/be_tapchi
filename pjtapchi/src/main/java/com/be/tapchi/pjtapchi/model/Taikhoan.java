@@ -22,12 +22,12 @@ public class Taikhoan {
     @Column(name = "Taikhoan_id")
     private Long taikhoan_id;
 
-    @JsonIgnore
-    @Column(name = "Username", nullable = false, unique = true, length = 100)
+    // @JsonIgnore
+    @Column(name = "Username", unique = true, length = 100)
     private String username;
 
     @JsonIgnore
-    @Column(name = "Password", nullable = false, length = 100)
+    @Column(name = "Password", length = 100)
     private String password;
 
     @JsonIgnore
@@ -38,6 +38,15 @@ public class Taikhoan {
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<QuangCao> quangcao;
+
+    // @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    // @JsonIgnore
+    // private List<DanhMuc> danhmuc;
+    //
+    // @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    // @JsonIgnore
+    // private List<BangGiaQC> banggiaqc;
+    //
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     @JsonIgnore
@@ -54,6 +63,10 @@ public class Taikhoan {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Thich> thichs;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    private Taikhoanchitiet taikhoanchitiet;
 
     // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     // @JsonIgnore

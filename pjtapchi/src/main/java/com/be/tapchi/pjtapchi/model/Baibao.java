@@ -42,7 +42,7 @@ public class Baibao {
     /**
      * The date the Baibao was published.
      */
-    @Column(name = "ngaydang", nullable = false)
+    @Column(name = "ngaydang")
     private LocalDate ngaydang;
     /**
      * The URL of the Baibao.
@@ -52,25 +52,25 @@ public class Baibao {
     /**
      * The status of the Baibao.
      */
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private Integer status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "theloai_id", nullable = false)
+    @JoinColumn(name = "theloai_id")
     private Theloai theloai;
 
     //@JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Taikhoan_id", nullable = false)
+    @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
     
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "binhluan_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "binhluan_id")
     private List<Binhluan> binhluans;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "baibao_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "baibao_id")
     private List<Thich> thichs;
 
     // @OneToMany(fetch = FetchType.EAGER)

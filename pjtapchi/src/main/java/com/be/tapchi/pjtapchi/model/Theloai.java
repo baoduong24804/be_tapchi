@@ -23,16 +23,16 @@ public class Theloai {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "theloai_id", nullable = false)
+    @Column(name = "theloai_id")
     private Integer id;
 
     /**
      * The name of the category.
      */
-    @Column(name = "tenloai", nullable = false, length = 100)
+    @Column(name = "tenloai")
     private String tenloai;
 
-    @OneToMany(mappedBy = "theloai", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "theloai", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Baibao> dsbaibao;
 
