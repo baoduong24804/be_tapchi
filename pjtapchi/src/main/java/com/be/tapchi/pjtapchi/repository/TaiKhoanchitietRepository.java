@@ -10,5 +10,8 @@ public interface TaiKhoanchitietRepository extends JpaRepository<Taikhoanchitiet
     boolean existsByEmail(String email);
 
     Taikhoanchitiet findByEmail(String email);
+
+    boolean existsBySdt(String sdt);
+
     
 }

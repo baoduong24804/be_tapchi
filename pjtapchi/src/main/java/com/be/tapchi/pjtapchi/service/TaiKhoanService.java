@@ -56,6 +56,8 @@ public class TaiKhoanService {
         return taiKhoanRepository.findByUsername(username);
     }
 
+    
+
     public Taikhoan findByEmail(String email){
         Taikhoanchitiet tkct = taiKhoanchitietRepository.findByEmail(email);
         if(tkct == null){
@@ -73,6 +75,13 @@ public class TaiKhoanService {
 
     public boolean existsByEmail(String email){
         if(taiKhoanchitietRepository.existsByEmail(email)){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean existsBySdt(String sdt){
+        if(taiKhoanchitietRepository.existsBySdt(sdt)){
             return true;
         }
         return false;

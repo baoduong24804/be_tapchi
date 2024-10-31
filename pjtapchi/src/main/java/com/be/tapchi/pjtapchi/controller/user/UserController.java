@@ -19,6 +19,7 @@ import com.be.tapchi.pjtapchi.userRole.RoleName;
 
 import jakarta.validation.Valid;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -131,6 +132,21 @@ public class UserController {
                 api.setMessage("Username ton tai");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(api);
             }
+            // kiem tra email
+            if (taiKhoanService.existsByEmail(userRegister.getEmail().trim())) {
+                api.setSuccess(false);
+                api.setMessage("Email da ton tai");
+                api.setData(null);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
+            }
+
+            // kiem tra sdt
+            if (taiKhoanService.existsBySdt(userRegister.getSdt().trim())) {
+                api.setSuccess(false);
+                api.setMessage("Sdt da ton tai");
+                api.setData(null);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
+            }
 
             Taikhoan tk = new Taikhoan();
             tk.setUsername(userRegister.getUsername());
@@ -144,18 +160,12 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
             }
             tk.setVaitro(Set.of(vt));
-            // kiem tra email
-            if (taiKhoanService.existsByEmail(userRegister.getEmail().trim())) {
-                api.setSuccess(false);
-                api.setMessage("Email da ton tai");
-                api.setData(null);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
-            }
+            
             // tai khoan chi tiet
             Taikhoanchitiet tkct = new Taikhoanchitiet();
             tkct.setHovaten(userRegister.getHovaten());
             tkct.setEmail(userRegister.getEmail());
-            tkct.setNgaytao(userRegister.getNgaytao());
+            tkct.setNgaytao(new Date());
             tkct.setSdt(userRegister.getSdt());
             tkct.setUrl(userRegister.getUrl());
             tkct.setStatus(1);

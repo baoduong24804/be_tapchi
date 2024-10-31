@@ -32,6 +32,6 @@ public class UserRegister {
     @NotNull(message = "Email không được để trống")
     private String email;
 
-    @NotNull(message = "Ngày tạo không được để trống")
-    private Date ngaytao;
+    // @NotNull(message = "Ngày tạo không được để trống")
+    // private Date ngaytao;
 }

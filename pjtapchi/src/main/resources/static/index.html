@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>API Documentation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .api-card {
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+        .method-get {
+            border-left-color: #0d6efd;
+        }
+        .method-post {
+            border-left-color: #198754;
+        }
+        .method-badge {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+        }
+        .code-endpoint {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4 text-center">API Documentation</h1>
+            </div>
+        </div>
+
+        <!-- Lấy thông tin người dùng -->
+        <div class="card api-card method-get mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-primary method-badge me-3">GET</span>
+                    <h5 class="card-title mb-0">Lấy thông tin người dùng</h5>
+                </div>
+                <div class="code-endpoint mb-3">
+                    api/get/userDetail?username
+                </div>
+                <div class="alert alert-light" role="alert">
+                    <strong>Tham số:</strong>
+                    <ul class="mb-0">
+                        <li>username: Tên đăng nhập của người dùng</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Đăng nhập -->
+        <div class="card api-card method-post mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success method-badge me-3">POST</span>
+                    <h5 class="card-title mb-0">Đăng nhập</h5>
+                </div>
+                <div class="code-endpoint mb-3">
+                    api/user/login
+                </div>
+                <div class="alert alert-light" role="alert">
+                    <strong>Dữ liệu:</strong>
+                    <ul class="mb-0">
+                        <li>username: Tên đăng nhập</li>
+                        <li>password: Mật khẩu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Đăng ký -->
+        <div class="card api-card method-post mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success method-badge me-3">POST</span>
+                    <h5 class="card-title mb-0">Đăng ký</h5>
+                </div>
+                <div class="code-endpoint mb-3">
+                    api/user/register
+                </div>
+                <div class="alert alert-light" role="alert">
+                    <strong>Dữ liệu:</strong>
+                    <ul class="mb-0">
+                        <li>username: Tên đăng nhập</li>
+                        <li>password: Mật khẩu</li>
+                        <li>hovaten: Họ và tên</li>
+                        <li>sdt: Số điện thoại</li>
+                        <li>url: Đường dẫn</li>
+                        <li>email: Địa chỉ email</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
