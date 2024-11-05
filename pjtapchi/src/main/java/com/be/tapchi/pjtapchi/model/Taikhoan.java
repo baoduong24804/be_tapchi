@@ -31,11 +31,11 @@ public class Taikhoan {
     private String password;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "taikhoan_vaitro", joinColumns = @JoinColumn(name = "taikhoan_id"), inverseJoinColumns = @JoinColumn(name = "vaitro_id"))
     private Set<Vaitro> vaitro = new HashSet<>();
 
-    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taikhoan")
     @JsonIgnore
     private List<QuangCao> quangcao;
 
@@ -48,24 +48,24 @@ public class Taikhoan {
     // private List<BangGiaQC> banggiaqc;
     //
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Baibao> dsbaibao;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taikhoan")
     @JsonIgnore
     private List<HoaDon> hoadon;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Binhluan> binhluans;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Thich> thichs;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "taikhoan",cascade = CascadeType.ALL)
     private Taikhoanchitiet taikhoanchitiet;
 
     // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")

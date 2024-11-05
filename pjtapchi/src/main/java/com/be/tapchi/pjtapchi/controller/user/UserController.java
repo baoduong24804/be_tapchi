@@ -45,6 +45,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,11 +95,11 @@ public class UserController {
     }
 
     @PostMapping("get/userDetail")
-    public ResponseEntity<ApiResponse<?>> userDetail(@RequestParam String token) {
+    public ResponseEntity<ApiResponse<?>> userDetail(@RequestBody(required = false) LoginRequest loginRequest) {
         try {
             ApiResponse<?> api = new ApiResponse<>();
-
-            Claims claims = jwtUtil.extractClaims(token);
+        
+            Claims claims = jwtUtil.extractClaims(loginRequest.getToken());
             // neu token ko dung hoac bi loi
             if (claims == null) {
                 api.setSuccess(false);
@@ -108,7 +109,7 @@ public class UserController {
             }
             String username = claims.getSubject();
             // kiem tra token hop le va con hsd
-            if (!jwtUtil.validateToken(token, username)) {
+            if (!jwtUtil.validateToken(loginRequest.getToken(), username)) {
                 api.setSuccess(false);
                 api.setMessage(HttpStatus.UNAUTHORIZED.toString());
 
@@ -122,8 +123,8 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
             Taikhoanchitiet ct = tk.getTaikhoanchitiet();
-            Map<String, String> data = new HashMap<>();
-            Map<String, String> userData = new HashMap<>();
+            Map<String, Object> data = new HashMap<>();
+            Map<String, Object> userData = new HashMap<>();
             SimpleDateFormat fmd = new SimpleDateFormat("dd-MM-yyyy");
 
             userData.put("date", fmd.format(ct.getNgaytao()));
@@ -132,13 +133,13 @@ public class UserController {
             for (Vaitro vt : tk.getVaitro()) {
                 roles.add(vt.getVaitroId() + ":" + vt.getTenrole());
             }
-            userData.put("roles", roles.toString());
+            userData.put("roles", roles);
             userData.put("url", ct.getUrl());
             userData.put("phone", ct.getSdt());
             userData.put("email", ct.getEmail());
             userData.put("fullname", ct.getHovaten());
             userData.put("username", ct.getTaikhoan().getUsername());
-            data.put("user", userData.toString());
+            data.put("user", userData);
             if (newToken != null) {
                 data.put("newToken", newToken);
             }
@@ -186,15 +187,15 @@ public class UserController {
         }
         response.setMessage("Dang nhap thanh cong");
         response.setSuccess(true);
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("token", jwtUtil.generateToken(tk.getUsername()));
         // co the luu token vao dtb
         Set<String> roles = new HashSet<>();
         for (Vaitro vt : tk.getVaitro()) {
             roles.add(vt.getVaitroId() + ":" + vt.getTenrole());
         }
-        map.put("roles", roles.toString());
-        response.setData(map.toString());
+        map.put("roles", roles);
+        response.setData(map);
         return ResponseEntity.ok().body(response);
 
     }

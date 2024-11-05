@@ -9,4 +9,7 @@ public class LoginRequest {
 
     @NotNull(message = "Password không được để trống")
     private String password;
+
+   
+    private String token;
 }
