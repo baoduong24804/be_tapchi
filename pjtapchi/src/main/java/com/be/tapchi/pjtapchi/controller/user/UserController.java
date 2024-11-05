@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.user.model.ChangePassword;
 import com.be.tapchi.pjtapchi.controller.user.model.LoginRequest;
+import com.be.tapchi.pjtapchi.controller.user.model.ResetPassword;
 import com.be.tapchi.pjtapchi.controller.user.model.UserRegister;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
@@ -14,14 +15,16 @@ import com.be.tapchi.pjtapchi.model.Vaitro;
 
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
 import com.be.tapchi.pjtapchi.repository.VaiTroRepository;
+import com.be.tapchi.pjtapchi.service.EmailService;
+import com.be.tapchi.pjtapchi.service.RateLimitingService;
 import com.be.tapchi.pjtapchi.service.TaiKhoanService;
 import com.be.tapchi.pjtapchi.service.TaikhoanTokenService;
 import com.be.tapchi.pjtapchi.userRole.ManageRoles;
 import com.be.tapchi.pjtapchi.userRole.RoleName;
 
+import io.github.bucket4j.Bucket;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
-
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,14 +69,20 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    // @Autowired
+    // private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private EmailService emailService;
+
+    @Autowired
+    private RateLimitingService rateLimitingService;
+
+    // @Autowired
+    // private UserDetailsService userDetailsService;
 
     @Autowired
     private TaikhoanTokenService taikhoanTokenService;
@@ -98,7 +107,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> userDetail(@RequestBody(required = false) LoginRequest loginRequest) {
         try {
             ApiResponse<?> api = new ApiResponse<>();
-        
+
             Claims claims = jwtUtil.extractClaims(loginRequest.getToken());
             // neu token ko dung hoac bi loi
             if (claims == null) {
@@ -215,19 +224,41 @@ public class UserController {
             api.setData(errorMessage);
             return ResponseEntity.badRequest().body(api);
         }
+        Bucket bucket = rateLimitingService.resolveBucket(userRegister.getEmail());
+        Bucket bucket2 = rateLimitingService.resolveBucket(userRegister.getUsername());
+        if (!bucket.tryConsume(1) || !bucket2.tryConsume(1)) {
+            api.setSuccess(false);
+            api.setMessage("Quá nhiều yêu cầu. Vui lòng thử lại sau");
+            api.setData(null);
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(api);
+        }
         try {
 
             if (taiKhoanRepository.existsByUsername(userRegister.getUsername())) {
                 api.setSuccess(false);
                 api.setData(null);
                 api.setMessage("Username ton tai");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(api);
+                // gui ma xac nhan neu tk chua kich hoat
+                if (taiKhoanService.findByUsername(userRegister.getUsername()).getTaikhoanchitiet().getStatus() == 0) {
+                    emailService.sendVerificationEmail(userRegister.getEmail());
+                    api.setSuccess(true);
+                    api.setMessage("Da gui ma xac thuc");
+                    return ResponseEntity.ok().body(api);
+                }
+                return ResponseEntity.badRequest().body(api);
             }
             // kiem tra email
             if (taiKhoanService.existsByEmail(userRegister.getEmail().trim())) {
                 api.setSuccess(false);
                 api.setMessage("Email da ton tai");
                 api.setData(null);
+                // gui ma xac nhan neu tk chua kich hoat
+                if (taiKhoanService.findByEmail(userRegister.getEmail()).getTaikhoanchitiet().getStatus() == 0) {
+                    emailService.sendVerificationEmail(userRegister.getEmail());
+                    api.setSuccess(true);
+                    api.setMessage("Da gui ma xac thuc");
+                    return ResponseEntity.ok().body(api);
+                }
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
             }
 
@@ -267,12 +298,13 @@ public class UserController {
             tkct.setNgaytao(new Date());
             tkct.setSdt(userRegister.getSdt());
             tkct.setUrl(userRegister.getUrl());
-            tkct.setStatus(1);
+            tkct.setStatus(0);
             try {
                 taiKhoanService.saveTaiKhoanAndChiTiet(tk, tkct);
                 api.setSuccess(true);
-                api.setMessage("Dang ky thanh cong");
+                api.setMessage("Dang ky thanh cong, nhap code duoc gui qua email de xac thuc");
                 api.setData(null);
+                emailService.sendVerificationEmail(tkct.getEmail());
                 return ResponseEntity.ok().body(api);
             } catch (Exception e) {
                 // TODO: handle exception
@@ -320,7 +352,6 @@ public class UserController {
         tk.setPassword(passwordEncoder.encode(entity.getNewpassword().trim()));
 
         taiKhoanService.saveTaiKhoan(tk);
-        
 
         api.setSuccess(true);
         api.setMessage("Doi mk thanh cong");
@@ -331,10 +362,22 @@ public class UserController {
 
     // quen mk
     @PostMapping("/forgot")
-    public ResponseEntity<ApiResponse<?>> forgotPassword(@RequestParam("email") String email) {
+    public ResponseEntity<ApiResponse<?>> forgotPassword(@RequestParam(required = false) String email) {
         try {
-            taikhoanTokenService.createPasswordResetTokenForUser(email);
+            if (email == null) {
+                return ResponseEntity.badRequest().body(null);
+            }
             ApiResponse<?> api = new ApiResponse<>();
+            // Lấy bucket dựa trên địa chỉ email
+            Bucket bucket = rateLimitingService.resolveBucket(email);
+            if (!bucket.tryConsume(1)) {
+                api.setSuccess(false);
+                api.setMessage("Quá nhiều yêu cầu. Vui lòng thử lại sau");
+                api.setData(null);
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(api);
+            }
+            taikhoanTokenService.createPasswordResetTokenForUser(email);
+
             api.setSuccess(true);
             api.setMessage("Kiem tra email de doi mk");
             api.setData(null);
@@ -348,20 +391,42 @@ public class UserController {
 
     // doi mk
     @PostMapping("/reset")
-    public ResponseEntity<ApiResponse<?>> resetPassword(@RequestParam("token") String token,
-            @RequestParam("password") String newPassword) {
+    public ResponseEntity<ApiResponse<?>> resetPassword(@RequestBody(required = false) ResetPassword enity) {
         try {
-            taikhoanTokenService.changePassword(token, newPassword);
+            if (enity == null || enity.getToken() == null || enity.getNewpassword() == null) {
+                return ResponseEntity.badRequest().body(null);
+            }
             ApiResponse<?> api = new ApiResponse<>();
-            api.setSuccess(true);
-            api.setMessage("Doi mk thanh cong");
+            if (taikhoanTokenService.changePassword(enity.getToken(), enity.getNewpassword())) {
+
+                api.setSuccess(true);
+                api.setMessage("Doi mk thanh cong");
+                api.setData(null);
+                return ResponseEntity.ok().body(api);
+            }
+            api.setSuccess(false);
+            api.setMessage("Token het han hoac sai");
             api.setData(null);
-            return ResponseEntity.ok().body(api);
+            //
+            return ResponseEntity.badRequest().body(api);
         } catch (Exception e) {
             // TODO: handle exception
             return ResponseEntity.badRequest().body(null);
         }
 
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<String> verifyEmail(@RequestParam(required = false) String code) {
+        if (code == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        boolean isVerified = emailService.verifyEmail(code);
+        if (isVerified) {
+
+            return ResponseEntity.ok().body("Xác thực thành công");
+        }
+        return ResponseEntity.badRequest().body("Mã xác thực không hợp lệ hoặc đã hết hạn.");
     }
 
 }

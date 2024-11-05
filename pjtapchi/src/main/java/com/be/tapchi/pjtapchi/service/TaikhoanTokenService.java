@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.model.EmailVerification;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.TaikhoanToken;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
@@ -51,13 +52,17 @@ public class TaikhoanTokenService {
 
             String token = generateToken();
             TaikhoanToken myToken = new TaikhoanToken();
+            
+            if(tokenRepository.findByTaikhoan(user) != null){
+                myToken = tokenRepository.findByTaikhoan(user);
+            }
             myToken.setToken(token);
             myToken.setTaikhoan(user);
-            myToken.setExpiryDate(null);
+           // myToken.setExpiryDate(null);
             myToken.setExpiryDate(LocalDateTime.now().plusMinutes(defaultTokenExpiration));
             tokenRepository.save(myToken);
 
-            sendResetPasswordEmail(user.getTaikhoanchitiet().getEmail(), token);
+            sendResetPasswordEmail(user.getTaikhoanchitiet().getEmail(), token,"Đặt lại mật khẩu","Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn 15 phút");
         } catch (Exception e) {
             // TODO: handle exception
             return false;
@@ -70,16 +75,16 @@ public class TaikhoanTokenService {
         return UUID.randomUUID().toString();
     }
 
-    private void sendResetPasswordEmail(String userEmail, String token) {
+    private void sendResetPasswordEmail(String userEmail, String token, String title, String content) {
         String resetUrl = baseUrl + "/reset-password?token=" + token;
 
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(userEmail);
-        email.setSubject("Reset Password");
-        email.setText("To reset your password, click the link below:\n" + resetUrl +
-                "\nThis link will expire in 15 minutes.");
+        // SimpleMailMessage email = new SimpleMailMessage();
+        // email.setTo(userEmail);
+        // email.setSubject("Reset Password");
+        // email.setText("To reset your password, click the link below:\n" + resetUrl +
+        //         "\nThis link will expire in 15 minutes.");
 
-        emailService.sendActivationEmail("anhbao5cm@gmail.com",resetUrl,"Reset mk");
+        emailService.sendActivationEmail(userEmail,resetUrl,title,content);
     }
 
     public boolean validatePasswordResetToken(String token) {
@@ -89,12 +94,12 @@ public class TaikhoanTokenService {
             return false;
         }
 
-        if (passToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+        if (passToken.getExpiryDate().isAfter(LocalDateTime.now())) {
             tokenRepository.delete(passToken);
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public boolean changePassword(String token, String newPassword) {
@@ -102,6 +107,7 @@ public class TaikhoanTokenService {
             TaikhoanToken passToken = tokenRepository.findByToken(token);
         
             if (passToken == null || !validatePasswordResetToken(token)) {
+                System.out.println("Token doi mk het han hoac sai");
                 return false;
             }
 

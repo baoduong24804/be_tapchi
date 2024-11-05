@@ -1,84 +1,185 @@
 package com.be.tapchi.pjtapchi.service;
 
 import jakarta.mail.internet.MimeMessage;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.be.tapchi.pjtapchi.model.EmailVerification;
+import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.model.Taikhoanchitiet;
+import com.be.tapchi.pjtapchi.repository.EmailVerificationRepository;
+import com.be.tapchi.pjtapchi.repository.TaiKhoanchitietRepository;
 
 @Service
+@Transactional
 public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendActivationEmail(String to, String token, String title) {
+    @Autowired
+    private EmailVerificationRepository emailVerificationRepository;
+
+    @Autowired
+    private TaiKhoanService taiKhoanService;
+
+    @Autowired
+    private TaiKhoanchitietRepository taiKhoanchitietRepository;
+
+    
+    @Value("${app.token.expiration:15}")
+    private long defaultTokenExpiration;
+
+    public void sendVerificationEmail(String email) {
+        Taikhoan taikhoan = taiKhoanService.findByEmail(email);
+        if (taikhoan != null) {
+            
+            String verificode = getVerificationCode();
+            if(verificode == null){
+                throw new NullPointerException("Loi khi tao verify code");
+            }
+            
+            EmailVerification emailVerification = new EmailVerification();
+            if(emailVerificationRepository.findByTaikhoan(taikhoan) != null){
+                emailVerification = emailVerificationRepository.findByTaikhoan(taikhoan);
+            }
+            emailVerification.setTaikhoan(taikhoan);
+            emailVerification.setVerificationCode(verificode);
+            emailVerification.setCreatedAt(LocalDateTime.now().plusMinutes(defaultTokenExpiration));
+            emailVerificationRepository.save(emailVerification);
+
+            // SimpleMailMessage message = new SimpleMailMessage();
+            // message.setTo(email);
+            // message.setSubject("Mã xác thực tài khoản");
+            // message.setText("Mã xác thực của bạn là: " + verificode);
+            // mailSender.send(message);
+
+            sendActivationEmail(email, verificode, "Xác thực email", "Đây là mã để xác thực tài khoản của bạn, lưu ý mã xác thực có thời hạn 15 phút");
+        }
+    }
+
+    public String getVerificationCode() {
+        UUID uuid = UUID.randomUUID();
+        for (int i = 0; i < 99; i++) {
+            String uuidString = uuid.toString().replace("-", "");
+            String shortUuid = uuidString.substring(0, 6);
+            if(emailVerificationRepository.findByVerificationCode(shortUuid) == null){
+                return shortUuid;
+            }
+            uuid = UUID.randomUUID();
+        }
+        return null;
+     
+    }
+
+    public boolean verifyEmail(String verificationCode) {
+        EmailVerification emailVerification = emailVerificationRepository.findByVerificationCode(verificationCode);
+        if (emailVerification != null) {
+            LocalDateTime createdAt = emailVerification.getCreatedAt();
+            if (createdAt.isAfter(LocalDateTime.now())) {
+                // Xóa mã xác thực sau khi xác thực thành công
+                emailVerificationRepository.delete(emailVerification);
+                Taikhoanchitiet tkct = emailVerification.getTaikhoan().getTaikhoanchitiet();
+                if(tkct.getStatus() != 0){
+                    return true;
+                }
+                tkct.setStatus(1);
+                taiKhoanchitietRepository.save(tkct);
+                return true;
+            }
+           
+        }
+        return false;
+    }
+
+    // Scheduled task để xóa token hết hạn
+    @Scheduled(fixedRate = 3600000) // Chạy mỗi giờ
+    public void removeExpiredTokens() {
+        emailVerificationRepository.deleteByCreatedAtLessThan(LocalDateTime.now());
+    }
+
+    public void sendActivationEmail(String to, String token, String title, String content) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             // Build the activation link
-            String activationLink = token; // assuming 'token' is the full link or use to construct the link
+            //String activationLink = token; // assuming 'token' is the full link or use to construct the link
 
             // Email content in proper string format
-            String emailContent =
-                    "<html>" +
-                            "  <head>" +
-                            "    <meta name=\"viewport\" content=\"width=device-width\" />" +
-                            "    <meta name=\"description\" content=\"Password Reset - Ar18 - Email Templates for developers\" />" +
-                            "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />" +
-                            "    <title>Verification Code - As33 - Email Templates for developers</title>" +
-                            "    <style>" +
-                            "      html, body {" +
-                            "          margin: 0 auto !important;" +
-                            "          padding: 0 !important;" +
-                            "          width: 100% !important;" +
-                            "          font-family: sans-serif;" +
-                            "          line-height: 1.4;" +
-                            "          -webkit-font-smoothing: antialiased;" +
-                            "          -ms-text-size-adjust: 100%;" +
-                            "          -webkit-text-size-adjust: 100%;" +
-                            "      }" +
-                            "      * {" +
-                            "          -ms-text-size-adjust: 100%;" +
-                            "      }" +
-                            "      table, td {" +
-                            "          mso-table-lspace: 0pt !important;" +
-                            "          mso-table-rspace: 0pt !important;" +
-                            "      }" +
-                            "      img {" +
-                            "          display: block;" +
-                            "          border: none;" +
-                            "          max-width: 100%;" +
-                            "          -ms-interpolation-mode: bicubic;" +
-                            "      }" +
-                            "      a {" +
-                            "          text-decoration: none;" +
-                            "      }" +
-                            "    </style>" +
-                            "  </head>" +
-                            "  <body style=\"margin: 0; padding: 0 !important; background: #F8F8F8;\">" +
-                            "    <table align=\"center\" valign=\"top\" width=\"100%\" bgcolor=\"#FFFFFF\" style=\"background: #FFFFFF\">" +
-                            "      <tr>" +
-                            "        <td align=\"center\">" +
-                            "          <h1 style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">Email verification code</h1>" +
-                            "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">To continue with your email verification, please enter the following code:</p>" +
-                            "          <p style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">"+token+"</p>" +
-                            "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">Our award-winning customer Dummy Team is available 24/7. If you have any questions, please visit <a href=\"mailto:help@dummy.com\">help@dummy.com</a></p>" +
-                            "        </td>" +
-                            "      </tr>" +
-                            "    </table>" +
-                            "  </body>" +
-                            "</html>";
+            String emailContent = "<html>" +
+                    "  <head>" +
+                    "    <meta name=\"viewport\" content=\"width=device-width\" />" +
+                    "    <meta name=\"description\" content=\"Email Verification\" />"
+                    +
+                    "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />" +
+                    "    <title>"+title+"</title>" +
+                    "    <style>" +
+                    "      html, body {" +
+                    "          margin: 0 auto !important;" +
+                    "          padding: 0 !important;" +
+                    "          width: 100% !important;" +
+                    "          font-family: sans-serif;" +
+                    "          line-height: 1.4;" +
+                    "          -webkit-font-smoothing: antialiased;" +
+                    "          -ms-text-size-adjust: 100%;" +
+                    "          -webkit-text-size-adjust: 100%;" +
+                    "      }" +
+                    "      * {" +
+                    "          -ms-text-size-adjust: 100%;" +
+                    "      }" +
+                    "      table, td {" +
+                    "          mso-table-lspace: 0pt !important;" +
+                    "          mso-table-rspace: 0pt !important;" +
+                    "      }" +
+                    "      img {" +
+                    "          display: block;" +
+                    "          border: none;" +
+                    "          max-width: 100%;" +
+                    "          -ms-interpolation-mode: bicubic;" +
+                    "      }" +
+                    "      a {" +
+                    "          text-decoration: none;" +
+                    "      }" +
+                    "    </style>" +
+                    "  </head>" +
+                    "  <body style=\"margin: 0; padding: 0 !important; background: #F8F8F8;\">" +
+                    "    <table align=\"center\" valign=\"top\" width=\"100%\" bgcolor=\"#FFFFFF\" style=\"background: #FFFFFF\">"
+                    +
+                    "      <tr>" +
+                    "        <td align=\"center\">" +
+                    "          <h1 style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">"+title+"</h1>"
+                    +
+                    "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">"+content+"</p>"
+                    +
+                    "          <p style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">" + token
+                    + "</p>" +
+                    "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">Hỗ trợ 24/7, gửi email qua <a href=\"mailto:dthaibao2482004@gmail.com\">dthaibao2482004@gmail.com</a></p>"
+                    +
+                    "        </td>" +
+                    "      </tr>" +
+                    "    </table>" +
+                    "  </body>" +
+                    "</html>";
 
             helper.setTo(to);
             helper.setSubject(title);
             helper.setText(emailContent, true); // 'true' indicates it's an HTML email
 
             mailSender.send(message);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
-
