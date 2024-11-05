@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.be.tapchi.pjtapchi.controller.user.model.ChangePassword;
 import com.be.tapchi.pjtapchi.controller.user.model.LoginRequest;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Taikhoanchitiet;
@@ -85,6 +86,43 @@ public class TaiKhoanService {
         return false;
 
     }
+
+    // neu tk va mk dung
+    public boolean loginTaikhoan(ChangePassword user){
+        
+        try {
+            if(user.getUsername().isBlank() || user.getUsername().isEmpty()){
+                return false;
+            }
+            Taikhoan tk = findByUsername(user.getUsername().trim());
+            Taikhoan tk_e = findByEmail(user.getUsername().trim());
+            if(tk != null){
+                
+                if(passwordEncoder.matches(user.getPassword().trim(), tk.getPassword().trim())){
+                    return true;
+                }
+    
+                return false;
+            }
+    
+            if(tk_e != null){
+                
+                if(passwordEncoder.matches(user.getPassword().trim(), tk_e.getPassword().trim())){
+                    return true;
+                }
+                
+                return false;
+            }
+    
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            throw e;
+        }
+        return false;
+
+    }
+    
 
     public Taikhoan findByUsername(String username){
         return taiKhoanRepository.findByUsername(username);

@@ -1,118 +1,70 @@
 package com.be.tapchi.pjtapchi.service;
 
 import com.be.tapchi.pjtapchi.model.Baibao;
+import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.model.Theloai;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
+import com.be.tapchi.pjtapchi.repository.TheloaiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
-/**
- * Dịch vụ Baibao để quản lý các thao tác liên quan đến Baibao.
- */
 @Service
 public class BaibaoService {
-    @Autowired
-    private BaiBaoRepository baiBaoRepository;
 
-    /**
-     * Lấy tất cả các Baibao.
-     *
-     * @return danh sách tất cả các Baibao
-     */
+    private final BaiBaoRepository baiBaoRepository;
+    private final TheloaiRepository theloaiRepository;
+    private final TaiKhoanRepository taiKhoanRepository;
+
+    @Autowired
+    public BaibaoService(TaiKhoanRepository taiKhoanRepository, BaiBaoRepository baiBaoRepository, TheloaiRepository theloaiRepository) {
+        this.taiKhoanRepository = taiKhoanRepository;
+        this.baiBaoRepository = baiBaoRepository;
+        this.theloaiRepository = theloaiRepository;
+    }
+
     public List<Baibao> getAllBaibaos() {
         return baiBaoRepository.findAll();
     }
 
-    /**
-     * Lấy Baibao theo ID.
-     *
-     * @param id ID của Baibao
-     * @return một Optional chứa Baibao nếu tìm thấy, ngược lại là Optional rỗng
-     */
-    public Optional<Baibao> getBaibaoById(Long id) {
-        return baiBaoRepository.findById(id);
+    public Baibao getBaibaoById(Integer id) {
+        return baiBaoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Baibao ID"));
     }
 
-    /**
-     * Lưu một Baibao mới hoặc cập nhật Baibao hiện có.
-     *
-     * @param baibao đối tượng Baibao cần lưu
-     * @return Baibao đã được lưu
-     */
     public Baibao saveBaibao(Baibao baibao) {
         return baiBaoRepository.save(baibao);
     }
 
-
-    /**
-     * Xóa Baibao theo ID.
-     *
-     * @param id ID của Baibao cần xóa
-     */
-    public void deleteBaibao(Long id) {
+    public void deleteBaibao(Integer id) {
         baiBaoRepository.deleteById(id);
     }
 
-    /**
-     * Lấy danh sách Baibao theo thể loại.
-     *
-     * @param TheLoai thể loại của Baibao
-     * @return danh sách Baibao theo thể loại
-     */
-//    public List<Baibao> getBaiBaoByTheLoai(String TheLoai) {
-//        return baiBaoRepository.findByTheLoai(TheLoai);
-//    }
+    public List<Baibao> getBaibaoByTacGiaId(Long id) {
+        Taikhoan taikhoan = taiKhoanRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Taikhoan ID"));
+        return baiBaoRepository.findBaibaoByTaikhoan(taikhoan);
+    }
 
-    /**
-     * Lấy danh sách Baibao theo tác giả.
-     *
-     * @param TacGia tác giả của Baibao
-     * @return danh sách Baibao theo tác giả
-     */
-//    public List<Baibao> getBaiBaoByTacGia(String TacGia) {
-//        return baiBaoRepository.findByTacGia(TacGia);
-//    }
+    public List<Baibao> getBaibaoByTheLoaiID(Integer id) {
+        Theloai theloai = theloaiRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Theloai ID"));
+        return baiBaoRepository.findBaibaoByTheloai(theloai);
+    }
 
-    /**
-     * Lấy danh sách Baibao theo tiêu đề.
-     *
-     * @param TieuDe tiêu đề của Baibao
-     * @return danh sách Baibao theo tiêu đề
-     */
-//    public List<Baibao> getBaiBaoByTieuDe(String TieuDe) {
-//        return baiBaoRepository.findByTieuDeContaining(TieuDe);
-//    }
+    public List<Baibao> getBaibaoByTieuDe(String tieude) {
+        return baiBaoRepository.findBaibaoByTieudeContaining(tieude);
+    }
 
-    /**
-     * Lấy danh sách Baibao theo trạng thái kiểm duyệt.
-     *
-     * @param KiemDuyet trạng thái kiểm duyệt của Baibao
-     * @return danh sách Baibao theo trạng thái kiểm duyệt
-     */
-//    public List<Baibao> getBaiBaoByKiemDuyet(Boolean KiemDuyet) {
-//        return baiBaoRepository.findByKiemDuyet(KiemDuyet);
-//    }
+    public List<Baibao> getBaibaoByNgayDang(LocalDate postDate) {
+        return baiBaoRepository.findBaibaoByNgaydang(postDate);
+    }
 
-    /**
-     * Lấy danh sách Baibao theo thể loại ID
-     *
-     * @param id của thể loại
-     * @return danh sách Baibao theo thể loại ID
-     */
-//    public List<Baibao> getBaiBaoByTheLoaiId(Long id) {
-//        return baiBaoRepository.findByTheLoaiID(id);
-//    }
+    public List<Baibao> getBaibaiByNgayDangBetween(LocalDate date1, LocalDate date2) {
+        return baiBaoRepository.findByNgaydangBetween(date1, date2);
+    }
 
-    /**
-     * Lấy danh sách Baibao theo tác giả id
-     *
-     * @param id của tác giả
-     * @return danh sách Baibao theo tác giả id
-     */
-//    public List<Baibao> getBaiBaoByTacGiaId(Long id) {
-//        return baiBaoRepository.findByTacGiaID(id);
-//    }
-
+    public List<Baibao> getBaibaoByTrangThai(Integer status) {
+        return baiBaoRepository.findBaibaoByStatus(status);
+    }
 }

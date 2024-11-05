@@ -22,38 +22,32 @@ public class Taikhoan {
     @Column(name = "Taikhoan_id")
     private Long taikhoan_id;
 
-    //@JsonIgnore
-    @Column(name = "Username",unique = true, length = 100)
+    // @JsonIgnore
+    @Column(name = "Username", unique = true, length = 100)
     private String username;
 
     @JsonIgnore
     @Column(name = "Password", length = 100)
     private String password;
 
-
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "taikhoan_vaitro",
-            joinColumns = @JoinColumn(name = "taikhoan_id"),
-            inverseJoinColumns = @JoinColumn(name = "vaitro_id")
-    )
+    @JoinTable(name = "taikhoan_vaitro", joinColumns = @JoinColumn(name = "taikhoan_id"), inverseJoinColumns = @JoinColumn(name = "vaitro_id"))
     private Set<Vaitro> vaitro = new HashSet<>();
 
     @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<QuangCao> quangcao;
 
-    //    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<DanhMuc> danhmuc;
-//
-//    @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<BangGiaQC> banggiaqc;
-//
+    // @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    // @JsonIgnore
+    // private List<DanhMuc> danhmuc;
+    //
+    // @OneToMany(mappedBy = "taikhoan", cascade = CascadeType.ALL)
+    // @JsonIgnore
+    // private List<BangGiaQC> banggiaqc;
+    //
 
-    
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Baibao> dsbaibao;
@@ -73,8 +67,6 @@ public class Taikhoan {
     @JsonIgnore
     @OneToOne(mappedBy = "taikhoan", cascade = CascadeType.ALL)
     private Taikhoanchitiet taikhoanchitiet;
-
-
 
     // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     // @JsonIgnore
