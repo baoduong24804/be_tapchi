@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -37,29 +38,103 @@
         }
     </style>
 </head>
-<body>
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="mb-4 text-center">API Documentation</h1>
-        </div>
-    </div>
 
-    <!-- Lấy thông tin người dùng -->
-    <div class="card api-card method-get mb-3">
-        <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-                <span class="badge bg-primary method-badge me-3">GET</span>
-                <h5 class="card-title mb-0">Lấy thông tin người dùng</h5>
+<body>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4 text-center">API Documentation</h1>
             </div>
-            <div class="code-endpoint mb-3">
-                api/get/userDetail?username
+        </div>
+
+        <!-- Lấy thông tin người dùng -->
+        <div class="card api-card method-get mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success method-badge me-3">POST</span>
+                    <h5 class="card-title mb-0">Lấy thông tin người dùng</h5>
+                </div>
+                <div class="code-endpoint mb-3">
+                    api/user/get/userDetail
+                </div>
+                <div class="alert alert-light" role="alert">
+                    <strong>Tham số:</strong>
+                    <ul class="mb-0">
+                        <li>token: token khi dang nhap thanh cong</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Đăng nhập -->
+        <div class="card api-card method-post mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success method-badge me-3">POST</span>
+                    <h5 class="card-title mb-0">Đăng nhập</h5>
+                </div>
+                <div class="code-endpoint mb-3">
+                    api/user/login
+                </div>
+                <div class="alert alert-light" role="alert">
+                    <strong>Tài khoản test:</strong>
+                    <ul class="mb-0">
+                        <li>username: tkuser</li>
+                        <li>password: 123</li>
+                        <li>role: USER</li>
+                        <hr>
+                        <li>username: thaibao</li>
+                        <li>password: 123123</li>
+                    </ul>
+
+                    <br>
+                    <strong>Dữ liệu:</strong>
+                    <ul class="mb-0">
+                        <li>username: Tên đăng nhập</li>
+                        <li>password: Mật khẩu</li>
+                    </ul>
+                </div>
             </div>
             <div class="alert alert-light" role="alert">
                 <strong>Tham số:</strong>
                 <ul class="mb-0">
                     <li>username: Tên đăng nhập của người dùng</li>
                 </ul>
+            </div>
+        </div>
+        <div class="card api-card method-post mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success method-badge me-3">POST</span>
+                    <h5 class="card-title mb-0">Quen mk</h5>
+                </div>
+                <div class="code-endpoint mb-3">
+                    api/user/forgot
+                </div>
+                <div class="alert alert-light" role="alert">
+                    <strong>Dữ liệu:</strong>
+                    <ul class="mb-0">
+                        <li>email: Địa chỉ email</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card api-card method-post mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success method-badge me-3">POST</span>
+                    <h5 class="card-title mb-0">Doi mk</h5>
+                </div>
+                <div class="code-endpoint mb-3">
+                    api/user/reset
+                </div>
+                <div class="alert alert-light" role="alert">
+                    <strong>Dữ liệu:</strong>
+                    <ul class="mb-0">
+                        <li>token: token gửi trong email</li>
+                        <li>password: mk mới</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -164,9 +239,16 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 
-<!-- Bootstrap JS (Optional) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

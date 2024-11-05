@@ -26,6 +26,7 @@ import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Vaitro;
 import com.be.tapchi.pjtapchi.modeltest.LoginRequest;
+import com.be.tapchi.pjtapchi.repository.TaikhoanTKRepository;
 import com.be.tapchi.pjtapchi.repository.VaiTroRepository;
 import com.be.tapchi.pjtapchi.service.TaiKhoanService;
 
@@ -52,6 +53,9 @@ public class TestAuthentication {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TaikhoanTKRepository taikhoanTKRepository;
 
     @ResponseBody
    @GetMapping("users")
@@ -101,6 +105,13 @@ public class TestAuthentication {
         return "Đăng ký thành công!";
     }
 
+    @GetMapping("/token")
+    public List<?> getToken() {
+        
+        return taikhoanTKRepository.findAll();
+    }
+    
+
     @GetMapping("/decodeToken")
     public String decodeToken(@RequestParam String token) {
         try {
@@ -115,8 +126,25 @@ public class TestAuthentication {
             // Định dạng ngày giờ
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             String formattedExpiration = sdf.format(expiration);
+
+            // Tính thời gian còn lại trước khi token hết hạn
+        Date now = new Date();
+        long timeRemainingInMillis = expiration.getTime() - now.getTime();
+        
+        if (timeRemainingInMillis <= 0) {
+            return "Token đã hết hạn.";
+        }
+        // Chuyển đổi thời gian còn lại thành giờ, phút, giây
+        long seconds = (timeRemainingInMillis / 1000) % 60;
+        long minutes = (timeRemainingInMillis / (1000 * 60)) % 60;
+        long hours = timeRemainingInMillis / (1000 * 60 * 60);
+
+
             // Trả về thông tin từ token
-            return String.format("Username: %s, Expiration: %s", username, formattedExpiration);
+            //return String.format("Username: %s, Expiration: %s", username, formattedExpiration);
+            // Trả về thông tin từ token cùng với thời gian còn lại
+        return String.format("Username: %s, Expiration: %s, Time remaining: %d h %d m %d s",
+        username, formattedExpiration, hours, minutes, seconds);
         } catch (InvalidCsrfTokenException e) {
             
             return "Loi token. "+e.getMessage();
