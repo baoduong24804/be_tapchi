@@ -15,12 +15,17 @@ import com.be.tapchi.pjtapchi.model.Vaitro;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
 import com.be.tapchi.pjtapchi.repository.VaiTroRepository;
 import com.be.tapchi.pjtapchi.service.TaiKhoanService;
+import com.be.tapchi.pjtapchi.service.TaikhoanTokenService;
 import com.be.tapchi.pjtapchi.userRole.RoleName;
 
 import jakarta.validation.Valid;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,13 +39,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("api")
+@RequestMapping("api/user")
 public class UserController {
     @Autowired
     TaiKhoanRepository taiKhoanRepository;
@@ -63,6 +70,9 @@ public class UserController {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private TaikhoanTokenService taikhoanTokenService;
+
     // public int getUserRoleByName(String nameRole){
     // Vaitro vt = vaiTroRepository.findBytenrole(nameRole);
     // if(vt == null){
@@ -84,15 +94,26 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public ResponseEntity<ApiResponse<?>> createAuthenticationToken(@RequestBody LoginRequest loginRequest)
             throws Exception {
         ApiResponse<?> response = new ApiResponse<>();
         try {
 
-            // neu login ko thang cong
+            // kiem tra tai khoan ton tai
+            if (!taiKhoanService.checkTaikhoan(loginRequest)) {
+                response.setSuccess(false);
+                response.setMessage("Sai tk hoac mk");
+                response.setData(null);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+            // login that bai
             if (!taiKhoanService.loginTaikhoan(loginRequest)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                response.setSuccess(false);
+                response.setMessage("Sai tk hoac mk");
+                response.setData(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
         } catch (AuthenticationException e) {
@@ -101,15 +122,23 @@ public class UserController {
 
         // Nếu xác thực thành công, tạo JWT
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+        final Taikhoan tk = taiKhoanService.findByUsername(loginRequest.getUsername());
         response.setMessage("Dang nhap thanh cong");
         response.setSuccess(true);
-        response.setData(jwtUtil.generateToken(userDetails.getUsername()));
+        Map<String, String> map = new HashMap<>();
+        map.put("token", jwtUtil.generateToken(tk.getUsername()));
+
+        Set<String> roles = new HashSet<>();
+        for (Vaitro vt : tk.getVaitro()) {
+            roles.add(vt.getVaitroId()+":"+vt.getTenrole());
+        }
+        map.put("roles", roles.toString());
+        response.setData(map.toString());
         return ResponseEntity.ok().body(response);
 
     }
 
-    @PostMapping("user/register")
+    @PostMapping("/register")
     public ResponseEntity<ApiResponse<?>> userRegister(@Valid @RequestBody(required = true) UserRegister userRegister,
             BindingResult bindingResult) {
         // TODO: process POST request
@@ -152,15 +181,23 @@ public class UserController {
             tk.setUsername(userRegister.getUsername());
             tk.setPassword(passwordEncoder.encode(userRegister.getPassword()));
             Vaitro vt = vaiTroRepository.findBytenrole(RoleName.USER.toString());
+            Vaitro vt2 = vaiTroRepository.findBytenrole(RoleName.AUTHOR.toString());
             // tra ve loi neu ko tim thay vai tro
+            List<Vaitro> vaitros = new ArrayList<>();
+            vaitros.add(vt);
+            vaitros.add(vt2);
             if (vt == null) {
                 api.setSuccess(false);
                 api.setMessage("Loi khi tao vai tro");
                 api.setData(null);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
             }
-            tk.setVaitro(Set.of(vt));
-            
+            Set<Vaitro> setVaitros = new HashSet<>();
+            for (Vaitro vaitro : vaitros) {
+                setVaitros.add(vaitro);
+            }
+            tk.setVaitro(setVaitros);
+
             // tai khoan chi tiet
             Taikhoanchitiet tkct = new Taikhoanchitiet();
             tkct.setHovaten(userRegister.getHovaten());
@@ -188,6 +225,42 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
         }
 
+    }
+
+    // quen mk
+    @PostMapping("/forgot")
+    public ResponseEntity<ApiResponse<?>> forgotPassword(@RequestParam("email") String email) {
+        try {
+            taikhoanTokenService.createPasswordResetTokenForUser(email);
+            ApiResponse<?> api = new ApiResponse<>();
+            api.setSuccess(true);
+            api.setMessage("Kiem tra email de doi mk");
+            api.setData(null);
+            return ResponseEntity.ok().body(api);
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.badRequest().body(null);
+        }
+
+    }
+
+    // doi mk
+    @PostMapping("/reset")
+    public ResponseEntity<ApiResponse<?>> resetPassword(@RequestParam("token") String token,
+            @RequestParam("password") String newPassword) {
+        try {
+            taikhoanTokenService.changePassword(token, newPassword);
+            ApiResponse<?> api = new ApiResponse<>();
+            api.setSuccess(true);
+            api.setMessage("Doi mk thanh cong");
+            api.setData(null);
+            return ResponseEntity.ok().body(api);
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.badRequest().body(null);
+        }
+        
+        
     }
 
 }

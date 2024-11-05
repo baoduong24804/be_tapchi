@@ -61,7 +61,7 @@ public class TestAPI {
 
    @GetMapping("email")
    public String getMethodName() {
-       emailService.sendActivationEmail("tvugiang@gmail.com", "aaa");
+       emailService.sendActivationEmail("anhbao5cm@gmail.com", "aaa","test");
        return "Thanh cong";
    }
 

@@ -12,7 +12,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendActivationEmail(String to, String token) {
+    public void sendActivationEmail(String to, String token, String title) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -63,7 +63,7 @@ public class EmailService {
                             "        <td align=\"center\">" +
                             "          <h1 style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">Email verification code</h1>" +
                             "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">To continue with your email verification, please enter the following code:</p>" +
-                            "          <p style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">151901</p>" +
+                            "          <p style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">"+token+"</p>" +
                             "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">Our award-winning customer Dummy Team is available 24/7. If you have any questions, please visit <a href=\"mailto:help@dummy.com\">help@dummy.com</a></p>" +
                             "        </td>" +
                             "      </tr>" +
@@ -72,7 +72,7 @@ public class EmailService {
                             "</html>";
 
             helper.setTo(to);
-            helper.setSubject("Xác nhận đăng ký tài khoản");
+            helper.setSubject(title);
             helper.setText(emailContent, true); // 'true' indicates it's an HTML email
 
             mailSender.send(message);

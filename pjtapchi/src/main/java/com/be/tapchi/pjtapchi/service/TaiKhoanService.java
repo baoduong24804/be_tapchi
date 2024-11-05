@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,10 @@ public class TaiKhoanService {
     @Autowired
     private TaiKhoanchitietRepository taiKhoanchitietRepository;
 
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public List<Taikhoan> getAllTaiKhoans() {
         return taiKhoanRepository.findAll();
     }
@@ -37,7 +42,7 @@ public class TaiKhoanService {
         taiKhoanRepository.deleteById(id);
     }
 
-    public boolean loginTaikhoan(LoginRequest user){
+    public boolean checkTaikhoan(LoginRequest user){
         // trong email
         if(user.getUsername().isBlank() || user.getUsername().isEmpty()){
             return false;
@@ -49,6 +54,35 @@ public class TaiKhoanService {
         }
 
         return true;
+
+    }
+
+    public boolean loginTaikhoan(LoginRequest user){
+     
+        if(user.getUsername().isBlank() || user.getUsername().isEmpty()){
+            return false;
+        }
+        Taikhoan tk = findByUsername(user.getUsername().trim());
+        Taikhoan tk_e = findByEmail(user.getUsername().trim());
+        if(tk != null){
+            
+            if(passwordEncoder.matches(user.getPassword(), tk.getPassword())){
+                return true;
+            }
+
+            return false;
+        }
+
+        if(tk_e != null){
+            
+            if(passwordEncoder.matches(user.getPassword(), tk_e.getPassword())){
+                return true;
+            }
+            
+            return false;
+        }
+
+        return false;
 
     }
 
