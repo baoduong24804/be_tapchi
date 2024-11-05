@@ -2,7 +2,9 @@ package com.be.tapchi.pjtapchi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -26,14 +28,6 @@ public class Binhluan {
     @Column(name = "binhluan_id", nullable = false)
     private Integer id;
 
-    /**
-     * The account (Taikhoan) associated with the comment.
-     */
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @OnDelete(action = OnDeleteAction.CASCADE)
-    // @JoinColumn(name = "taikhoan_id")
-    // @JsonIgnore
-    // private Taikhoan taiKhoan;
 
     /**
      * The article (Baibao) associated with the comment.
