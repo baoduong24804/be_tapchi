@@ -7,17 +7,7 @@
     <option name="diagramMode" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/api/baibaoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/baibao/baibaoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Binhluan.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Binhluan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/DanhMuc.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/DanhMuc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Thich.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Thich.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/resources/static/index.html" afterDir="false" />
-    </list>
+    <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,7 +81,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.PjtapchiApplication.executor": "Run",
     "code.cleanup.on.save": "true",
-    "git-widget-placeholder": "HaiDepChieu",
+    "git-widget-placeholder": "#16 on HaiDepChieu",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/DATN/be_tapchi/pjtapchi/src/main/resources",
     "node.js.detected.package.eslint": "true",
@@ -208,6 +198,7 @@
       <workItem from="1730777620512" duration="1082000" />
       <workItem from="1730792586909" duration="17000" />
       <workItem from="1730814457538" duration="4049000" />
+      <workItem from="1730856393529" duration="611000" />
     </task>
     <servers />
   </component>
