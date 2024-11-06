@@ -36,7 +36,7 @@ public class ApiResponse<T> {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Object data) {
 
        
             this.data = (T) data;

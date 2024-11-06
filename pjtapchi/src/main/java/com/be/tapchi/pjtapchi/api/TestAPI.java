@@ -56,14 +56,5 @@ public class TestAPI {
     }
 
 
-   @Autowired
-   EmailService emailService;
-
-   @GetMapping("email")
-   public String getMethodName() {
-       emailService.sendActivationEmail("anhbao5cm@gmail.com", "aaa","test");
-       return "Thanh cong";
-   }
-
 
 }
