@@ -11,6 +11,7 @@ import java.util.List;
 //Extending JpaRepository interface for Baibao entity to perform CRUD operations.
 public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
 
+
     Baibao findBaibaoById(Integer id);
 
     List<Baibao> findBaibaoByNgaydang(LocalDate ngaydang);

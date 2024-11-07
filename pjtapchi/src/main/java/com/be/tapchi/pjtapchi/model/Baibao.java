@@ -38,11 +38,11 @@ public class Baibao {
     @Column(name = "status")
     private Integer status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theloai_id")
     private Theloai theloai;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
@@ -52,10 +52,6 @@ public class Baibao {
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Thich> thichs;
 
-    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Danhmucbaibao> danhmucbaibaos;
-
-//    @OneToMany(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "baibao_id")
-//    private List<Thich> thichs;
+//    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Danhmucbaibao> danhmucbaibaos;
 }

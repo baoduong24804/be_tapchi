@@ -53,7 +53,7 @@ public class baibaoController {
      */
     @GetMapping("all")
     public ResponseEntity<ApiResponse<List<Baibao>>> getExample() {
-        List<Baibao> list = bbService.getAllBaibaos();
+        List<Baibao> list = bbService.findAllBaibao();
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", list);
         if (!list.isEmpty()) {
             return ResponseEntity.ok().body(response);
