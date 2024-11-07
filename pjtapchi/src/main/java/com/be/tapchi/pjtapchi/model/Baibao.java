@@ -52,6 +52,9 @@ public class Baibao {
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Thich> thichs;
 
+    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Danhmucbaibao> danhmucbaibaos;
+
 //    @OneToMany(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "baibao_id")
 //    private List<Thich> thichs;

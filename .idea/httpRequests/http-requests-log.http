@@ -1,3 +1,13 @@
+POST http://localhost:9000/api/user/get/userDetail
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-11-06T090337.500.json
+
+###
+
 GET http://localhost:8081/api/email
 User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
 Accept-Encoding: br, deflate, gzip, x-gzip

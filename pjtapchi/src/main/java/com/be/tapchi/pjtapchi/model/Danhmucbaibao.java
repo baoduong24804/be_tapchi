@@ -1,11 +1,6 @@
 package com.be.tapchi.pjtapchi.model;
 
-import java.util.List;
-
-import com.be.tapchi.pjtapchi.model.Baibao;
-import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,5 +23,6 @@ public class Danhmucbaibao {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "baibao_id")
     private Baibao baibao;
+
 
 }
