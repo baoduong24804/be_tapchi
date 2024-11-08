@@ -1,9 +1,9 @@
 package com.be.tapchi.pjtapchi.userRole;
 
 public class ManageRoles {
-    public static String getUSERRole(){
+    public static String getCUSTOMERRole(){
         try {
-            return RoleName.USER.toString();
+            return RoleName.CUSTOMER.toString();
         } catch (Exception e) {
             // TODO: handle exception
             return null;

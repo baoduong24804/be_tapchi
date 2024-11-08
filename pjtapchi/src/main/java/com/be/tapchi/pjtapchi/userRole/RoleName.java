@@ -1,7 +1,7 @@
 package com.be.tapchi.pjtapchi.userRole;
 
 public enum RoleName {
-        USER,
+        CUSTOMER,
         ADMIN,
         AUTHOR,
         CENSOR,

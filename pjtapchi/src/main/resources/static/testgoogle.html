@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+    <div id="g_id_onload" data-client_id="269675276366-cgk7jb5qfo73k2dpjme0jbqlf91fv0h0.apps.googleusercontent.com"
+        data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <script>
+        //const Client_ID = '269675276366-cgk7jb5qfo73k2dpjme0jbqlf91fv0h0.apps.googleusercontent.com';
+        function handleCredentialResponse(response) {
+            console.log(response);
+            data(response.credential);
+        }
+
+        
+
+        const data = (idToken)=> fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${idToken}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("User Info:", data);
+                // data sẽ bao gồm các thông tin như email, name, picture, v.v.
+            })
+            .catch(error => console.error("Error fetching user data:", error));
+
+
+
+
+    </script>
+
+</body>
+
+</html>
