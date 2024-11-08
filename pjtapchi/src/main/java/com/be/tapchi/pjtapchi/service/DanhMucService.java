@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public class DanhMucService {
     @Autowired
-    private static DanhMucRepository danhMucRepository;
+    private DanhMucRepository danhMucRepository;
 
-    public static List<DanhMuc> getAllDanhMuc() {
+    public List<DanhMuc> getAllDanhMuc() {
         return danhMucRepository.findAll();
     }
 

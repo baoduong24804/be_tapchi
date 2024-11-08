@@ -1,5 +1,6 @@
-package com.be.tapchi.pjtapchi.api;
+package com.be.tapchi.pjtapchi.controller.danhmuc;
 
+import com.be.tapchi.pjtapchi.api.ApiResponse;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.service.DanhMucService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 public class DanhMucController {
 
     @Autowired
-    private DanhMucService danhMucService;
+    DanhMucService danhMucService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<DanhMuc>>> getAllDanhMuc() {
