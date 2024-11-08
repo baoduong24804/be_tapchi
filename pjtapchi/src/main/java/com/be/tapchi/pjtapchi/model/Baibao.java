@@ -52,6 +52,10 @@ public class Baibao {
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Thich> thichs;
 
+    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Danhmucbaibao> danhmucbaibaos;
+
+
 //    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<Danhmucbaibao> danhmucbaibaos;
 }

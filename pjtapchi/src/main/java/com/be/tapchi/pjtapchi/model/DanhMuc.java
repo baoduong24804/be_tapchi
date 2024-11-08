@@ -39,6 +39,7 @@ public class DanhMuc {
     @OneToMany(mappedBy = "danhmuc", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Danhmucbaibao> danhmucbaibaos;
 
+
     // @OneToMany(mappedBy = "baibao", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     // private List<Baibao> baibaos;
 
