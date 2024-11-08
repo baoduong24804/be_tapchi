@@ -9,4 +9,6 @@ public interface TheloaiRepository extends JpaRepository<Theloai, Integer> {
 
 
     Theloai findTheloaiById(Integer id);
+
+    void deleteTheloaiByTenloai(String tenloai);
 }

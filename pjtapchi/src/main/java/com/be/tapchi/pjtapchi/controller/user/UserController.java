@@ -10,7 +10,7 @@ import com.be.tapchi.pjtapchi.controller.user.model.ResetPassword;
 import com.be.tapchi.pjtapchi.controller.user.model.UserRegister;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
-import com.be.tapchi.pjtapchi.model.Taikhoanchitiet;
+
 import com.be.tapchi.pjtapchi.model.Vaitro;
 
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
@@ -131,23 +131,24 @@ public class UserController {
             if (tk == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            Taikhoanchitiet ct = tk.getTaikhoanchitiet();
+            
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> userData = new HashMap<>();
+            Map<String,Object> roles = new HashMap<>();
             SimpleDateFormat fmd = new SimpleDateFormat("dd-MM-yyyy");
 
-            userData.put("date", fmd.format(ct.getNgaytao()));
+            userData.put("date", fmd.format(tk.getNgaytao()));
 
-            Set<String> roles = new HashSet<>();
+            
             for (Vaitro vt : tk.getVaitro()) {
-                roles.add(vt.getVaitroId() + ":" + vt.getTenrole());
+                roles.put(String.valueOf(vt.getVaitroId()), vt.getTenrole());
             }
             userData.put("roles", roles);
-            userData.put("url", ct.getUrl());
-            userData.put("phone", ct.getSdt());
-            userData.put("email", ct.getEmail());
-            userData.put("fullname", ct.getHovaten());
-            userData.put("username", ct.getTaikhoan().getUsername());
+            userData.put("url", tk.getUrl());
+            userData.put("phone", tk.getSdt());
+            userData.put("email", tk.getEmail());
+            userData.put("fullname", tk.getHovaten());
+            userData.put("username", tk.getUsername());
             data.put("user", userData);
             if (newToken != null) {
                 data.put("newToken", newToken);
@@ -197,13 +198,15 @@ public class UserController {
         response.setMessage("Dang nhap thanh cong");
         response.setSuccess(true);
         Map<String, Object> map = new HashMap<>();
+        Map<String,Object> roles = new HashMap<>();
         map.put("token", jwtUtil.generateToken(tk.getUsername()));
         // co the luu token vao dtb
-        Set<String> roles = new HashSet<>();
         for (Vaitro vt : tk.getVaitro()) {
-            roles.add(vt.getVaitroId() + ":" + vt.getTenrole());
+            roles.put(String.valueOf(vt.getVaitroId()), vt.getTenrole());
         }
+
         map.put("roles", roles);
+        map.put("fullname", tk.getHovaten());
         response.setData(map);
         return ResponseEntity.ok().body(response);
 
@@ -239,7 +242,7 @@ public class UserController {
                 api.setData(null);
                 api.setMessage("Username ton tai");
                 // gui ma xac nhan neu tk chua kich hoat
-                if (taiKhoanService.findByUsername(userRegister.getUsername()).getTaikhoanchitiet().getStatus() == 0) {
+                if (taiKhoanService.findByUsername(userRegister.getUsername()).getStatus() == 0) {
                     emailService.sendVerificationEmail(userRegister.getEmail());
                     api.setSuccess(true);
                     api.setMessage("Da gui ma xac thuc");
@@ -253,7 +256,7 @@ public class UserController {
                 api.setMessage("Email da ton tai");
                 api.setData(null);
                 // gui ma xac nhan neu tk chua kich hoat
-                if (taiKhoanService.findByEmail(userRegister.getEmail()).getTaikhoanchitiet().getStatus() == 0) {
+                if (taiKhoanService.findByEmail(userRegister.getEmail()).getStatus() == 0) {
                     emailService.sendVerificationEmail(userRegister.getEmail());
                     api.setSuccess(true);
                     api.setMessage("Da gui ma xac thuc");
@@ -273,7 +276,7 @@ public class UserController {
             Taikhoan tk = new Taikhoan();
             tk.setUsername(userRegister.getUsername());
             tk.setPassword(passwordEncoder.encode(userRegister.getPassword()));
-            Vaitro vt = vaiTroRepository.findBytenrole(RoleName.USER.toString());
+            Vaitro vt = vaiTroRepository.findBytenrole(RoleName.CUSTOMER.toString());
             // Vaitro vt2 = vaiTroRepository.findBytenrole(RoleName.AUTHOR.toString());
             // tra ve loi neu ko tim thay vai tro
             List<Vaitro> vaitros = new ArrayList<>();
@@ -291,20 +294,20 @@ public class UserController {
             }
             tk.setVaitro(setVaitros);
 
-            // tai khoan chi tiet
-            Taikhoanchitiet tkct = new Taikhoanchitiet();
-            tkct.setHovaten(userRegister.getHovaten());
-            tkct.setEmail(userRegister.getEmail());
-            tkct.setNgaytao(new Date());
-            tkct.setSdt(userRegister.getSdt());
-            tkct.setUrl(userRegister.getUrl());
-            tkct.setStatus(0);
+            // tai khoan 
+            
+            tk.setHovaten(userRegister.getHovaten());
+            tk.setEmail(userRegister.getEmail());
+            tk.setNgaytao(new Date());
+            tk.setSdt(userRegister.getSdt());
+            tk.setUrl(userRegister.getUrl());
+            tk.setStatus(0);
             try {
-                taiKhoanService.saveTaiKhoanAndChiTiet(tk, tkct);
+                taiKhoanService.saveTaiKhoan(tk);
                 api.setSuccess(true);
                 api.setMessage("Dang ky thanh cong, nhap code duoc gui qua email de xac thuc");
                 api.setData(null);
-                emailService.sendVerificationEmail(tkct.getEmail());
+                emailService.sendVerificationEmail(tk.getEmail());
                 return ResponseEntity.ok().body(api);
             } catch (Exception e) {
                 // TODO: handle exception

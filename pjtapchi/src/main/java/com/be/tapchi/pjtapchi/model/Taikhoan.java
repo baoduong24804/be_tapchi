@@ -1,11 +1,14 @@
 package com.be.tapchi.pjtapchi.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "taikhoan")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Taikhoan {
 
     @Id
@@ -22,13 +26,35 @@ public class Taikhoan {
     @Column(name = "Taikhoan_id")
     private Long taikhoan_id;
 
-    // @JsonIgnore
-    @Column(name = "Username", unique = true, length = 100)
+    @JsonIgnore
+    @Column(name = "Username", length = 100)
     private String username;
 
     @JsonIgnore
     @Column(name = "Password", length = 100)
     private String password;
+
+    @Column(name = "hovaten")
+    private String hovaten;
+
+    @Column(name = "Google_ID")
+    private String google_id;
+
+    @Column(name = "sdt")
+    private String sdt;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "url")
+    private String url;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "ngaytao")
+    private Date ngaytao;
+
+    @Column(name = "status")
+    private Integer status;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
@@ -64,9 +90,6 @@ public class Taikhoan {
     @JsonIgnore
     private List<Thich> thichs;
 
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "taikhoan",cascade = CascadeType.ALL)
-    private Taikhoanchitiet taikhoanchitiet;
 
     // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
     // @JsonIgnore

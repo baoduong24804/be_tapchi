@@ -1,6 +1,7 @@
 package com.be.tapchi.pjtapchi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "theloai")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Theloai {
 
     /**
@@ -34,6 +36,6 @@ public class Theloai {
 
     @OneToMany(mappedBy = "theloai", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<Baibao> dsbaibao;
+    private List<Baibao> baibaos;
 
 }

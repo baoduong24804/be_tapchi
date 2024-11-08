@@ -53,4 +53,14 @@ public class TheloaiService {
     public void deleteTheloai(Integer id) {
         theloaiRepository.deleteById(id);
     }
+
+    /**
+     * Xóa thể loại theo tên thể loại.
+     *
+     * @param tentheloai Tên thể loại cần xóa.
+     */
+
+    public void deleteTheloaibyName(String tentheloai) {
+        theloaiRepository.deleteTheloaiByTenloai(tentheloai);
+    }
 }
