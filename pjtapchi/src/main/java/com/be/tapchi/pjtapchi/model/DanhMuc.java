@@ -4,12 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "danhmuc")
@@ -38,7 +35,13 @@ public class DanhMuc {
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
-   
+    @Column(name = "tuan", nullable = false)
+    private Integer tuan;
+
+    @Column(name = "so", nullable = false)
+    private Integer so;
+
+
     @OneToMany(mappedBy = "danhmuc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Danhmucbaibao> danhmucbaibaos;
 
