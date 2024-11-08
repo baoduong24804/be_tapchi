@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>API Documentation</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -54,19 +54,19 @@
                         <h5 class="card-title text-center mb-4">Đăng nhập</h5>
                         <form id="loginForm">
                             <div class="mb-3">
-                                <label for="username" class="form-label">Tên đăng nhập hoặc Email</label>
-                                <input type="text" class="form-control" id="username" required>
+                                <label class="form-label" for="username">Tên đăng nhập hoặc Email</label>
+                                <input class="form-control" id="username" required type="text">
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">Mật khẩu</label>
-                                <input type="password" class="form-control" id="password" required>
+                                <label class="form-label" for="password">Mật khẩu</label>
+                                <input class="form-control" id="password" required type="password">
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                            <button class="btn btn-primary w-100" type="submit">Đăng nhập</button>
                         </form>
-                        <div id="result" class="mt-4">
+                        <div class="mt-4" id="result">
                             <h6>Token:</h6>
-                            <p id="token" class="alert alert-success"></p>
-                            <button id="copyButton" class="btn btn-primary">Sao chép Token</button>
+                            <p class="alert alert-success" id="token"></p>
+                            <button class="btn btn-primary" id="copyButton">Sao chép Token</button>
                         </div>
                     </div>
                 </div>
@@ -77,15 +77,15 @@
                         <h5 class="card-title text-center mb-4">Chi tiết user từ token</h5>
                         <form id="tokenForm">
                             <div class="mb-3">
-                                <label for="username" class="form-label">Token</label>
-                                <input type="text" class="form-control" id="tokenip" required>
+                                <label class="form-label" for="username">Token</label>
+                                <input class="form-control" id="tokenip" required type="text">
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Check</button>
+                            <button class="btn btn-primary w-100" type="submit">Check</button>
                         </form>
-                        <div id="result" class="mt-4">
+                        <div class="mt-4" id="result1">
                             <h6>Thông tin:</h6>
-                            <p id="user" class="alert alert-light"></p>
+                            <p class="alert alert-light" id="user"></p>
 
                         </div>
                     </div>
@@ -134,22 +134,13 @@
                         const data = await response.json();
 
 
-
                         document.getElementById("token").textContent = data.data.token;
                         console.log('ok');
 
                     } else {
                         alert("Sai tên đăng nhập hoặc mật khẩu.");
                     }
-
-
-                    btn.classList.remove('btn-success');
-                    btn.classList.add('btn-primary');
-                    btn.textContent = 'Sao chép Token';
-                } catch (error) {
-                    console.error("Lỗi:", error);
-                }
-            });
+                });
 
             ///
 
@@ -180,10 +171,40 @@
                     }
 
 
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-primary');
+                    btn.textContent = 'Sao chép Token';
                 } catch (error) {
                     console.error("Lỗi:", error);
                 }
             });
+
+            ///
+
+            document.getElementById("tokenForm").addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                const token = document.getElementById("tokenip").value;
+
+
+                try {
+                    const response = await fetch("https://anime404.click/api/user/get/userDetail", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ token })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+
+                        displayUserInfo(data.data.user);
+
+                    } else {
+                        alert("Sai tên đăng nhập hoặc mật khẩu.");
+                    }
+                });
             function displayUserInfo(user) {
                 const userInfoDiv = document.getElementById("user");
                 const rolesString = Array.of(user.roles)
@@ -209,15 +230,15 @@
             <h1 class="h2 mb-4">Upload File (Image or PDF)</h1>
 
             <!-- Upload form -->
-            <form id="uploadForm" class="mb-4" enctype="multipart/form-data">
-                <label for="files" class="form-label fw-bold">Choose file:</label>
-                <input type="file" id="files" name="files" accept=".jpg,.jpeg,.png,.pdf" multiple
-                    class="form-control mb-4" required>
-                <button type="submit" class="btn btn-primary w-100">
+            <form class="mb-4" enctype="multipart/form-data" id="uploadForm">
+                <label class="form-label fw-bold" for="files">Choose file:</label>
+                <input accept=".jpg,.jpeg,.png,.pdf" class="form-control mb-4" id="files" multiple name="files" required
+                    type="file">
+                <button class="btn btn-primary w-100" type="submit">
                     Tải ảnh lên
                 </button>
             </form>
-            <button type="button" id="btn_deleteAll" class="btn btn-danger w-100 mb-4">
+            <button class="btn btn-danger w-100 mb-4" id="btn_deleteAll" type="button">
                 Xóa hết ảnh
             </button>
 
@@ -602,10 +623,492 @@
             </div>
         </div>
 
+        <!-- Uploaded files list -->
+        <h2 class="h5 mt-4">Files đã upload</h2>
+        <ul class="list-group mt-3" id="fileList">
+            <!-- List of uploaded files will be added here dynamically -->
+        </ul>
     </div>
 
 
+    <script>
+        // Upload file
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('files').files;
+            if (fileInput.length === 0) return;
 
+            const formData = new FormData();
+            for (const file of fileInput) {
+                formData.append('files', file); // Thêm file vào FormData
+            }
+
+            try {
+                const response = await fetch('https://anime404.click/api/upload/file', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.text();
+                document.getElementById('message').innerText = result;
+                loadFileList();
+            } catch (error) {
+                console.error('Error uploading files:', error);
+            }
+        });
+
+        // Load file list
+        async function loadFileList() {
+            const fileListElement = document.getElementById('fileList');
+            fileListElement.innerHTML = '';
+            try {
+                const response = await fetch('https://anime404.click/api/upload/view/file/all');  // Update API path if needed
+                const files = await response.json();
+
+                files.forEach(file => {
+                    const li = document.createElement('li');
+                    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+
+                    const fileName = document.createElement('span');
+                    fileName.classList.add('text-truncate');
+                    fileName.innerText = file;
+
+                    const viewLink = document.createElement('a');
+                    viewLink.href = `https://anime404.click/api/upload/view/file/${file}`;
+                    viewLink.innerText = "Xem";
+                    viewLink.classList.add('text-primary', 'text-decoration-none', 'me-2');
+
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = `https://anime404.click/api/upload/download/file/${file}`;
+                    downloadLink.innerText = "Tải";
+                    downloadLink.classList.add('text-primary', 'text-decoration-none', 'me-2');
+
+                    const removeLink = document.createElement('a');
+                    removeLink.addEventListener('click', () => {
+                        deleteFile(file);
+                    });
+                    removeLink.innerText = "Xóa";
+                    removeLink.classList.add('text-danger', 'text-decoration-none', 'custom-pointer');
+
+                    li.appendChild(fileName);
+                    li.appendChild(viewLink);
+                    li.appendChild(downloadLink);
+                    li.appendChild(removeLink);
+
+                    fileListElement.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error loading file list:', error);
+            }
+        }
+
+        async function deleteFile(fileName) {
+            try {
+                const response = await fetch(`https://anime404.click/api/upload/delete/file/${fileName}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.text();
+                console.log(result); // Hiển thị thông báo kết quả
+                loadFileList();
+            } catch (error) {
+                console.error('Error deleting file:', error);
+            }
+        }
+
+        async function deleteAllFiles() {
+            try {
+                const response = await fetch('https://anime404.click/api/upload/delete-all/file', {
+                    method: 'DELETE'
+                });
+                const result = await response.text();
+                loadFileList();
+            } catch (error) {
+                console.error('Error deleting all files:', error);
+            }
+        }
+
+        document.getElementById("btn_deleteAll").addEventListener('click', () => {
+            deleteAllFiles();
+        });
+
+        // Load file list on page load
+        loadFileList();
+    </script>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4 text-center">API Documentation</h1>
+        </div>
+    </div>
+
+    <!-- API for /checkRoles -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Check Roles</h5>
+            </div>
+            <div class="code-endpoint mb-3">/api/user/checkRoles</div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul>
+                    <li>token: Token của người dùng</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- API for /get/userDetail -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Lấy Thông Tin Người Dùng</h5>
+            </div>
+            <div class="code-endpoint mb-3">/api/user/get/userDetail</div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul>
+                    <li>token: Token của người dùng</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- API for /login -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Đăng Nhập</h5>
+            </div>
+            <div class="code-endpoint mb-3">/api/user/login</div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul>
+                    <li>username: Tên đăng nhập hoặc email</li>
+                    <li>password: Mật khẩu</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- API for /register -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Đăng Ký</h5>
+            </div>
+            <div class="code-endpoint mb-3">/api/user/register</div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul>
+                    <li>username: Tên đăng nhập</li>
+                    <li>password: Mật khẩu</li>
+                    <li>email: Email người dùng</li>
+                    <li>sdt: Số điện thoại</li>
+                    <li>hovaten: Họ và tên</li>
+                    <li>url: Ảnh đại diện URL</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- API for /changepassword -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Đổi Mật Khẩu</h5>
+            </div>
+            <div class="code-endpoint mb-3">/api/user/changepassword</div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul>
+                    <li>username: Tên đăng nhập</li>
+                    <li>password: Mật khẩu cũ</li>
+                    <li>newpassword: Mật khẩu mới</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- API for /forgot -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Quên Mật Khẩu</h5>
+            </div>
+            <div class="code-endpoint mb-3">/api/user/forgot</div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul>
+                    <li>email: Email để gửi yêu cầu đặt lại mật khẩu</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- API for /reset -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Đặt Lại Mật Khẩu</h5>
+            </div>
+            <div class="code-endpoint mb-3">/api/user/reset</div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul>
+                    <li>token: Token xác thực đặt lại mật khẩu</li>
+                    <li>password: Mật khẩu mới</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Upload File</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                <code>/api/files/upload</code>
+            </div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul class="mb-0">
+                    <li><code>files</code>: Danh sách tệp tin cần tải lên (required)</li>
+                </ul>
+            </div>
+            <strong>Phản hồi:</strong>
+            <ul class="mb-0">
+                <li><strong>Status 200:</strong>
+                    <code>{"message": "File uploaded successfully: [location] file1,file2,..."} </code>
+                </li>
+                <li><strong>Status 400:</strong> <code>{"message": "No files provided"}</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card api-card method-delete mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-danger method-badge me-3">DELETE</span>
+                <h5 class="card-title mb-0">Delete File</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                <code>/api/files/delete/{fileName}</code>
+            </div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul class="mb-0">
+                    <li><code>fileName</code>: Tên của tệp tin cần xóa (required)</li>
+                </ul>
+            </div>
+            <strong>Phản hồi:</strong>
+            <ul class="mb-0">
+                <li><strong>Status 200:</strong> <code>{"message": "File deleted successfully: {fileName}"}</code>
+                </li>
+                <li><strong>Status 500:</strong> <code>{"message": "Failed to delete file: {fileName}"}</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card api-card method-delete mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-danger method-badge me-3">DELETE</span>
+                <h5 class="card-title mb-0">Delete All Files</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                <code>/api/files/delete-all</code>
+            </div>
+            <strong>Phản hồi:</strong>
+            <ul class="mb-0">
+                <li><strong>Status 200:</strong> <code>{"message": "All files deleted successfully."}</code></li>
+                <li><strong>Status 500:</strong> <code>{"message": "Failed to delete all files."}</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card api-card method-get mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-primary method-badge me-3">GET</span>
+                <h5 class="card-title mb-0">Download File</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                <code>/api/files/download/{fileName}</code>
+            </div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul class="mb-0">
+                    <li><code>fileName</code>: Tên của tệp tin cần tải xuống (required)</li>
+                </ul>
+            </div>
+            <strong>Phản hồi:</strong>
+            <ul class="mb-0">
+                <li><strong>Status 200:</strong> Tệp tin được tải xuống (attachment).</li>
+                <li><strong>Status 404:</strong> <code>{"message": "File not found."}</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card api-card method-get mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-primary method-badge me-3">GET</span>
+                <h5 class="card-title mb-0">View Image</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                <code>/api/files/view/{fileName}</code>
+            </div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul class="mb-0">
+                    <li><code>fileName</code>: Tên của tệp hình ảnh cần xem (required)</li>
+                </ul>
+            </div>
+            <strong>Phản hồi:</strong>
+            <ul class="mb-0">
+                <li><strong>Status 200:</strong> Hình ảnh được hiển thị.</li>
+                <li><strong>Status 404:</strong> <code>{"message": "File not found."}</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card api-card method-get mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-primary method-badge me-3">GET</span>
+                <h5 class="card-title mb-0">Get All Files</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                <code>/api/files/view/all</code>
+            </div>
+            <strong>Phản hồi:</strong>
+            <ul class="mb-0">
+                <li><strong>Status 200:</strong> <code>["file1", "file2", ...]</code></li>
+                <li><strong>Status 500:</strong> <code>{"message": "Error loading file list."}</code></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <!-- Đăng nhập -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Đăng nhập</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                api/user/login
+            </div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul class="mb-0">
+                    <li>username: Tên đăng nhập</li>
+                    <li>password: Mật khẩu</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Đăng ký -->
+    <div class="card api-card method-post mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success method-badge me-3">POST</span>
+                <h5 class="card-title mb-0">Đăng ký</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                api/user/register
+            </div>
+            <div class="alert alert-light" role="alert">
+                <strong>Dữ liệu:</strong>
+                <ul class="mb-0">
+                    <li>username: Tên đăng nhập</li>
+                    <li>password: Mật khẩu</li>
+                    <li>hovaten: Họ và tên</li>
+                    <li>sdt: Số điện thoại</li>
+                    <li>url: Đường dẫn</li>
+                    <li>email: Địa chỉ email</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Bài Báo -->
+    <div class="card api-card method-get mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-primary method-badge me-3">GET</span>
+                <h5 class="card-title mb-0">Bài Báo</h5>
+            </div>
+            <div class="code-endpoint mb-3">
+                <h7><strong>Dateformat:</strong> <code>YYYY-MM-DD</code></h7>
+                <br>
+                <code>/api/baibao/all</code> <br>
+                <code>/api/baibao/{id}</code> <br>
+                <code>/api/baibao/date/{date}</code> <br>
+                <code>/api/baibao/date/{date1}/{date2}</code> <br>
+                <code>/api/baibao/author/{author\_id}</code> <br>
+                <code>/api/baibao/theloai/{theloai\_id}</code> <br>
+                <code>/api/baibao/status/{status\_id}</code> <br>
+            </div>
+            <strong>Phản hồi:</strong>
+            <ul class="mb-0">
+                <li><strong> id:</strong> id bài báo</li>
+                <li><strong> tieude:</strong> tiêu đề bài báo</li>
+                <li><strong> noidung:</strong> nội dung bài báo</li>
+                <li><strong> ngaydang:</strong> ngày đăng bài báo</li>
+                <li><strong> url:</strong> đường dẫn bài báo</li>
+                <li><strong> status:</strong> trạng thái bài báo</li>
+                <li><strong> theloai:</strong> thể loại bài báo</li>
+                <li><strong> taikhoan:</strong> tài khoản đăng bài báo</li>
+                <ul>
+                    <li><strong>taikhoan_id:</strong> id tác giả</li>
+                    <li><strong>username:</strong> tên đăng nhập</li>
+                </ul>
+                <li><strong> binhluans:</strong> danh sách bình luận</li>
+                <ul>
+                    <li><strong> id:</strong> id bình luận</li>
+                    <li><strong> thoigianbl:</strong> thời gian bình luận</li>
+                    <li><strong> noidung:</strong> nội dung bình luận</li>
+                    <li><strong> status:</strong> trạng thái bình luận</li>
+                    <li><strong> taikhoan:</strong> tài khoản đăng bình luận</li>
+                    <ul>
+                        <li><strong>taikhoan_id:</strong> id tài khoản bình luận</li>
+                        <li><strong>username:</strong> tên đăng nhập</li>
+                    </ul>
+                </ul>
+                <li><strong> thichs:</strong> danh sách người thích</li>
+                <ul>
+                    <li><strong> id:</strong> id người thích</li>
+                    <li><strong>thoigianthich</strong> thời gian nhấn thích</li>
+                    <li><strong> taikhoan:</strong> tài khoản thích</li>
+                    <ul>
+                        <li><strong>taikhoan_id:</strong> id tài khoản thích</li>
+                        <li><strong>username:</strong> tên đăng nhập</li>
+                    </ul>
+
+                </ul>
+
+        </div>
+    </div>
+    ```
+
+
+    </div>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
     <!-- Bootstrap JS (Optional) -->

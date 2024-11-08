@@ -1,11 +1,6 @@
 package com.be.tapchi.pjtapchi.model;
 
-import java.util.List;
-
-import com.be.tapchi.pjtapchi.model.Baibao;
-import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,11 +17,19 @@ public class Danhmucbaibao {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "danhmuc_id")
+    @JoinColumn(name = "danhmuc_id", insertable = false, updatable = false)
     private DanhMuc danhmuc;
 
+    @Column(name = "danhmuc_id", insertable = false, updatable = false)
+    private Integer danhmucId;
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "baibao_id")
     private Baibao baibao;
+
+    @Column(name = "baibao_id", insertable = false, updatable = false)
+    private Integer baobaiId;
+
 
 }
