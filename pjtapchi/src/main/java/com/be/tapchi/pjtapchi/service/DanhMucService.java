@@ -16,4 +16,24 @@ public class DanhMucService {
         return danhMucRepository.findAll();
     }
 
+    public DanhMuc getDanhMucById(Long id) {
+        return danhMucRepository.findById(id).orElse(null);
+    }
+
+    public DanhMuc saveDanhMuc(DanhMuc danhMuc) {
+        return danhMucRepository.save(danhMuc);
+    }
+
+    public void deleteDanhMuc(Long id) {
+        danhMucRepository.deleteById(id);
+    }
+
+    public DanhMuc updateDanhMuc(Long id, DanhMuc newDanhMuc) {
+        return danhMucRepository.findById(id).map(danhMuc -> {
+            danhMuc.setTieuDe(newDanhMuc.getTieuDe());
+            danhMuc.setMoTa(newDanhMuc.getMoTa());
+            return danhMucRepository.save(danhMuc);
+        }).orElse(null);
+    }
+
 }
