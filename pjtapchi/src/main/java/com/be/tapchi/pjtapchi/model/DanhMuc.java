@@ -35,12 +35,17 @@ public class DanhMuc {
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
+    @Column(name = "tuan", nullable = false)
+    private Integer tuan;
 
-    @OneToMany(mappedBy = "danhmuc", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Column(name = "so", nullable = false)
+    private Integer so;
+
+
+    @OneToMany(mappedBy = "danhmuc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Danhmucbaibao> danhmucbaibaos;
 
-
-    // @OneToMany(mappedBy = "baibao", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    // @OneToMany(mappedBy = "baibao", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     // private List<Baibao> baibaos;
 
 
