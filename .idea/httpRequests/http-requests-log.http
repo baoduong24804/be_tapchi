@@ -1,3 +1,53 @@
+POST http://localhost:9000/api/user/register
+Content-Type: application/json
+Content-Length: 158
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "hisu",
+  "password": "123",
+  "hovaten": "John Doe",
+  "sdt": "1234567890",
+  "url": "http://example.com",
+  "email": "newuser@example.com"
+}
+
+<> 2024-11-07T162824.500.json
+
+###
+
+POST http://localhost:9000/api/user/register
+Content-Type: application/json
+Content-Length: 169
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+
+{
+  "username": "newuser",
+  "password": "password123",
+  "hovaten": "New User",
+  "email": "newuser@example.com",
+  "sdt": "1234567890",
+  "url": "http://example.com"
+}
+
+<> 2024-11-07T162520.500.json
+
+###
+
+POST http://localhost:9000/api/user/register
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-11-07T161353.400.json
+
+###
+
 POST http://localhost:9000/api/user/get/userDetail
 User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.1.6
 Accept-Encoding: br, deflate, gzip, x-gzip
