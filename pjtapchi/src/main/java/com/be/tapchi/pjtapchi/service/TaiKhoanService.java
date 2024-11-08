@@ -11,18 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.be.tapchi.pjtapchi.controller.user.model.ChangePassword;
 import com.be.tapchi.pjtapchi.controller.user.model.LoginRequest;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
-import com.be.tapchi.pjtapchi.model.Taikhoanchitiet;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
-import com.be.tapchi.pjtapchi.repository.TaiKhoanchitietRepository;
+
 
 @Service
 public class TaiKhoanService {
     @Autowired
     private TaiKhoanRepository taiKhoanRepository;
-
-    @Autowired
-    private TaiKhoanchitietRepository taiKhoanchitietRepository;
-
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -131,11 +126,11 @@ public class TaiKhoanService {
     
 
     public Taikhoan findByEmail(String email){
-        Taikhoanchitiet tkct = taiKhoanchitietRepository.findByEmail(email);
-        if(tkct == null){
+        Taikhoan tk = taiKhoanRepository.findByEmail(email);
+        if(tk == null){
             return null;
         }
-        Taikhoan tk = taiKhoanRepository.findById(tkct.getTaikhoan_id()).orElse(null);
+        
 
         return tk;
 
@@ -146,26 +141,22 @@ public class TaiKhoanService {
     }
 
     public boolean existsByEmail(String email){
-        if(taiKhoanchitietRepository.existsByEmail(email)){
+        if(taiKhoanRepository.existsByEmail(email)){
             return true;
         }
         return false;
     }
 
     public boolean existsBySdt(String sdt){
-        if(taiKhoanchitietRepository.existsBySdt(sdt)){
+        if(taiKhoanRepository.existsBySdt(sdt)){
             return true;
         }
         return false;
     }
 
     @Transactional
-    public void saveTaiKhoanAndChiTiet(Taikhoan taiKhoan, Taikhoanchitiet taiKhoanChiTiet) {
+    public void saveTaiKhoanAndChiTiet(Taikhoan taiKhoan) {
         // Lưu thông tin TaiKhoan
         Taikhoan savedTaiKhoan = taiKhoanRepository.save(taiKhoan);
-
-        // Set TaiKhoan cho TaiKhoanChiTiet và lưu TaiKhoanChiTiet
-        taiKhoanChiTiet.setTaikhoan(savedTaiKhoan);
-        taiKhoanchitietRepository.save(taiKhoanChiTiet);
     }
 }

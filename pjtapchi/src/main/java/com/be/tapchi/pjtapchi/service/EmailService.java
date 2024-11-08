@@ -16,9 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.be.tapchi.pjtapchi.model.EmailVerification;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
-import com.be.tapchi.pjtapchi.model.Taikhoanchitiet;
 import com.be.tapchi.pjtapchi.repository.EmailVerificationRepository;
-import com.be.tapchi.pjtapchi.repository.TaiKhoanchitietRepository;
+
 
 @Service
 @Transactional
@@ -32,9 +31,6 @@ public class EmailService {
 
     @Autowired
     private TaiKhoanService taiKhoanService;
-
-    @Autowired
-    private TaiKhoanchitietRepository taiKhoanchitietRepository;
 
     
     @Value("${app.token.expiration:15}")
@@ -89,12 +85,12 @@ public class EmailService {
             if (createdAt.isAfter(LocalDateTime.now())) {
                 // Xóa mã xác thực sau khi xác thực thành công
                 emailVerificationRepository.delete(emailVerification);
-                Taikhoanchitiet tkct = emailVerification.getTaikhoan().getTaikhoanchitiet();
-                if(tkct.getStatus() != 0){
+                Taikhoan tk = emailVerification.getTaikhoan();
+                if(tk.getStatus() != 0){
                     return true;
                 }
-                tkct.setStatus(1);
-                taiKhoanchitietRepository.save(tkct);
+                tk.setStatus(1);
+                taiKhoanService.saveTaiKhoan(tk);
                 return true;
             }
            

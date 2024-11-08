@@ -62,7 +62,7 @@ public class TaikhoanTokenService {
             myToken.setExpiryDate(LocalDateTime.now().plusMinutes(defaultTokenExpiration));
             tokenRepository.save(myToken);
 
-            sendResetPasswordEmail(user.getTaikhoanchitiet().getEmail(), token,"Đặt lại mật khẩu","Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn 15 phút");
+            sendResetPasswordEmail(user.getEmail(), token,"Đặt lại mật khẩu","Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn 15 phút");
         } catch (Exception e) {
             // TODO: handle exception
             return false;
