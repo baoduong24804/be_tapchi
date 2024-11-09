@@ -1,6 +1,7 @@
 package com.be.tapchi.pjtapchi.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -53,6 +54,16 @@ public class TaikhoanTokenService {
                 return false;
             }
 
+          
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+
+            
+            LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(defaultTokenExpiration);
+
+           
+            String formattedExpiryDate = expiryDate.format(formatter);
+            System.out.println("Đã thêm token có thời hạn đến: " + formattedExpiryDate);
+
             String token = generateToken();
             TaikhoanToken myToken = new TaikhoanToken();
 
@@ -61,8 +72,9 @@ public class TaikhoanTokenService {
             }
             myToken.setToken(token);
             myToken.setTaikhoan(user);
-            // myToken.setExpiryDate(null);
-            myToken.setExpiryDate(LocalDateTime.now().plusMinutes(defaultTokenExpiration));
+            // myToken.setExpiryDate(LocalDateTime.now());
+            myToken.setExpiryDate(expiryDate);
+            // System.out.println(LocalDateTime.now().plusMinutes(0));
             tokenRepository.save(myToken);
 
             sendResetPasswordEmail(user.getEmail(), token, "Đặt lại mật khẩu",
@@ -143,29 +155,35 @@ public class TaikhoanTokenService {
         return false;
     }
 
-    public List<Taikhoan> getTaiKhoanFromTokenExpiryDate() {
+    public void deleteTokenExpiryDate() {
         try {
             List<TaikhoanToken> list = tokenRepository.findByExpiryDateBefore(LocalDateTime.now());
-            
-            if (list == null) {
-                return null;
+
+            if (list == null || list.size() == 0) {
+                System.out.println("Ko co token het han");
+                return;
             }
 
-            System.out.println("okkkkkkkkk size: "+list.size());
-            List<Taikhoan> listTK = new ArrayList<>();
+            //List<Taikhoan> listTK = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+      
 
             for (TaikhoanToken tktoken : list) {
-                
-                listTK.add(tktoken.getTaikhoan());
+                // System.out.println(tktoken.getExpiryDate());
+                //listTK.add(tktoken.getTaikhoan());
+                String formattedExpiryDate = tktoken.getExpiryDate().format(formatter);
+                System.out.println("Tìm thấy token có thời gian hết hạn là: " + formattedExpiryDate);
+                tokenRepository.delete(tktoken);
+                System.out.println("Đã xóa token hết hạn");
             }
-            
 
-            return listTK;
+            return;
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println("err get taikhantoken expriryDate: " + e.getMessage());
         }
-        return null;
+        
+        return;
     }
 
     // Scheduled task để xóa token hết hạn
@@ -175,21 +193,10 @@ public class TaikhoanTokenService {
         // tokenRepository.deleteByExpiryDateLessThan(LocalDateTime.now());// xoa token
         // het han
         try {
-            System.out.println("Helooooooooooooooooooooooo");
-            List<Taikhoan> list = getTaiKhoanFromTokenExpiryDate();
-            if(list == null){
-                System.out.println("Ko co tktoken het han");
-                return;
-            }
+            System.out.println("Checkkkk token");
 
-            if (list.size() <= 0) {
-                System.out.println("Ko co tktoken het han");
-                return;
-            }
-
-            for (Taikhoan taikhoan : list) {
-                System.out.println(taikhoan.getEmail());
-            }
+            deleteTokenExpiryDate();
+            
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println("Err function checkExpriryDate");

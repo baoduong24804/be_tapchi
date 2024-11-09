@@ -15,7 +15,7 @@ public interface TaikhoanTKRepository extends JpaRepository<TaikhoanToken, Long>
     TaikhoanToken findByTaikhoan(Taikhoan taikhoan);
     List<TaikhoanToken> findByExpiryDate(LocalDateTime now);
     List<TaikhoanToken> findByExpiryDateBefore(LocalDateTime dateTime);
-    
+    List<TaikhoanToken> findByExpiryDateAfter(LocalDateTime dateTime);
     
 }
 

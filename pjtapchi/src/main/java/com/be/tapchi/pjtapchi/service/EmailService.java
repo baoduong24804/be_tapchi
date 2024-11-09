@@ -3,6 +3,8 @@ package com.be.tapchi.pjtapchi.service;
 import jakarta.mail.internet.MimeMessage;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.be.tapchi.pjtapchi.model.EmailVerification;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.model.TaikhoanToken;
 import com.be.tapchi.pjtapchi.repository.EmailVerificationRepository;
 
 
 @Service
-@Transactional
 public class EmailService {
 
     @Autowired
@@ -31,6 +33,7 @@ public class EmailService {
 
     @Autowired
     private TaiKhoanService taiKhoanService;
+
 
     
     @Value("${app.token.expiration:15}")
@@ -78,6 +81,7 @@ public class EmailService {
      
     }
 
+    
     public boolean verifyEmail(String verificationCode) {
         EmailVerification emailVerification = emailVerificationRepository.findByVerificationCode(verificationCode);
         if (emailVerification != null) {
@@ -98,10 +102,44 @@ public class EmailService {
         return false;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteTokenExpiryDate() {
+        try {
+            List<EmailVerification> list = emailVerificationRepository.findByCreatedAtBefore(LocalDateTime.now());
+
+            if (list == null || list.size() == 0) {
+                System.out.println("Ko co email verify het han");
+                return;
+            }
+
+            //List<Taikhoan> listTK = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+      
+
+            for (EmailVerification tktoken : list) {
+                // System.out.println(tktoken.getExpiryDate());
+                //listTK.add(tktoken.getTaikhoan());
+                String formattedExpiryDate = tktoken.getCreatedAt().format(formatter);
+                System.out.println("Tìm thấy email_vefiry có thời gian hết hạn là: " + formattedExpiryDate);
+                taiKhoanService.deleteTaiKhoan(tktoken.getTaikhoan());
+                emailVerificationRepository.delete(tktoken);
+                System.out.println("Đã xóa email_vefiry và tk hết hạn");
+            }
+
+            return;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("err get email expriryDate: " + e.getMessage());
+        }
+        
+        return;
+    }
+
     // Scheduled task để xóa token hết hạn
     @Scheduled(fixedRate = 3600000) // Chạy mỗi giờ
     public void removeExpiredTokens() {
         //emailVerificationRepository.deleteByCreatedAtLessThan(LocalDateTime.now());
+        deleteTokenExpiryDate();
     }
 
     public void sendActivationEmail(String to, String token, String title, String content) {
