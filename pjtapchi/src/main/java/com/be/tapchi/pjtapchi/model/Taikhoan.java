@@ -2,6 +2,7 @@ package com.be.tapchi.pjtapchi.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "taikhoan")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Taikhoan {
 
     @Id
@@ -37,7 +39,7 @@ public class Taikhoan {
 
     @Column(name = "Google_ID")
     private String google_id;
-    
+
     @Column(name = "sdt")
     private String sdt;
 

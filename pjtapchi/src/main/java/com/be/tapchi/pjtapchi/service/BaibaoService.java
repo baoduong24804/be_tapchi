@@ -26,7 +26,7 @@ public class BaibaoService {
         this.theloaiRepository = theloaiRepository;
     }
 
-    public List<Baibao> getAllBaibaos() {
+    public List<Baibao> findAllBaibao() {
         return baiBaoRepository.findAll();
     }
 

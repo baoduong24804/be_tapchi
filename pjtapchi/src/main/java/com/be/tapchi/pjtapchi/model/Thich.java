@@ -1,5 +1,6 @@
 package com.be.tapchi.pjtapchi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,5 +30,10 @@ public class Thich {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Taikhoan_id", nullable = false)
     private Taikhoan taikhoan;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Baibao_id", nullable = false)
+    @JsonIgnore
+    private Baibao baibao;
 
 }

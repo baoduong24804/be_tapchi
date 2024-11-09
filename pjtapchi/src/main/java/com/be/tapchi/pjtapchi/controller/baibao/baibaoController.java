@@ -1,5 +1,6 @@
-package com.be.tapchi.pjtapchi.api;
+package com.be.tapchi.pjtapchi.controller.baibao;
 
+import com.be.tapchi.pjtapchi.api.ApiResponse;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.repository.*;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
@@ -8,10 +9,7 @@ import com.be.tapchi.pjtapchi.service.TheloaiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +18,8 @@ import java.util.List;
  * Controller cho các API liên quan đến Baibao.
  */
 @RestController
+@RequestMapping("api/baibao")
+
 public class baibaoController {
 
     @Autowired
@@ -51,9 +51,9 @@ public class baibaoController {
      *
      * @return ResponseEntity chứa danh sách các Baibao.
      */
-    @GetMapping("baibao")
+    @GetMapping("all")
     public ResponseEntity<ApiResponse<List<Baibao>>> getExample() {
-        List<Baibao> list = bbService.getAllBaibaos();
+        List<Baibao> list = bbService.findAllBaibao();
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", list);
         if (!list.isEmpty()) {
             return ResponseEntity.ok().body(response);
@@ -68,7 +68,7 @@ public class baibaoController {
      * @param id ID của Baibao.
      * @return ResponseEntity chứa Baibao.
      */
-    @GetMapping("baibao/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ApiResponse<Baibao>> getExample(@PathVariable("id") Integer id) {
         Baibao bb = bbService.getBaibaoById(id);
         ApiResponse<Baibao> response = new ApiResponse<>(true, "Fetch bai bao successful", bb);
@@ -85,7 +85,7 @@ public class baibaoController {
      * @param id ID của tác giả.
      * @return ResponseEntity chứa danh sách các Baibao.
      */
-    @GetMapping("baibao/tacgia/{id}")
+    @GetMapping("author/{id}")
     public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaoByTacGiaId(@PathVariable("id") Long id) {
         List<Baibao> list = bbService.getBaibaoByTacGiaId(id);
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", list);
@@ -102,7 +102,7 @@ public class baibaoController {
      * @param id ID của thể loại.
      * @return ResponseEntity chứa danh sách các Baibao.
      */
-    @GetMapping("baibao/theloai/{id}")
+    @GetMapping("theloai/{id}")
     public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaoByTheLoaiID(@PathVariable("id") Integer id) {
         List<Baibao> list = bbService.getBaibaoByTheLoaiID(id);
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", list);
@@ -119,7 +119,7 @@ public class baibaoController {
      * @param postDate Ngày đăng của Baibao.
      * @return ResponseEntity chứa danh sách các Baibao.
      */
-    @GetMapping("baibao/ngaydang/{postDate}")
+    @GetMapping("date/{postDate}")
     public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaoByNgayDang(@PathVariable("postDate") LocalDate postDate) {
         List<Baibao> list = bbService.getBaibaoByNgayDang(postDate);
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", list);
@@ -137,8 +137,9 @@ public class baibaoController {
      * @param date2 Ngày kết thúc.
      * @return ResponseEntity chứa danh sách các Baibao.
      */
-    @GetMapping("baibao/ngaydang/{date1}/{date2}")
-    public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaiByNgayDangBetween(@PathVariable("date1") LocalDate date1, @PathVariable("date2") LocalDate date2) {
+    @GetMapping("date/{date1}/{date2}")
+    public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaiByNgayDangBetween(@PathVariable("date1") LocalDate date1,
+                                                                                @PathVariable("date2") LocalDate date2) {
         List<Baibao> list = bbService.getBaibaiByNgayDangBetween(date1, date2);
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", list);
         if (!list.isEmpty()) {
@@ -154,7 +155,7 @@ public class baibaoController {
      * @param status Trạng thái của Baibao.
      * @return ResponseEntity chứa danh sách các Baibao.
      */
-    @GetMapping("baibao/trangthai/{status}")
+    @GetMapping("status/{status}")
     public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaoByTrangThai(@PathVariable("status") Integer status) {
         List<Baibao> list = bbService.getBaibaoByTrangThai(status);
         ApiResponse<List<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", list);
@@ -170,9 +171,10 @@ public class baibaoController {
      *
      * @param baibao Đối tượng Baibao cần lưu.
      * @return ResponseEntity chứa Baibao đã lưu.
-     * @implNote: Waiting for the Frontend to be able to get the data from the form and send it to the backend.
+     * @implNote: Waiting for the Frontend to be able to get the data from the form
+     * and send it to the backend.
      */
-    @PostMapping("baibao/save")
+    @PostMapping("/save")
     public ResponseEntity<ApiResponse<Baibao>> saveBaibao(Baibao baibao) {
         Baibao bb = bbService.saveBaibao(baibao);
         ApiResponse<Baibao> response = new ApiResponse<>(true, "Fetch bai bao successful", bb);
@@ -189,10 +191,11 @@ public class baibaoController {
      * @param id ID của Baibao cần xóa.
      * @return ResponseEntity chứa thông báo xóa thành công.
      */
-    @PostMapping("baibao/delete/{id}")
+    @PostMapping("delete/{id}")
     public ResponseEntity<ApiResponse<String>> deleteBaibao(@PathVariable("id") Integer id) {
         bbService.deleteBaibao(id);
-        ApiResponse<String> response = new ApiResponse<>(true, "Delete bai bao successful", "Delete bai bao successful");
+        ApiResponse<String> response = new ApiResponse<>(true, "Delete bai bao successful",
+                "Delete bai bao successful");
         return ResponseEntity.ok().body(response);
     }
 
@@ -202,7 +205,7 @@ public class baibaoController {
      * @param baibao Đối tượng Baibao cần cập nhật.
      * @return ResponseEntity chứa Baibao đã cập nhật.
      */
-    @PostMapping("baibao/update")
+    @PostMapping("update")
     public ResponseEntity<ApiResponse<Baibao>> updateBaibao(Baibao baibao) {
         Baibao bb = bbService.saveBaibao(baibao);
         ApiResponse<Baibao> response = new ApiResponse<>(true, "Update bai bao successful", bb);
