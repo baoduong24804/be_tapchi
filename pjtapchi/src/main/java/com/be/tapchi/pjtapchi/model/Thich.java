@@ -20,6 +20,8 @@ public class Thich {
     private Long thichId;
 
 
+    @Column(name = "Status", nullable = false)
+    private Integer status;
 
     @Column(name = "Thoigianthich", nullable = false)
     private LocalDateTime thoigianthich;

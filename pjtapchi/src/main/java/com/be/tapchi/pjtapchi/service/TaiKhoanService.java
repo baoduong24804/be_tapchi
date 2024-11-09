@@ -154,9 +154,9 @@ public class TaiKhoanService {
         return false;
     }
 
-    @Transactional
-    public void saveTaiKhoanAndChiTiet(Taikhoan taiKhoan) {
-        // Lưu thông tin TaiKhoan
-        Taikhoan savedTaiKhoan = taiKhoanRepository.save(taiKhoan);
-    }
+    // @Transactional
+    // public void saveTaiKhoanAndChiTiet(Taikhoan taiKhoan) {
+    //     // Lưu thông tin TaiKhoan
+    //     Taikhoan savedTaiKhoan = taiKhoanRepository.save(taiKhoan);
+    // }
 }

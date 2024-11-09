@@ -101,7 +101,7 @@ public class EmailService {
     // Scheduled task để xóa token hết hạn
     @Scheduled(fixedRate = 3600000) // Chạy mỗi giờ
     public void removeExpiredTokens() {
-        emailVerificationRepository.deleteByCreatedAtLessThan(LocalDateTime.now());
+        //emailVerificationRepository.deleteByCreatedAtLessThan(LocalDateTime.now());
     }
 
     public void sendActivationEmail(String to, String token, String title, String content) {

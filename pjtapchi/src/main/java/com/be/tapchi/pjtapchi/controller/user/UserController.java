@@ -420,16 +420,20 @@ public class UserController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<String> verifyEmail(@RequestParam(required = false) String code) {
+    public ResponseEntity<?> verifyEmail(@RequestParam(required = false) String code) {
         if (code == null) {
             return ResponseEntity.badRequest().body(null);
         }
+        ApiResponse<?> api = new ApiResponse<>();
         boolean isVerified = emailService.verifyEmail(code);
         if (isVerified) {
-
-            return ResponseEntity.ok().body("Xác thực thành công");
+            api.setSuccess(true);
+            api.setMessage("Xác thực thành công");
+            return ResponseEntity.ok().body(api);
         }
-        return ResponseEntity.badRequest().body("Mã xác thực không hợp lệ hoặc đã hết hạn.");
+        api.setSuccess(false);
+        api.setMessage("Mã xác thực không hợp lệ hoặc đã hết hạn");
+        return ResponseEntity.badRequest().body(api);
     }
 
 }
