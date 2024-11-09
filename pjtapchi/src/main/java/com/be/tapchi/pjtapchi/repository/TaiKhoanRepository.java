@@ -13,7 +13,7 @@ public interface TaiKhoanRepository extends JpaRepository<Taikhoan,Long>{
 
     Taikhoan findByEmail(String email);
 
-    Taikhoan findBySdt(String email);
+    Taikhoan findBySdt(String sdt);
 
     boolean existsByEmail(String email);
 

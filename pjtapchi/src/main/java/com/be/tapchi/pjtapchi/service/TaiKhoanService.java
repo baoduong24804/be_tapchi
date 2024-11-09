@@ -50,32 +50,32 @@ public class TaiKhoanService {
             }
             Taikhoan tk = findByUsername(user.getUsername().trim());
             Taikhoan tk_e = findByEmail(user.getUsername().trim());
-            Taikhoan tk_sdt = findBySdt(user.getPassword().trim());
-            if (tk == null && tk_e == null && tk_sdt == null) {
-                return false;
+            Taikhoan tk_sdt = findBySdt(user.getUsername().trim());
+            if (tk != null || tk_e != null || tk_sdt != null) {
+                return true;
             }
         } catch (Exception e) {
             // TODO: handle exception
             return false;
         }
 
-        return true;
+        return false;
 
     }
 
     public Taikhoan getTaikhoanLogin(LoginRequest entity) {
 
         try {
-            Taikhoan username = taiKhoanRepository.findByUsername(entity.getUsername());
+            Taikhoan username = taiKhoanRepository.findByUsername(entity.getUsername().trim());
             if (username != null) {
                 return username;
             }
-            Taikhoan email = taiKhoanRepository.findByEmail(entity.getUsername());
+            Taikhoan email = taiKhoanRepository.findByEmail(entity.getUsername().trim());
             if (email != null) {
                 return email;
             }
 
-            Taikhoan sdt = taiKhoanRepository.findBySdt(entity.getUsername());
+            Taikhoan sdt = taiKhoanRepository.findBySdt(entity.getUsername().trim());
             if (sdt != null) {
                 return sdt;
             }
