@@ -3,10 +3,11 @@ package com.be.tapchi.pjtapchi.repository;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Theloai;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 
 //Extending JpaRepository interface for Baibao entity to perform CRUD operations.
 public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
@@ -14,28 +15,28 @@ public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
 
     Baibao findBaibaoById(Integer id);
 
-    List<Baibao> findBaibaoByNgaydang(LocalDate ngaydang);
+    Page<Baibao> findBaibaoByNgaydang(LocalDate ngaydang, Pageable pageable);
 
-    List<Baibao> findByNgaydangBetween(LocalDate date1, LocalDate date2);
+    Page<Baibao> findByNgaydangBetween(LocalDate date1, LocalDate date2, Pageable pageable);
 
-    List<Baibao> findBaibaoByTaikhoan(Taikhoan taikhoan);
+    Page<Baibao> findBaibaoByTaikhoan(Taikhoan taikhoan, Pageable pageable);
 
-    List<Baibao> findBaibaoByTheloai(Theloai theloai);
+    Page<Baibao> findBaibaoByTheloai(Theloai theloai, Pageable pageable);
 
-    List<Baibao> findBaibaoByTieudeContaining(String tieude);
+    Page<Baibao> findBaibaoByTieudeContaining(String tieude, Pageable pageable);
 
-    List<Baibao> findBaibaoByNoidungContaining(String noidung);
+    Page<Baibao> findBaibaoByNoidungContaining(String noidung, Pageable pageable);
 
-    List<Baibao> findBaibaoByStatus(Integer status);
+    Page<Baibao> findBaibaoByStatus(Integer status, Pageable pageable);
 
-    List<Baibao> findBaibaoByNgaydangAndStatus(LocalDate ngaydang, Integer status);
+    Page<Baibao> findBaibaoByNgaydangAndStatus(LocalDate ngaydang, Integer status, Pageable pageable);
 
-    List<Baibao> findBaibaoByNgaydangBetweenAndStatus(LocalDate date1, LocalDate date2, Integer status);
+    Page<Baibao> findBaibaoByNgaydangBetweenAndStatus(LocalDate date1, LocalDate date2, Integer status, Pageable pageable);
 
 
-    List<Baibao> findBaibaoByTieudeContainingAndStatus(String tieude, Integer status);
+    Page<Baibao> findBaibaoByTieudeContainingAndStatus(String tieude, Integer status, Pageable pageable);
 
-    List<Baibao> findBaibaoByNoidungContainingAndStatus(String noidung, Integer status);
+    Page<Baibao> findBaibaoByNoidungContainingAndStatus(String noidung, Integer status, Pageable pageable);
 
 
 }
