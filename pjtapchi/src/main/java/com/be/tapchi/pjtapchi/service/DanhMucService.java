@@ -3,17 +3,21 @@ package com.be.tapchi.pjtapchi.service;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class DanhMucService {
     @Autowired
     private DanhMucRepository danhMucRepository;
 
-    public List<DanhMuc> getAllDanhMuc() {
-        return danhMucRepository.findAll();
+//    public List<DanhMuc> getAllDanhMuc() {
+//        return danhMucRepository.findAll();
+//    }
+
+    public Page<DanhMuc> getAllDanhMuc(Pageable pageable) {
+        return danhMucRepository.findAll(pageable);
     }
 
     public DanhMuc getDanhMucById(Long id) {
@@ -36,4 +40,7 @@ public class DanhMucService {
         }).orElse(null);
     }
 
+    public Page<DanhMuc> findAll(Pageable pageable) {
+        return danhMucRepository.findAll(pageable);
+    }
 }

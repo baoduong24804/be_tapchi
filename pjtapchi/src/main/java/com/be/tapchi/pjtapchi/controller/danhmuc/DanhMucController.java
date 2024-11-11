@@ -4,11 +4,12 @@ import com.be.tapchi.pjtapchi.api.ApiResponse;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.service.DanhMucService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/danhmuc")
@@ -17,12 +18,17 @@ public class DanhMucController {
     @Autowired
     DanhMucService danhMucService;
 
-    @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<DanhMuc>>> getAllDanhMuc() {
-        List<DanhMuc> danhMucList = danhMucService.getAllDanhMuc();
-        ApiResponse<List<DanhMuc>> response = new ApiResponse<>(true, "Danh sách danh mục", danhMucList);
 
-        if (danhMucList.isEmpty()) {
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<Page<DanhMuc>>> getAllDanhMuc(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<DanhMuc> danhMucPage = danhMucService.getAllDanhMuc(pageable);
+        ApiResponse<Page<DanhMuc>> response = new ApiResponse<>(true, "Danh sách danh mục", danhMucPage);
+
+        if (danhMucPage.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } else {
             return ResponseEntity.ok().body(response);
@@ -61,5 +67,6 @@ public class DanhMucController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, "Danh muc not found", null));
         }
     }
+
 
 }
