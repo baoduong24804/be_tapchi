@@ -13,7 +13,6 @@ import com.be.tapchi.pjtapchi.controller.user.model.LoginRequest;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
 
-
 @Service
 public class TaiKhoanService {
     @Autowired
@@ -34,47 +33,86 @@ public class TaiKhoanService {
         return taiKhoanRepository.save(taiKhoan);
     }
 
-    public void deleteTaiKhoan(Long id) {
+    public void deleteTaiKhoanById(Long id) {
         taiKhoanRepository.deleteById(id);
     }
 
-    public boolean checkTaikhoan(LoginRequest user){
-        // trong email
-        if(user.getUsername().isBlank() || user.getUsername().isEmpty()){
-            return false;
-        }
-        Taikhoan tk = findByUsername(user.getUsername().trim());
-        Taikhoan tk_e = findByEmail(user.getUsername().trim());
-        if(tk == null && tk_e == null){
+    public void deleteTaiKhoan(Taikhoan entity) {
+        taiKhoanRepository.delete(entity);
+    }
+
+    public boolean checkTaikhoan(LoginRequest user) {
+        // trong username
+        try {
+            if (user.getUsername().isBlank() || user.getUsername().isEmpty() || user.getPassword().isBlank()
+                    || user.getPassword().isEmpty()) {
+                return false;
+            }
+            Taikhoan tk = findByUsername(user.getUsername().trim());
+            Taikhoan tk_e = findByEmail(user.getUsername().trim());
+            Taikhoan tk_sdt = findBySdt(user.getUsername().trim());
+            if (tk != null || tk_e != null || tk_sdt != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
             return false;
         }
 
-        return true;
+        return false;
 
     }
 
-    public boolean loginTaikhoan(LoginRequest user){
-     
-        if(user.getUsername().isBlank() || user.getUsername().isEmpty()){
+    public Taikhoan getTaikhoanLogin(LoginRequest entity) {
+
+        try {
+            Taikhoan username = taiKhoanRepository.findByUsername(entity.getUsername().trim());
+            if (username != null) {
+                return username;
+            }
+            Taikhoan email = taiKhoanRepository.findByEmail(entity.getUsername().trim());
+            if (email != null) {
+                return email;
+            }
+
+            Taikhoan sdt = taiKhoanRepository.findBySdt(entity.getUsername().trim());
+            if (sdt != null) {
+                return sdt;
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean checkUserLockedorNotActice(Taikhoan tk){
+        try {
+            if(tk.getStatus() == -1 || tk.getStatus() == 0){
+                return true;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            return true;
+        }
+        return false;
+    }
+
+    public boolean loginTaikhoan(LoginRequest user) {
+
+        if (user.getUsername().isBlank() || user.getUsername().isEmpty()) {
             return false;
         }
-        Taikhoan tk = findByUsername(user.getUsername().trim());
-        Taikhoan tk_e = findByEmail(user.getUsername().trim());
-        if(tk != null){
-            
-            if(passwordEncoder.matches(user.getPassword(), tk.getPassword())){
+        Taikhoan tk = getTaikhoanLogin(user);// lay tk tu username
+       
+
+        if (tk != null) {
+
+            if (passwordEncoder.matches(user.getPassword(), tk.getPassword())) {
                 return true;
             }
 
-            return false;
-        }
-
-        if(tk_e != null){
-            
-            if(passwordEncoder.matches(user.getPassword(), tk_e.getPassword())){
-                return true;
-            }
-            
             return false;
         }
 
@@ -83,33 +121,32 @@ public class TaiKhoanService {
     }
 
     // neu tk va mk dung
-    public boolean loginTaikhoan(ChangePassword user){
-        
+    public boolean loginTaikhoan(ChangePassword user) {
+
         try {
-            if(user.getUsername().isBlank() || user.getUsername().isEmpty()){
+            if (user.getUsername().isBlank() || user.getUsername().isEmpty()) {
                 return false;
             }
             Taikhoan tk = findByUsername(user.getUsername().trim());
             Taikhoan tk_e = findByEmail(user.getUsername().trim());
-            if(tk != null){
-                
-                if(passwordEncoder.matches(user.getPassword().trim(), tk.getPassword().trim())){
+            if (tk != null) {
+
+                if (passwordEncoder.matches(user.getPassword().trim(), tk.getPassword().trim())) {
                     return true;
                 }
-    
+
                 return false;
             }
-    
-            if(tk_e != null){
-                
-                if(passwordEncoder.matches(user.getPassword().trim(), tk_e.getPassword().trim())){
+
+            if (tk_e != null) {
+
+                if (passwordEncoder.matches(user.getPassword().trim(), tk_e.getPassword().trim())) {
                     return true;
                 }
-                
+
                 return false;
             }
-    
-            
+
         } catch (Exception e) {
             // TODO: handle exception
             throw e;
@@ -117,46 +154,46 @@ public class TaiKhoanService {
         return false;
 
     }
-    
 
-    public Taikhoan findByUsername(String username){
+    public Taikhoan findBySdt(String sdt){
+        return taiKhoanRepository.findBySdt(sdt);
+    }
+
+    public Taikhoan findByUsername(String username) {
         return taiKhoanRepository.findByUsername(username);
     }
 
-    
-
-    public Taikhoan findByEmail(String email){
+    public Taikhoan findByEmail(String email) {
         Taikhoan tk = taiKhoanRepository.findByEmail(email);
-        if(tk == null){
+        if (tk == null) {
             return null;
         }
-        
 
         return tk;
 
     }
 
-    public boolean existsByUsername(String username){
+    public boolean existsByUsername(String username) {
         return taiKhoanRepository.existsByUsername(username);
     }
 
-    public boolean existsByEmail(String email){
-        if(taiKhoanRepository.existsByEmail(email)){
+    public boolean existsByEmail(String email) {
+        if (taiKhoanRepository.existsByEmail(email)) {
             return true;
         }
         return false;
     }
 
-    public boolean existsBySdt(String sdt){
-        if(taiKhoanRepository.existsBySdt(sdt)){
+    public boolean existsBySdt(String sdt) {
+        if (taiKhoanRepository.existsBySdt(sdt)) {
             return true;
         }
         return false;
     }
 
-    @Transactional
-    public void saveTaiKhoanAndChiTiet(Taikhoan taiKhoan) {
-        // Lưu thông tin TaiKhoan
-        Taikhoan savedTaiKhoan = taiKhoanRepository.save(taiKhoan);
-    }
+    // @Transactional
+    // public void saveTaiKhoanAndChiTiet(Taikhoan taiKhoan) {
+    // // Lưu thông tin TaiKhoan
+    // Taikhoan savedTaiKhoan = taiKhoanRepository.save(taiKhoan);
+    // }
 }

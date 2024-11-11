@@ -8,31 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="">
-
-      <change afterPath="$PROJECT_DIR$/.idea/be_tapchi.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/api/DanhMucController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ad7048ed-271c-4788-8367-691d8ae95e75.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ad7048ed-271c-4788-8367-691d8ae95e75.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/DanhMucService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/DanhMucService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/TaikhoanTokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/TaikhoanTokenService.java" afterDir="false" />
-
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480/storage_v2/_src_/database/ahihi.o8WHBQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480/storage_v2/_src_/database/ahihi.o8WHBQ/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/danhmuc/danhmucController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/theloai/theloaiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/theloai/theloaiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/DanhMuc.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/DanhMuc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Danhmucbaibao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Danhmucbaibao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Taikhoan.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Taikhoan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Theloai.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Theloai.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/TheloaiRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/TheloaiRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/TheloaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/TheloaiService.java" afterDir="false" />
-
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/baibao/baibaoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/baibao/baibaoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/BaiBaoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/BaiBaoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/BaibaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/BaibaoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/resources/static/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,33 +35,23 @@
     <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
-  &quot;history&quot;: [
-    {
-      &quot;state&quot;: &quot;OPEN&quot;,
-      &quot;assignee&quot;: &quot;Zitjjj&quot;,
-      &quot;author&quot;: &quot;Zitjjj&quot;
-    }
-  ],
-  &quot;lastFilter&quot;: {}
-}</component>
-  <component name="GitHubPullRequestState">{
-  &quot;prStates&quot;: [
-    {
-      &quot;id&quot;: {
-        &quot;id&quot;: &quot;PR_kwDONAGoKc6A8WeK&quot;,
-        &quot;number&quot;: 16
-      },
-      &quot;lastSeen&quot;: 1730955288417
-    }
-  ]
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;hisu87&quot;
+  }
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/baoduong24804/be_tapchi.git&quot;,
-    &quot;accountId&quot;: &quot;32dcff33-64a9-43b4-b282-40cea0b26542&quot;
+    &quot;url&quot;: &quot;https://github.com/baoduong24804/be_tapchi&quot;,
+    &quot;accountId&quot;: &quot;993a5683-a023-4d77-9143-0e92804bcab5&quot;
   }
 }</component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -124,11 +97,10 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.PjtapchiApplication.executor": "Run",
-    "Spring Boot.SpringApplication.executor": "Run",
     "code.cleanup.on.save": "true",
-    "git-widget-placeholder": "thuongg",
+    "git-widget-placeholder": "HaiDepChieu",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/FPT/be_tapchi",
+    "last_opened_file_path": "D:/DATN/be_tapchi/pjtapchi/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.stylelint": "true",
     "node.js.detected.package.tslint": "true",
@@ -195,10 +167,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.PjtapchiApplication | #8" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #9" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #7" />
         <item itemvalue="JUnit.TestBaiBaoTest" />
+        <item itemvalue="HTTP Request.PjtapchiApplication | #9" />
+        <item itemvalue="HTTP Request.PjtapchiApplication | #8" />
+        <item itemvalue="HTTP Request.PjtapchiApplication | #7" />
         <item itemvalue="HTTP Request.PjtapchiApplication | #6" />
       </list>
     </recent_temporary>
@@ -206,8 +178,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.19072.14" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.19072.14" />
       </set>
     </attachedChunks>
   </component>
@@ -250,13 +222,6 @@
       <workItem from="1730269274764" duration="689000" />
       <workItem from="1730272711619" duration="74000" />
       <workItem from="1730299545442" duration="2610000" />
-      <workItem from="1730862387829" duration="2402000" />
-      <workItem from="1730954725430" duration="405000" />
-      <workItem from="1730955184003" duration="1519000" />
-      <workItem from="1730957036850" duration="1258000" />
-      <workItem from="1730986926043" duration="556000" />
-      <workItem from="1730989579933" duration="314000" />
-      <workItem from="1730989999737" duration="2637000" />
       <workItem from="1730708628228" duration="1636000" />
       <workItem from="1730734056365" duration="2376000" />
       <workItem from="1730777620512" duration="1082000" />
@@ -265,17 +230,43 @@
       <workItem from="1730856393529" duration="8142000" />
       <workItem from="1730962046403" duration="3730000" />
       <workItem from="1730977947700" duration="1471000" />
-      <workItem from="1731036043989" duration="4631000" />
-
+      <workItem from="1731036043989" duration="5869000" />
+      <workItem from="1731074335250" duration="589000" />
+      <workItem from="1731111895163" duration="1665000" />
+      <workItem from="1731156770931" duration="324000" />
+      <workItem from="1731286445660" duration="1406000" />
+      <workItem from="1731287871259" duration="13101000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+        <option value="GitHub.CommitStatus" />
+      </list>
+    </option>
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="80fd9bbb-64ec-4f73-9c12-febeb3ad2df8" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
+        <entry key="80fd9bbb-64ec-4f73-9c12-febeb3ad2df8">
+          <value>
+            <State />
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -284,7 +275,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/main" />
+                        <option value="hisu" />
                       </list>
                     </value>
                   </entry>
@@ -309,10 +300,6 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.hibernate.query.SemanticException" package="org.hibernate.query" />
           <option name="timeStamp" value="2" />
-        </breakpoint>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="org.springframework.beans.factory.BeanCreationException" package="org.springframework.beans.factory" />
-          <option name="timeStamp" value="3" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

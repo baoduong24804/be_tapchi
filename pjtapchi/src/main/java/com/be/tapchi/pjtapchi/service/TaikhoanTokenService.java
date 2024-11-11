@@ -1,6 +1,9 @@
 package com.be.tapchi.pjtapchi.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,19 +54,31 @@ public class TaikhoanTokenService {
                 return false;
             }
 
+          
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+
+            
+            LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(defaultTokenExpiration);
+
+           
+            String formattedExpiryDate = expiryDate.format(formatter);
+            System.out.println("Đã thêm token có thời hạn đến: " + formattedExpiryDate);
+
             String token = generateToken();
             TaikhoanToken myToken = new TaikhoanToken();
-            
-            if(tokenRepository.findByTaikhoan(user) != null){
+
+            if (tokenRepository.findByTaikhoan(user) != null) {
                 myToken = tokenRepository.findByTaikhoan(user);
             }
             myToken.setToken(token);
             myToken.setTaikhoan(user);
-           // myToken.setExpiryDate(null);
-            myToken.setExpiryDate(LocalDateTime.now().plusMinutes(defaultTokenExpiration));
+            // myToken.setExpiryDate(LocalDateTime.now());
+            myToken.setExpiryDate(expiryDate);
+            // System.out.println(LocalDateTime.now().plusMinutes(0));
             tokenRepository.save(myToken);
 
-            sendResetPasswordEmail(user.getEmail(), token,"Đặt lại mật khẩu","Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn 15 phút");
+            sendResetPasswordEmail(user.getEmail(), token, "Đặt lại mật khẩu",
+                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn 15 phút");
         } catch (Exception e) {
             // TODO: handle exception
             return false;
@@ -82,9 +98,9 @@ public class TaikhoanTokenService {
         // email.setTo(userEmail);
         // email.setSubject("Reset Password");
         // email.setText("To reset your password, click the link below:\n" + resetUrl +
-        //         "\nThis link will expire in 15 minutes.");
+        // "\nThis link will expire in 15 minutes.");
 
-        emailService.sendActivationEmail(userEmail,resetUrl,title,content);
+        emailService.sendActivationEmail(userEmail, resetUrl, title, content);
     }
 
     public boolean validatePasswordResetToken(String token) {
@@ -105,31 +121,86 @@ public class TaikhoanTokenService {
     public boolean changePassword(String token, String newPassword) {
         try {
             TaikhoanToken passToken = tokenRepository.findByToken(token);
-        
+
             if (passToken == null || !validatePasswordResetToken(token)) {
                 System.out.println("Token doi mk het han hoac sai");
                 return false;
             }
 
-            System.out.println("Doi mk tai khoan: "+passToken.getTaikhoan().getUsername());
-            
+            System.out.println("Doi mk tai khoan: " + passToken.getTaikhoan().getUsername());
+
             Taikhoan user = passToken.getTaikhoan();
             user.setPassword(passwordEncoder.encode(newPassword));
             taiKhoanService.saveTaiKhoan(user);
-            
+
             tokenRepository.delete(passToken);
         } catch (Exception e) {
             // TODO: handle exception
-            
-            //return false;
-            throw  e;
+
+            // return false;
+            throw e;
         }
         return true;
     }
 
+    public boolean checkExpiryDateFromNowDate(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return false;
+        }
+        try {
+            return dateTime.isAfter(LocalDateTime.now());
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return false;
+    }
+
+    public void deleteTokenExpiryDate() {
+        try {
+            List<TaikhoanToken> list = tokenRepository.findByExpiryDateBefore(LocalDateTime.now());
+
+            if (list == null || list.size() == 0) {
+                System.out.println("Ko co token het han");
+                return;
+            }
+
+            //List<Taikhoan> listTK = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+      
+
+            for (TaikhoanToken tktoken : list) {
+                // System.out.println(tktoken.getExpiryDate());
+                //listTK.add(tktoken.getTaikhoan());
+                String formattedExpiryDate = tktoken.getExpiryDate().format(formatter);
+                System.out.println("Tìm thấy token có thời gian hết hạn là: " + formattedExpiryDate);
+                tokenRepository.delete(tktoken);
+                System.out.println("Đã xóa token hết hạn");
+            }
+
+            return;
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("err get taikhantoken expriryDate: " + e.getMessage());
+        }
+        
+        return;
+    }
+
     // Scheduled task để xóa token hết hạn
     @Scheduled(fixedRate = 3600000) // Chạy mỗi giờ
-    public void removeExpiredTokens() {
-        tokenRepository.deleteByExpiryDateLessThan(LocalDateTime.now());
+    @Async
+    public void checkExpriyDate() {
+        // tokenRepository.deleteByExpiryDateLessThan(LocalDateTime.now());// xoa token
+        // het han
+        try {
+            System.out.println("Checkkkk token");
+
+            deleteTokenExpiryDate();
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Err function checkExpriryDate");
+        }
+
     }
 }

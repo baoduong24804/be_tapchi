@@ -23,6 +23,15 @@ public class Danhmucbaibao {
     @Column(name = "danhmuc_id", insertable = false, updatable = false)
     private Integer danhmucId;
 
+    @Transient
+    private String tieuDe;
+
+    @Transient
+    private Integer tuan;
+
+    @Transient
+    private Integer so;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "baibao_id")
@@ -31,5 +40,12 @@ public class Danhmucbaibao {
     @Column(name = "baibao_id", insertable = false, updatable = false)
     private Integer baobaiId;
 
-
+    @PostLoad
+    private void postLoad() {
+        if (danhmuc != null) {
+            this.tieuDe = danhmuc.getTieuDe();
+            this.tuan = danhmuc.getTuan();
+            this.so = danhmuc.getSo();
+        }
+    }
 }

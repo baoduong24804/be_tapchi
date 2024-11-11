@@ -11,10 +11,10 @@ import com.be.tapchi.pjtapchi.repository.ThichRepository;
 
 @Service
 public class ThichService {
-
+    @Autowired
     private final ThichRepository thichRepository;
 
-    @Autowired
+    
     public ThichService(ThichRepository thichRepository) {
         this.thichRepository = thichRepository;
     }

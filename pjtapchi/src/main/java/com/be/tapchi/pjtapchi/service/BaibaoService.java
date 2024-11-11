@@ -7,10 +7,11 @@ import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
 import com.be.tapchi.pjtapchi.repository.TheloaiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class BaibaoService {
@@ -26,8 +27,8 @@ public class BaibaoService {
         this.theloaiRepository = theloaiRepository;
     }
 
-    public List<Baibao> findAllBaibao() {
-        return baiBaoRepository.findAll();
+    public Page<Baibao> findAllBaibao(Pageable pageable) {
+        return baiBaoRepository.findAll(pageable);
     }
 
     public Baibao getBaibaoById(Integer id) {
@@ -42,29 +43,30 @@ public class BaibaoService {
         baiBaoRepository.deleteById(id);
     }
 
-    public List<Baibao> getBaibaoByTacGiaId(Long id) {
+    public Page<Baibao> getBaibaoByTacGiaId(Long id, Pageable pageable) {
         Taikhoan taikhoan = taiKhoanRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Taikhoan ID"));
-        return baiBaoRepository.findBaibaoByTaikhoan(taikhoan);
+        return baiBaoRepository.findBaibaoByTaikhoan(taikhoan, pageable);
     }
 
-    public List<Baibao> getBaibaoByTheLoaiID(Integer id) {
+    public Page<Baibao> getBaibaoByTheLoaiID(Integer id, Pageable pageable) {
         Theloai theloai = theloaiRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Theloai ID"));
-        return baiBaoRepository.findBaibaoByTheloai(theloai);
+        return baiBaoRepository.findBaibaoByTheloai(theloai, pageable);
     }
 
-    public List<Baibao> getBaibaoByTieuDe(String tieude) {
-        return baiBaoRepository.findBaibaoByTieudeContaining(tieude);
+    public Page<Baibao> getBaibaoByTieuDe(String tieude, Pageable pageable) {
+        return baiBaoRepository.findBaibaoByTieudeContaining(tieude, pageable);
     }
 
-    public List<Baibao> getBaibaoByNgayDang(LocalDate postDate) {
-        return baiBaoRepository.findBaibaoByNgaydang(postDate);
+    public Page<Baibao> getBaibaoByNgayDang(LocalDate postDate, Pageable pageable) {
+        return baiBaoRepository.findBaibaoByNgaydang(postDate, pageable);
     }
 
-    public List<Baibao> getBaibaiByNgayDangBetween(LocalDate date1, LocalDate date2) {
-        return baiBaoRepository.findByNgaydangBetween(date1, date2);
+    public Page<Baibao> getBaibaiByNgayDangBetween(LocalDate date1, LocalDate date2, Pageable pageable) {
+        return baiBaoRepository.findByNgaydangBetween(date1, date2, pageable);
     }
 
-    public List<Baibao> getBaibaoByTrangThai(Integer status) {
-        return baiBaoRepository.findBaibaoByStatus(status);
+    public Page<Baibao> getBaibaoByTrangThai(Integer status, Pageable pageable) {
+        return baiBaoRepository.findBaibaoByStatus(status, pageable);
     }
+
 }
