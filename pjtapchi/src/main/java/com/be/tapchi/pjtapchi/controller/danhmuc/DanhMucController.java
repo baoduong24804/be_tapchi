@@ -65,13 +65,10 @@ public class DanhMucController {
         }
     }
 
-    @PostMapping("/create/{tendanhmuc}")
-    public ResponseEntity<ApiResponse<DanhMuc>> createDanhMuc(@PathVariable("tendanhmuc") String tendanhmuc) {
-        DanhMuc danhMuc = new DanhMuc();
-        danhMuc.setTieuDe(tendanhmuc);
-
-        DanhMuc savedDanhMuc = danhMucService.saveDanhMuc(danhMuc);
-        ApiResponse<DanhMuc> response = new ApiResponse<>(true, "Save danh muc successful", savedDanhMuc);
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse<DanhMuc>> createBaibao(@RequestBody DanhMuc danhMuc) {
+        DanhMuc dm = danhMucService.saveDanhMuc(danhMuc);
+        ApiResponse<DanhMuc> response = new ApiResponse<>(true, "Create danh muc successful", dm);
         return ResponseEntity.ok().body(response);
     }
 
