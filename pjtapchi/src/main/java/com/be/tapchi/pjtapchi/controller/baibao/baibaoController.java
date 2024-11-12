@@ -106,4 +106,18 @@ public class baibaoController {
         ApiResponse<Page<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", pageResult);
         return ResponseEntity.ok().body(response);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteBaibao(@PathVariable("id") Integer id) {
+        bbService.deleteBaibao(id);
+        ApiResponse<Void> response = new ApiResponse<>(true, "Delete bai bao successful", null);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse<Baibao>> createBaibao(@RequestBody Baibao baibao) {
+        Baibao bb = bbService.saveBaibao(baibao);
+        ApiResponse<Baibao> response = new ApiResponse<>(true, "Create bai bao successful", bb);
+        return ResponseEntity.ok().body(response);
+    }
 }

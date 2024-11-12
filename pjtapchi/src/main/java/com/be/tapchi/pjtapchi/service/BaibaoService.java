@@ -71,4 +71,8 @@ public class BaibaoService {
         return baiBaoRepository.findBaibaoByStatus(status, pageable);
     }
 
+    public Baibao updateBaibao(Baibao baibao) {
+        return baiBaoRepository.save(baibao);
+    }
+
 }
