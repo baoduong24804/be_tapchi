@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "danhmuc")
 @Data
@@ -41,7 +43,7 @@ public class DanhMuc {
     @Column(name = "so", nullable = false)
     private Integer so;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "danhmuc", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Danhmucbaibao> danhmucbaibaos;
 
