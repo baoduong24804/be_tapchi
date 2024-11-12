@@ -37,8 +37,14 @@ public class TaiKhoanService {
         taiKhoanRepository.deleteById(id);
     }
 
-    public void deleteTaiKhoan(Taikhoan entity) {
-        taiKhoanRepository.delete(entity);
+    public boolean deleteTaiKhoan(Taikhoan entity) {
+        try {
+            taiKhoanRepository.delete(entity);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return false;
     }
 
     public boolean checkTaikhoan(LoginRequest user) {
@@ -49,7 +55,7 @@ public class TaiKhoanService {
                 return false;
             }
             Taikhoan tk = findByUsername(user.getUsername().trim());
-            Taikhoan tk_e = findByEmail(user.getUsername().trim());
+            Taikhoan tk_e = taiKhoanRepository.findByEmailAndGoogleIdIsNull(user.getUsername().trim());
             Taikhoan tk_sdt = findBySdt(user.getUsername().trim());
             if (tk != null || tk_e != null || tk_sdt != null) {
                 return true;
@@ -70,12 +76,38 @@ public class TaiKhoanService {
             if (username != null) {
                 return username;
             }
-            Taikhoan email = taiKhoanRepository.findByEmail(entity.getUsername().trim());
+            Taikhoan email = taiKhoanRepository.findByEmailAndGoogleIdIsNull(entity.getUsername().trim());
             if (email != null) {
                 return email;
             }
 
             Taikhoan sdt = taiKhoanRepository.findBySdt(entity.getUsername().trim());
+            if (sdt != null) {
+                return sdt;
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Taikhoan getTaikhoanLogin(String username) {
+        if(username == null){
+            return null;
+        }
+        try {
+            Taikhoan tkusername = taiKhoanRepository.findByUsername(username.trim());
+            if (tkusername != null) {
+                return tkusername;
+            }
+            Taikhoan email = taiKhoanRepository.findByEmailAndGoogleIdIsNull(username.trim());
+            if (email != null) {
+                return email;
+            }
+
+            Taikhoan sdt = taiKhoanRepository.findBySdt(username.trim());
             if (sdt != null) {
                 return sdt;
             }
@@ -164,7 +196,7 @@ public class TaiKhoanService {
     }
 
     public Taikhoan findByEmail(String email) {
-        Taikhoan tk = taiKhoanRepository.findByEmail(email);
+        Taikhoan tk = taiKhoanRepository.findByEmailAndGoogleIdIsNull(email);
         if (tk == null) {
             return null;
         }

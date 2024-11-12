@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,7 +107,7 @@ public class EmailService {
     public void deleteTokenExpiryDate() {
         try {
             List<EmailVerification> list = emailVerificationRepository.findByCreatedAtBefore(LocalDateTime.now());
-
+            System.out.println("haahhah"+list.size());
             if (list == null || list.size() == 0) {
                 System.out.println("Ko co email verify het han");
                 return;
@@ -114,16 +115,22 @@ public class EmailService {
 
             //List<Taikhoan> listTK = new ArrayList<>();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-      
+            
 
             for (EmailVerification tktoken : list) {
                 // System.out.println(tktoken.getExpiryDate());
                 //listTK.add(tktoken.getTaikhoan());
                 String formattedExpiryDate = tktoken.getCreatedAt().format(formatter);
                 System.out.println("Tìm thấy email_vefiry có thời gian hết hạn là: " + formattedExpiryDate);
-                taiKhoanService.deleteTaiKhoan(tktoken.getTaikhoan());
                 emailVerificationRepository.delete(tktoken);
-                System.out.println("Đã xóa email_vefiry và tk hết hạn");
+                System.out.println("Đã xóa email_vefiry");
+                if(tktoken.getTaikhoan().getStatus() == 0){
+                    taiKhoanService.deleteTaiKhoan(tktoken.getTaikhoan());
+                    System.out.println("Đã xóa tk hết hạn");
+                }
+                
+                
+                
             }
 
             return;
@@ -136,7 +143,9 @@ public class EmailService {
     }
 
     // Scheduled task để xóa token hết hạn
+    
     @Scheduled(fixedRate = 3600000) // Chạy mỗi giờ
+    @Async
     public void removeExpiredTokens() {
         //emailVerificationRepository.deleteByCreatedAtLessThan(LocalDateTime.now());
         deleteTokenExpiryDate();

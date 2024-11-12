@@ -9,13 +9,19 @@ import java.util.List;
 public interface TaiKhoanRepository extends JpaRepository<Taikhoan,Long>{
     Taikhoan findByUsername(String username);
 
+    Taikhoan findByGoogleId(String google_id);
+
     boolean existsByUsername(String username);
 
-    Taikhoan findByEmail(String email);
+    Taikhoan findByEmailAndGoogleIdIsNull(String email);
 
     Taikhoan findBySdt(String sdt);
 
     boolean existsByEmail(String email);
 
     boolean existsBySdt(String sdt);
+
+    boolean existsByGoogleId(String google_id);
+
+
 }
