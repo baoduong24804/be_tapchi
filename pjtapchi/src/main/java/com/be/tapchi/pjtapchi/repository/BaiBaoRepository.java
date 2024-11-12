@@ -12,7 +12,6 @@ import java.time.LocalDate;
 //Extending JpaRepository interface for Baibao entity to perform CRUD operations.
 public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
 
-
     Baibao findBaibaoById(Integer id);
 
     Page<Baibao> findBaibaoByNgaydang(LocalDate ngaydang, Pageable pageable);
