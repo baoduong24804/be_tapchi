@@ -16,12 +16,12 @@ public class Danhmucbaibao {
     private Integer id;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "danhmuc_id", insertable = false, updatable = false)
     private DanhMuc danhmuc;
 
-    @Column(name = "danhmuc_id", insertable = false, updatable = false)
-    private Integer danhmucId;
+    // @Column(name = "danhmuc_id", insertable = false, updatable = false)
+    // private Integer danhmucId;
 
     @Transient
     private String tieuDe;
@@ -33,12 +33,12 @@ public class Danhmucbaibao {
     private Integer so;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "baibao_id")
     private Baibao baibao;
 
-    @Column(name = "baibao_id", insertable = false, updatable = false)
-    private Integer baobaiId;
+    // @Column(name = "baibao_id", insertable = false, updatable = false)
+    // private Integer baobaiId;
 
     @PostLoad
     private void postLoad() {

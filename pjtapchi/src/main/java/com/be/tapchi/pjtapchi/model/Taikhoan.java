@@ -38,7 +38,7 @@ public class Taikhoan {
     private String hovaten;
 
     @Column(name = "Google_ID")
-    private String google_id;
+    private String googleId;
 
     @Column(name = "sdt")
     private String sdt;

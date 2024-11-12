@@ -8,6 +8,7 @@ import com.be.tapchi.pjtapchi.controller.user.model.ChangePassword;
 import com.be.tapchi.pjtapchi.controller.user.model.LoginRequest;
 import com.be.tapchi.pjtapchi.controller.user.model.ResetPassword;
 import com.be.tapchi.pjtapchi.controller.user.model.UserRegister;
+import com.be.tapchi.pjtapchi.controller.user.model.UserRegisterByGG;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 
@@ -25,6 +26,7 @@ import com.be.tapchi.pjtapchi.userRole.RoleName;
 import io.github.bucket4j.Bucket;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +35,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,15 +135,14 @@ public class UserController {
             if (tk == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            
+
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> userData = new HashMap<>();
-            Map<String,Object> roles = new HashMap<>();
+            Map<String, Object> roles = new HashMap<>();
             SimpleDateFormat fmd = new SimpleDateFormat("dd-MM-yyyy");
 
             userData.put("date", fmd.format(tk.getNgaytao()));
 
-            
             for (Vaitro vt : tk.getVaitro()) {
                 roles.put(String.valueOf(vt.getVaitroId()), vt.getTenrole());
             }
@@ -195,23 +198,23 @@ public class UserController {
         if (tk == null) {
 
             response.setSuccess(false);
-           
+
             response.setMessage("Có lỗi khi đăng nhập vui lòng thử lại sau");
-            
-            return ResponseEntity.badRequest().body(response); 
+
+            return ResponseEntity.badRequest().body(response);
         }
 
         // kiem tra tk bi khoa hoac chua kich hoat
-        if(taiKhoanService.checkUserLockedorNotActice(tk)){
-            if(tk.getStatus() == -1){
+        if (taiKhoanService.checkUserLockedorNotActice(tk)) {
+            if (tk.getStatus() == -1) {
                 response.setSuccess(false);
                 response.setMessage("Tài khoản của bạn đã bị khóa vui lòng liên hệ với admin");
-                return ResponseEntity.badRequest().body(response); 
+                return ResponseEntity.badRequest().body(response);
             }
-            if(tk.getStatus() == 0){
+            if (tk.getStatus() == 0) {
                 response.setSuccess(false);
                 response.setMessage("Vui lòng kích hoạt tài khoản");
-                return ResponseEntity.badRequest().body(response); 
+                return ResponseEntity.badRequest().body(response);
             }
         }
 
@@ -219,7 +222,7 @@ public class UserController {
         response.setMessage("Đăng nhập thành công");
         response.setSuccess(true);
         Map<String, Object> map = new HashMap<>();
-        Map<String,Object> roles = new HashMap<>();
+        Map<String, Object> roles = new HashMap<>();
         map.put("token", jwtUtil.generateToken(tk.getUsername()));
         // co the luu token vao dtb
         for (Vaitro vt : tk.getVaitro()) {
@@ -233,11 +236,129 @@ public class UserController {
 
     }
 
-    public static String generateUsername(String input) {
-       
+    public String generateUsernameByGG(String input) {
+        try {
+            String cleanedInput = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+            String randomUUID = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
+            String username = cleanedInput + randomUUID;
+            for (int i = 0; i < 99; i++) {
+                if (taiKhoanService.existsByUsername(username)) {
+                    randomUUID = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
+                    username = cleanedInput + randomUUID;
+                } else {
+                    return username.trim();
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return null;
+    }
+
+    public String generateUsername(String input) {
+
         String cleanedInput = input.replaceAll("[^a-zA-Z0-9]", "");
 
         return cleanedInput.toLowerCase();
+    }
+
+    @PostMapping("/login/google")
+    public ResponseEntity<ApiResponse<?>> loginorregisterByGG(@Valid @RequestBody UserRegisterByGG entity,
+            BindingResult bindingResult) {
+        // TODO: process POST request
+        ApiResponse<?> api = new ApiResponse<>();
+        // kiem tra du lieu bi trong
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            api.setSuccess(false);
+            api.setMessage("Không được để trống dữ liệu");
+            api.setData(errorMessage);
+            return ResponseEntity.badRequest().body(api);
+        }
+
+        // kiem tra sub de trong
+        try {
+            if (entity.getSub() == null || entity.getSub().isEmpty()) {
+                api.setSuccess(false);
+                api.setMessage("Không được để trống dữ liệu");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.badRequest().body(api);
+        }
+
+        try {
+            if (taiKhoanRepository.existsByGoogleId(entity.getSub())) {
+                Taikhoan tk = taiKhoanRepository.findByGoogleId(entity.getSub().trim());
+                if (tk == null) {
+                    api.setSuccess(false);
+                    api.setMessage("Có lỗi không mong muốn xảy ra");
+                    return ResponseEntity.badRequest().body(api);
+                }
+                api.setSuccess(true);
+                api.setMessage("Đăng nhập thành công với tài khoản Google");
+                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> roles = new HashMap<>();
+                map.put("token", jwtUtil.generateToken(tk.getUsername()));
+                // co the luu token vao dtb
+                for (Vaitro vtro : tk.getVaitro()) {
+                    roles.put(String.valueOf(vtro.getVaitroId()), vtro.getTenrole());
+                }
+
+                map.put("roles", roles);
+                map.put("fullname", tk.getHovaten());
+                api.setData(map);
+                return ResponseEntity.ok().body(api);
+            }
+
+            // dang ky google
+            Taikhoan tk = new Taikhoan();
+            tk.setUsername(generateUsernameByGG(entity.getName()));
+            tk.setGoogleId(entity.getSub());
+            tk.setEmail(entity.getEmail());
+            tk.setHovaten(entity.getName());
+            tk.setStatus(entity.isVerified_email() ? 1 : 0);
+            tk.setNgaytao(new Date());
+            tk.setUrl(entity.getPicture());
+
+            Vaitro vt = vaiTroRepository.findBytenrole(RoleName.CUSTOMER.toString());
+            List<Vaitro> vaitros = new ArrayList<>();
+            vaitros.add(vt);
+            Set<Vaitro> setVaitros = new HashSet<>();
+            for (Vaitro vaitro : vaitros) {
+                setVaitros.add(vaitro);
+            }
+            tk.setVaitro(setVaitros);
+            taiKhoanService.saveTaiKhoan(tk);
+            api.setSuccess(true);
+            api.setMessage("Đăng ký thành công với tài khoản Google");
+            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> roles = new HashMap<>();
+            map.put("token", jwtUtil.generateToken(tk.getUsername()));
+            // co the luu token vao dtb
+            for (Vaitro vtro : tk.getVaitro()) {
+                roles.put(String.valueOf(vtro.getVaitroId()), vtro.getTenrole());
+            }
+
+            map.put("roles", roles);
+            map.put("fullname", tk.getHovaten());
+            api.setData(map);
+            return ResponseEntity.ok().body(api);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        // dang nhap google
+
+        api.setSuccess(false);
+        api.setMessage("Có lỗi không mong muốn xảy ra");
+        return ResponseEntity.badRequest().body(api);
+
     }
 
     @PostMapping("/register")
@@ -272,8 +393,8 @@ public class UserController {
                 // api.setData(null);
                 // api.setMessage("Username ton tai");
                 // gui ma xac nhan neu tk chua kich hoat
-                
-                //return ResponseEntity.badRequest().body(api);
+
+                // return ResponseEntity.badRequest().body(api);
             }
             // kiem tra email
             if (taiKhoanService.existsByEmail(userRegister.getEmail().trim())) {
@@ -288,7 +409,7 @@ public class UserController {
                     api.setMessage("Đã gửi mã xác thực");
                     return ResponseEntity.ok().body(api);
                 }
-                //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
+                // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
             }
 
             // kiem tra sdt
@@ -297,10 +418,10 @@ public class UserController {
                 // api.setSuccess(false);
                 // api.setMessage("Sdt da ton tai");
                 // api.setData(null);
-                //return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
-                
+                // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
+
             }
-            if(!err_mes.isEmpty()){
+            if (!err_mes.isEmpty()) {
                 api.setMessage("Lỗi khi đăng ký tài khoản");
                 api.setData(err_mes);
                 return ResponseEntity.badRequest().body(api);
@@ -326,8 +447,8 @@ public class UserController {
             }
             tk.setVaitro(setVaitros);
 
-            // tai khoan 
-            
+            // tai khoan
+
             tk.setHovaten(userRegister.getHovaten());
             tk.setEmail(userRegister.getEmail());
             tk.setNgaytao(new Date());
@@ -411,8 +532,13 @@ public class UserController {
                 api.setData(null);
                 return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(api);
             }
-            taikhoanTokenService.createPasswordResetTokenForUser(email);
-
+            boolean send = taikhoanTokenService.createPasswordResetTokenForUser(email);
+            if (send == false) {
+                api.setSuccess(false);
+                api.setMessage("Hãy đảm bảo rằng bạn nhập đúng email cần khôi phục");
+                api.setData(null);
+                return ResponseEntity.ok().body(api);
+            }
             api.setSuccess(true);
             api.setMessage("Thành công! Vui lòng kiểm tra email");
             api.setData(null);
@@ -466,6 +592,28 @@ public class UserController {
         api.setSuccess(false);
         api.setMessage("Mã xác thực không hợp lệ hoặc đã hết hạn");
         return ResponseEntity.badRequest().body(api);
+    }
+
+    // xoa nguoi dung
+    @PostMapping("/delete")
+    public ResponseEntity<ApiResponse<?>> deleteUser(@RequestParam(required = false) String username) {
+        // TODO: process POST request
+        if (username == null) {
+            System.out.println("null tai khoan delete");
+            return ResponseEntity.badRequest().body(null);
+        }
+        ApiResponse<?> api = new ApiResponse<>();
+        Taikhoan tk = taiKhoanService.getTaikhoanLogin(username);
+        if (tk == null) {
+            api.setSuccess(false);
+            api.setMessage("Ko có tài khoản này bạn đã chắc chưa");
+            return ResponseEntity.badRequest().body(null);
+        }
+        taiKhoanService.deleteTaiKhoan(tk);
+        api.setSuccess(true);
+        api.setMessage("Xóa thành công Zangnquuuuuuuuu");
+        api.setData("Anh bảo no 1");
+        return ResponseEntity.ok().body(api);
     }
 
 }
