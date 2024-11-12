@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Repository
 public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
 
-
     Baibao findBaibaoById(Integer id);
 
     Page<Baibao> findBaibaoByNgaydang(LocalDate ngaydang, Pageable pageable);
