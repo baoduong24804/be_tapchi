@@ -3,6 +3,7 @@ package com.be.tapchi.pjtapchi.repository;
 import java.time.LocalDateTime;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.be.tapchi.pjtapchi.model.EmailVerification;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
@@ -10,7 +11,7 @@ import com.be.tapchi.pjtapchi.model.TaikhoanToken;
 
 import java.util.List;
 
-
+@Repository
 public interface EmailVerificationRepository extends JpaRepository<EmailVerification, Long> {
     EmailVerification findByVerificationCode(String verificationCode);
     void deleteByCreatedAtLessThan(LocalDateTime now);

@@ -1,20 +1,26 @@
 package com.be.tapchi.pjtapchi.service;
 
+import com.be.tapchi.pjtapchi.controller.danhmuc.utils.DateUtils;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
+
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DanhMucService {
+
     @Autowired
     private DanhMucRepository danhMucRepository;
 
-//    public List<DanhMuc> getAllDanhMuc() {
-//        return danhMucRepository.findAll();
-//    }
+    // public List<DanhMuc> getAllDanhMuc() {
+    // return danhMucRepository.findAll();
+    // }
 
     public Page<DanhMuc> getAllDanhMuc(Pageable pageable) {
         return danhMucRepository.findAll(pageable);
@@ -30,6 +36,15 @@ public class DanhMucService {
 
     public void deleteDanhMuc(Long id) {
         danhMucRepository.deleteById(id);
+    }
+
+    public Page<DanhMuc> getDanhmucInCurrentWeek(int page, int size) {
+        LocalDate startOfWeek = DateUtils.getStartOfWeek();
+        LocalDate endOfWeek = DateUtils.getEndOfWeek();
+        System.out.println(startOfWeek+","+endOfWeek);
+        Pageable pageable = PageRequest.of(page, size);
+
+        return danhMucRepository.findDanhmucByWeek(startOfWeek, endOfWeek, pageable);
     }
 
     public DanhMuc updateDanhMuc(Long id, DanhMuc newDanhMuc) {

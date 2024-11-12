@@ -1,6 +1,7 @@
 package com.be.tapchi.pjtapchi.controller.baibao;
 
-import com.be.tapchi.pjtapchi.api.ApiResponse;
+
+import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/baibao")
 public class baibaoController {
