@@ -35,6 +35,9 @@ public class Baibao {
     @Column(name = "url")
     private String url;
 
+    @Column(name = "file")
+    private String file;
+
     @Column(name = "status")
     private Integer status;
 
