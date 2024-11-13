@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -31,23 +28,22 @@ public class paypalController {
     HoaDonService hoaDonService;
 
     @PostMapping("/create")
-    public RedirectView createPayment() {
+    public RedirectView createPayment(@RequestBody com.be.tapchi.pjtapchi.model.Payment paymentReq) {
         try {
             String cancelUrl = "http://localhost:9000/pay/cancel";
             String successUrl = "http://localhost:9000/pay/success";
 
             Payment payment = paypalService.createPayment(
-//                    paymentReq.getTotal(),
-//                    paymentReq.getCurrency(),
-//                    paymentReq.getMethod(),
-//                    paymentReq.getIntent(),
-//                    paymentReq.getDescription(),
-
-                    100.0,
-                    "USD",
-                    "paypal",
-                    "sale",
-                    "Thanh toan don hang",
+                    paymentReq.getTotal(),
+                    paymentReq.getCurrency(),
+                    paymentReq.getMethod(),
+                    paymentReq.getIntent(),
+                    paymentReq.getDescription(),
+//                    100.0,
+//                    "USD",
+//                    "paypal",
+//                    "sale",
+//                    "Thanh toan don hang",
                     cancelUrl,
                     successUrl
             );
