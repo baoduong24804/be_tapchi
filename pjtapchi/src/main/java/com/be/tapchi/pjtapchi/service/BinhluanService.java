@@ -24,7 +24,6 @@ public class BinhluanService {
         return binhluanRepository.findAll();
     }
 
-
     /**
      * Lưu một Binhluan.
      *
@@ -42,5 +41,16 @@ public class BinhluanService {
      */
     public void deleteBinhluan(Long id) {
         binhluanRepository.deleteById(id);
+    }
+
+    /**
+     * Cập nhật thông tin một Binhluan.
+     *
+     * @param binhluan đối tượng Binhluan cần cập nhật
+     * @return đối tượng Binhluan đã được cập nhật
+     */
+
+    public Binhluan updateBinhluan(Binhluan binhluan) {
+        return binhluanRepository.save(binhluan);
     }
 }
