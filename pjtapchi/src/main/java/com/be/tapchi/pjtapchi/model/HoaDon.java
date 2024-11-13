@@ -23,11 +23,18 @@ public class HoaDon {
     private Float tongTien;
 
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private String status;
 
     @Column(name = "ngaytao", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
+
+    @Column(name = "paymentid", nullable = false)
+    private String paymentId;
+
+    @Column(name = "payerid", nullable = false)
+    private String payerId;
+
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hopdongId", nullable = false)
@@ -36,4 +43,5 @@ public class HoaDon {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "taikhoan_id", nullable = false)
     private Taikhoan taikhoan;
+
 }

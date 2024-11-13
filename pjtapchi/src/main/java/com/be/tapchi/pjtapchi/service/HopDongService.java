@@ -30,4 +30,6 @@ public class HopDongService {
     public void deleteHopDong(Long id) {
         hopDongRepository.deleteById(id);
     }
+
+
 }
