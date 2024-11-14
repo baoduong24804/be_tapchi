@@ -49,12 +49,15 @@ public class Baibao {
     @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
+    @Column(name = "keyword")
+    private String keyword;
+    
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Binhluan> binhluans;
 
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Thich> thichs;
-    
+
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Danhmucbaibao> danhmucbaibaos;
 
