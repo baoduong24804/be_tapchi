@@ -16,6 +16,15 @@ public class PaypalService {
 
     private final APIContext apiContext;
 
+
+//    public Order createOrder(String id, Double amount) throws PayPalRESTException {
+//        Order order = new Order();
+//        order.setId(id);
+//        order.setAmount(String.format(Locale.US, "%.2f", amount));
+//        order.setState("CREATED");
+//        return order;
+//    }
+
     public Payment createPayment(
             Double total,
             String currency,

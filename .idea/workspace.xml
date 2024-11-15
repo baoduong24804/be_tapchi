@@ -9,7 +9,11 @@
   <component name="ChangeListManager">
     <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/kiemduyet/kiemduyetController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/kiemduyet/kiemduyetController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/KiemduyetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/KiemduyetService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/PaypalService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/PaypalService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -234,7 +238,8 @@
       <workItem from="1731410466527" duration="99000" />
       <workItem from="1731410729091" duration="8648000" />
       <workItem from="1731477714116" duration="12088000" />
-      <workItem from="1731549981963" duration="119000" />
+      <workItem from="1731549981963" duration="257000" />
+      <workItem from="1731643271021" duration="9221000" />
     </task>
     <servers />
   </component>
