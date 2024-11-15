@@ -1,7 +1,12 @@
 package com.be.tapchi.pjtapchi.controller.danhmuc;
 
+
+import com.be.tapchi.pjtapchi.api.ApiResponse;
+import com.be.tapchi.pjtapchi.model.Baibao;
+
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.Danhmucweek;
+
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.service.DanhMucService;
 
@@ -16,7 +21,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.List;
+
+
 @CrossOrigin(origins = "*")
+
 @RestController
 @RequestMapping("/api/danhmuc")
 public class DanhMucController {
@@ -95,6 +105,19 @@ public class DanhMucController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>(false, "Danh muc not found", null));
         }
+    }
+
+
+    @GetMapping("/{danhmucId}/listBb")
+    public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaosByDanhMuc(@PathVariable Long danhmucId) {
+        List<Baibao> baibaos = danhMucService.getBbByIdDanhMuc(danhmucId);
+
+        if (baibaos.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(false, "Không có bài báo nào trong danh mục này", null));
+        }
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Danh sách bài báo trong danh mục", baibaos));
     }
 
 }
