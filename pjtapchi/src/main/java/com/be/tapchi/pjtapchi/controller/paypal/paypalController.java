@@ -29,6 +29,7 @@ public class paypalController {
 
     @PostMapping("/create")
     public RedirectView createPayment(@RequestBody com.be.tapchi.pjtapchi.model.Payment paymentReq) {
+//    public RedirectView createPayment() {
         try {
             String cancelUrl = "http://localhost:9000/pay/cancel";
             String successUrl = "http://localhost:9000/pay/success";
