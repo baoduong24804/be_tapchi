@@ -15,12 +15,14 @@ import java.time.LocalDate;
 
 @Service
 public class BaibaoService {
-
+    @Autowired
     private final BaiBaoRepository baiBaoRepository;
+    @Autowired
     private final TheloaiRepository theloaiRepository;
+    @Autowired
     private final TaiKhoanRepository taiKhoanRepository;
 
-    @Autowired
+    
     public BaibaoService(TaiKhoanRepository taiKhoanRepository, BaiBaoRepository baiBaoRepository, TheloaiRepository theloaiRepository) {
         this.taiKhoanRepository = taiKhoanRepository;
         this.baiBaoRepository = baiBaoRepository;
@@ -67,6 +69,10 @@ public class BaibaoService {
 
     public Page<Baibao> getBaibaoByTrangThai(Integer status, Pageable pageable) {
         return baiBaoRepository.findBaibaoByStatus(status, pageable);
+    }
+
+    public Baibao updateBaibao(Baibao baibao) {
+        return baiBaoRepository.save(baibao);
     }
 
 }

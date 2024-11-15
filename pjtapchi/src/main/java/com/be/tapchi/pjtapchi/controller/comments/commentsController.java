@@ -1,16 +1,13 @@
 package com.be.tapchi.pjtapchi.controller.comments;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
-import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.Binhluan;
-import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
 
 /**
@@ -35,24 +32,21 @@ public class commentsController {
         if (!list.isEmpty()) {
             return ResponseEntity.ok().body(response);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, "No binh luan found", null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(false, "No binh luan found", null));
         }
     }
 
-    @PostMapping("save/{noidung}/{idbaiviet}/{idnguoidung}")
-    public ResponseEntity<ApiResponse<Binhluan>> saveBinhluan(@PathVariable("noidung") String noidung,
-                                                              @PathVariable("idbaiviet") Baibao idbaiviet,
-                                                              @PathVariable("idnguoidung") Taikhoan idnguoidung) {
-        Binhluan binhluan = new Binhluan();
-        binhluan.setNoidung(noidung);
-        binhluan.setThoigianbl(Instant.now());
-        binhluan.setBaibao(idbaiviet);
-        binhluan.setStatus(1);
-        binhluan.setTaikhoan(idnguoidung);
-
+    @PostMapping("save")
+    public ResponseEntity<ApiResponse<Binhluan>> saveBinhluan(@RequestBody Binhluan binhluan) {
         Binhluan savedBinhluan = binhluanService.saveBinhluan(binhluan);
-        ApiResponse<Binhluan> response = new ApiResponse<>(true, "Save binh luan successful", savedBinhluan);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Save binh luan successful", savedBinhluan));
+    }
+
+    @PutMapping("update")
+    public ResponseEntity<ApiResponse<Binhluan>> updateBinhluan(@RequestBody Binhluan binhluan) {
+        Binhluan updatedBinhluan = binhluanService.updateBinhluan(binhluan);
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Update binh luan successful", updatedBinhluan));
     }
 
     @DeleteMapping("delete/{id}")

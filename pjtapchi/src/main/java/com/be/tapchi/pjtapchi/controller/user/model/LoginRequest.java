@@ -1,13 +1,14 @@
 package com.be.tapchi.pjtapchi.controller.user.model;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class LoginRequest {
-    @NotNull(message = "Username không được để trống")
+    @NotBlank(message = "Username không được để trống")
     private String username;
 
-    @NotNull(message = "Password không được để trống")
+    @NotBlank(message = "Password không được để trống")
     private String password;
 
    

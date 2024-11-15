@@ -35,6 +35,9 @@ public class Baibao {
     @Column(name = "url")
     private String url;
 
+    @Column(name = "file")
+    private String file;
+
     @Column(name = "status")
     private Integer status;
 
@@ -46,13 +49,16 @@ public class Baibao {
     @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
-    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "keyword")
+    private String keyword;
+    
+    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Binhluan> binhluans;
 
-    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Thich> thichs;
 
-    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Danhmucbaibao> danhmucbaibaos;
 
 

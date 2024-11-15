@@ -1,6 +1,7 @@
 package com.be.tapchi.pjtapchi.controller.baibao;
 
-import com.be.tapchi.pjtapchi.api.ApiResponse;
+
+import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/baibao")
 public class baibaoController {
@@ -102,6 +104,20 @@ public class baibaoController {
         Pageable pageable = PageRequest.of(page, size);
         Page<Baibao> pageResult = bbService.getBaibaoByTrangThai(status, pageable);
         ApiResponse<Page<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", pageResult);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteBaibao(@PathVariable("id") Integer id) {
+        bbService.deleteBaibao(id);
+        ApiResponse<Void> response = new ApiResponse<>(true, "Delete bai bao successful", null);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ApiResponse<Baibao>> createBaibao(@RequestBody Baibao baibao) {
+        Baibao bb = bbService.saveBaibao(baibao);
+        ApiResponse<Baibao> response = new ApiResponse<>(true, "Create bai bao successful", bb);
         return ResponseEntity.ok().body(response);
     }
 }

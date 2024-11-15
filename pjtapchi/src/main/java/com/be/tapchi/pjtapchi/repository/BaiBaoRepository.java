@@ -6,12 +6,13 @@ import com.be.tapchi.pjtapchi.model.Theloai;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 
 //Extending JpaRepository interface for Baibao entity to perform CRUD operations.
+@Repository
 public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
-
 
     Baibao findBaibaoById(Integer id);
 

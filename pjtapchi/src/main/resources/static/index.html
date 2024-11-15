@@ -1099,13 +1099,32 @@
                     </ul>
 
                 </ul>
-
+            </ul>
         </div>
+
+        <!-- PayPal -->
+
+        <div class="card api-card method-post mb-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge bg-success method-badge me-3">POST</span>
+                    <h5 class="card-title mb-0">paypal integration</h5>
+                </div>
+                <div class="code-endpoint mb-3">
+                    /api/pay/create
+                </div>
+                <div class="alert alert-light" role="alert">
+                    <form action="/pay/create" method="post">
+                        <button type="submit">pay</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
-    ```
 
 
-    </div>
+
 
     <!-- Bootstrap JS (Optional) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
