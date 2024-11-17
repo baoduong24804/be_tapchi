@@ -25,15 +25,14 @@ public class Binhluan {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "binhluan_id", nullable = false)
+    @Column(name = "binhluan_id")
     private Integer id;
 
 
     /**
      * The article (Baibao) associated with the comment.
      */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "baibao_id")
     @JsonIgnore
     private Baibao baibao;
@@ -41,23 +40,23 @@ public class Binhluan {
     /**
      * The timestamp when the comment was made.
      */
-    @Column(name = "thoigianbl", nullable = false)
+    @Column(name = "thoigianbl")
     private Instant thoigianbl;
 
     /**
      * The content of the comment.
      */
-    @Column(name = "noidung", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "noidung")
     private String noidung;
 
     /**
      * The status of the comment.
      */
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private Integer status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Taikhoan_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
     // @ManyToOne(fetch = FetchType.EAGER)

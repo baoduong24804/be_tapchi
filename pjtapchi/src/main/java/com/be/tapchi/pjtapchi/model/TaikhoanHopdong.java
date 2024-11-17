@@ -16,25 +16,23 @@ public class TaikhoanHopdong {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "taikhoan_hopdong_id", nullable = false)
+    @Column(name = "taikhoan_hopdong_id")
     private Integer id;
 
-    @Column(name = "tenhopdong", nullable = false)
+    @Column(name = "tenhopdong")
     private String tenhopdong;
 
-    @Column(name = "ngaymua", nullable = false)
+    @Column(name = "ngaymua")
     private LocalDate ngaymua;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private Integer status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "taikhoan_id")
     private Taikhoan taikhoan;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "hopdong_id")
     private HopDong hopdong;
 

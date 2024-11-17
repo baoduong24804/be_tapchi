@@ -25,7 +25,7 @@ public class Vaitro {
     @Column(name = "vaitro_id")
     private Integer vaitroId;
 
-    @Column(name = "tenrole", nullable = false)
+    @Column(name = "tenrole")
     private String tenrole;
 
 

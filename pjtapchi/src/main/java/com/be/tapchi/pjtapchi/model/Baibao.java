@@ -20,10 +20,10 @@ public class Baibao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "baibao_id", nullable = false)
+    @Column(name = "baibao_id")
     private Integer id;
 
-    @Column(name = "tieude", nullable = false)
+    @Column(name = "tieude")
     private String tieude;
 
     @Column(name = "noidung")

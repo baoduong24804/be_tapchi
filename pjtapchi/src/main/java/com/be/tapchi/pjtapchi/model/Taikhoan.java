@@ -49,7 +49,7 @@ public class Taikhoan {
     @Column(name = "url")
     private String url;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "ngaytao")
     private Date ngaytao;
 

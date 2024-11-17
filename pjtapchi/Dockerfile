@@ -5,7 +5,18 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Sao chép tệp jar từ máy cục bộ vào container
-COPY target/api_anime404-0.0.1-SNAPSHOT.jar api_anime404-0.0.1-SNAPSHOT.jar
-
+COPY target/*.jar *.jar
+EXPOSE 9000
 # Chạy ứng dụng Spring Boot
-ENTRYPOINT ["java", "-jar", "api_anime404-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "*.jar"]
+##
+#FROM eclipse-temurin:17-jdk-focal as builder
+#WORKDIR /app
+#COPY . .
+#RUN ./mvnw clean package -DskipTests
+
+#FROM eclipse-temurin:17-jre-focal
+#WORKDIR /app
+#COPY --from=builder /app/target/*.jar app.jar
+#EXPOSE 9000
+#ENTRYPOINT ["java", "-jar", "app.jar"]

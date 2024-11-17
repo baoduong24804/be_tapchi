@@ -22,7 +22,6 @@ import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.TaikhoanToken;
 import com.be.tapchi.pjtapchi.repository.EmailVerificationRepository;
 
-
 @Service
 public class EmailService {
 
@@ -35,22 +34,20 @@ public class EmailService {
     @Autowired
     private TaiKhoanService taiKhoanService;
 
-
-    
     @Value("${app.token.expiration:15}")
     private long defaultTokenExpiration;
 
     public void sendVerificationEmail(String email) {
         Taikhoan taikhoan = taiKhoanService.findByEmail(email);
         if (taikhoan != null) {
-            
+
             String verificode = getVerificationCode();
-            if(verificode == null){
+            if (verificode == null) {
                 throw new NullPointerException("Loi khi tao verify code");
             }
-            
+
             EmailVerification emailVerification = new EmailVerification();
-            if(emailVerificationRepository.findByTaikhoan(taikhoan) != null){
+            if (emailVerificationRepository.findByTaikhoan(taikhoan) != null) {
                 emailVerification = emailVerificationRepository.findByTaikhoan(taikhoan);
             }
             emailVerification.setTaikhoan(taikhoan);
@@ -64,7 +61,8 @@ public class EmailService {
             // message.setText("Mã xác thực của bạn là: " + verificode);
             // mailSender.send(message);
 
-            sendActivationEmail(email, verificode, "Xác thực email", "Đây là mã để xác thực tài khoản của bạn, lưu ý mã xác thực có thời hạn 15 phút");
+            sendActivationEmail(email, verificode, "Xác thực email",
+                    "Đây là mã để xác thực tài khoản của bạn, lưu ý mã xác thực có thời hạn 15 phút");
         }
     }
 
@@ -73,16 +71,15 @@ public class EmailService {
         for (int i = 0; i < 99; i++) {
             String uuidString = uuid.toString().replace("-", "");
             String shortUuid = uuidString.substring(0, 6);
-            if(emailVerificationRepository.findByVerificationCode(shortUuid) == null){
+            if (emailVerificationRepository.findByVerificationCode(shortUuid) == null) {
                 return shortUuid;
             }
             uuid = UUID.randomUUID();
         }
         return null;
-     
+
     }
 
-    
     public boolean verifyEmail(String verificationCode) {
         EmailVerification emailVerification = emailVerificationRepository.findByVerificationCode(verificationCode);
         if (emailVerification != null) {
@@ -91,14 +88,14 @@ public class EmailService {
                 // Xóa mã xác thực sau khi xác thực thành công
                 emailVerificationRepository.delete(emailVerification);
                 Taikhoan tk = emailVerification.getTaikhoan();
-                if(tk.getStatus() != 0){
+                if (tk.getStatus() != 0) {
                     return true;
                 }
                 tk.setStatus(1);
                 taiKhoanService.saveTaiKhoan(tk);
                 return true;
             }
-           
+
         }
         return false;
     }
@@ -107,47 +104,59 @@ public class EmailService {
     public void deleteTokenExpiryDate() {
         try {
             List<EmailVerification> list = emailVerificationRepository.findByCreatedAtBefore(LocalDateTime.now());
-            System.out.println("haahhah"+list.size());
+            System.out.println("haahhah" + list.size());
             if (list == null || list.size() == 0) {
                 System.out.println("Ko co email verify het han");
                 return;
             }
 
-            //List<Taikhoan> listTK = new ArrayList<>();
+            // List<Taikhoan> listTK = new ArrayList<>();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-            
 
             for (EmailVerification tktoken : list) {
                 // System.out.println(tktoken.getExpiryDate());
-                //listTK.add(tktoken.getTaikhoan());
+                // listTK.add(tktoken.getTaikhoan());
                 String formattedExpiryDate = tktoken.getCreatedAt().format(formatter);
                 System.out.println("Tìm thấy email_vefiry có thời gian hết hạn là: " + formattedExpiryDate);
                 emailVerificationRepository.delete(tktoken);
                 System.out.println("Đã xóa email_vefiry");
-                if(tktoken.getTaikhoan().getStatus() == 0){
+                if (tktoken.getTaikhoan() == null) {
+                    System.out.println("tai khoan can xac minh email null");
+                    return;
+                }
+                if (tktoken.getTaikhoan().getStatus() == 0) {
                     taiKhoanService.deleteTaiKhoan(tktoken.getTaikhoan());
                     System.out.println("Đã xóa tk hết hạn");
                 }
-                
-                
-                
+
             }
 
             return;
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println("err get email expriryDate: " + e.getMessage());
+            try {
+                emailVerificationRepository.deleteAll();
+                System.out.println("Xoa tat ca email verify");
+                return;
+            } catch (Exception ex) {
+                // TODO: handle exception
+                System.out.println("Loi xoa tat ca email verify: "+ex.getMessage());
+            }
+            
+            
+
         }
-        
+
         return;
     }
 
     // Scheduled task để xóa token hết hạn
-    
+
     @Scheduled(fixedRate = 3600000) // Chạy mỗi giờ
     @Async
     public void removeExpiredTokens() {
-        //emailVerificationRepository.deleteByCreatedAtLessThan(LocalDateTime.now());
+        // emailVerificationRepository.deleteByCreatedAtLessThan(LocalDateTime.now());
         deleteTokenExpiryDate();
     }
 
@@ -157,7 +166,8 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             // Build the activation link
-            //String activationLink = token; // assuming 'token' is the full link or use to construct the link
+            // String activationLink = token; // assuming 'token' is the full link or use to
+            // construct the link
 
             // Email content in proper string format
             String emailContent = "<html>" +
@@ -166,7 +176,7 @@ public class EmailService {
                     "    <meta name=\"description\" content=\"Email Verification\" />"
                     +
                     "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />" +
-                    "    <title>"+title+"</title>" +
+                    "    <title>" + title + "</title>" +
                     "    <style>" +
                     "      html, body {" +
                     "          margin: 0 auto !important;" +
@@ -201,9 +211,11 @@ public class EmailService {
                     +
                     "      <tr>" +
                     "        <td align=\"center\">" +
-                    "          <h1 style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">"+title+"</h1>"
+                    "          <h1 style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">" + title
+                    + "</h1>"
                     +
-                    "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">"+content+"</p>"
+                    "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">" + content
+                    + "</p>"
                     +
                     "          <p style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">" + token
                     + "</p>" +
@@ -220,7 +232,7 @@ public class EmailService {
             helper.setText(emailContent, true); // 'true' indicates it's an HTML email
 
             mailSender.send(message);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }

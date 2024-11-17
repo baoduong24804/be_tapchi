@@ -34,7 +34,7 @@ public class QuangCao {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Taikhoan_id", nullable = false)
+    @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
     // @OneToMany(mappedBy = "QuangCao", fetch = FetchType.LAZY)

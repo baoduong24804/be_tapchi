@@ -20,16 +20,17 @@ public class TaikhoanToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "token")
     private String token;
 
-    @OneToOne(targetEntity = Taikhoan.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "taikhoan_id")
+    @OneToOne(targetEntity = Taikhoan.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "taikhoan_id")
     private Taikhoan taikhoan;
 
-    @Column(nullable = false)
+    @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
 
 

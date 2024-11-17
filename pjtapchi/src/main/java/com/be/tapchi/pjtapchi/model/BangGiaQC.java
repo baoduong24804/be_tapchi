@@ -31,13 +31,13 @@ public class BangGiaQC {
     @Column(name = "banggiaqc_id")
     private Long bangGiaQCId;
 
-    @Column(name = "songay", nullable = false)
+    @Column(name = "songay")
     private Integer soNgay;
 
-    @Column(name = "giatien", nullable = false)
+    @Column(name = "giatien")
     private Float giaTien;
 
-    @Column(name = "tengoi", nullable = false, length = 100)
+    @Column(name = "tengoi", length = 100)
     private String tenGoi;
 
     // @OneToMany(mappedBy = "bangGiaQC", fetch = FetchType.LAZY)

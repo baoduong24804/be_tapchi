@@ -34,7 +34,7 @@ public class Theloai {
     @Column(name = "tenloai")
     private String tenloai;
 
-    @OneToMany(mappedBy = "theloai", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "theloai", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Baibao> baibaos;
 

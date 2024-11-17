@@ -17,20 +17,20 @@ public class Danhmucbaibao {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "danhmuc_id", insertable = false, updatable = false)
+    @JoinColumn(name = "danhmuc_id")
     private DanhMuc danhmuc;
 
     // @Column(name = "danhmuc_id", insertable = false, updatable = false)
     // private Integer danhmucId;
 
-    @Transient
-    private String tieuDe;
+    // @Transient
+    // private String tieuDe;
 
-    @Transient
-    private Integer tuan;
+    // @Transient
+    // private Integer tuan;
 
-    @Transient
-    private Integer so;
+    // @Transient
+    // private Integer so;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,12 +40,12 @@ public class Danhmucbaibao {
     // @Column(name = "baibao_id", insertable = false, updatable = false)
     // private Integer baobaiId;
 
-    @PostLoad
-    private void postLoad() {
-        if (danhmuc != null) {
-            this.tieuDe = danhmuc.getTieuDe();
-            this.tuan = danhmuc.getTuan();
-            this.so = danhmuc.getSo();
-        }
-    }
+    // @PostLoad
+    // private void postLoad() {
+    //     if (danhmuc != null) {
+    //         this.tieuDe = danhmuc.getTieuDe();
+    //         this.tuan = danhmuc.getTuan();
+    //         this.so = danhmuc.getSo();
+    //     }
+    // }
 }

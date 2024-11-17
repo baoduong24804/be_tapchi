@@ -107,17 +107,4 @@ public class DanhMucController {
         }
     }
 
-
-    @GetMapping("/{danhmucId}/listBb")
-    public ResponseEntity<ApiResponse<List<Baibao>>> getBaibaosByDanhMuc(@PathVariable Long danhmucId) {
-        List<Baibao> baibaos = danhMucService.getBbByIdDanhMuc(danhmucId);
-
-        if (baibaos.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(false, "Không có bài báo nào trong danh mục này", null));
-        }
-
-        return ResponseEntity.ok(new ApiResponse<>(true, "Danh sách bài báo trong danh mục", baibaos));
-    }
-
 }

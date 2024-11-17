@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface DanhMucBaiBaoRepository extends JpaRepository<Danhmucbaibao, Long> {
-    List<Danhmucbaibao> findByDanhMucId(Long danhmucId);
+    //List<Danhmucbaibao> findByDanhMucId(Long danhmucId);
 }

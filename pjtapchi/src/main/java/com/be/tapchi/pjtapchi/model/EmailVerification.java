@@ -26,13 +26,13 @@ public class EmailVerification {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "taikhoan_id", nullable = false)
+    @JoinColumn(name = "taikhoan_id")
     private Taikhoan taikhoan;
 
-    @Column(name = "verification_code", nullable = false)
+    @Column(name = "verification_code")
     private String verificationCode;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     // Getters and Setters

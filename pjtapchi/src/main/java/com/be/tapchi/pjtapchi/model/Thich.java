@@ -21,18 +21,18 @@ public class Thich {
     private Long thichId;
 
 
-    @Column(name = "Status", nullable = false)
+    @Column(name = "Status")
     private Integer status;
 
-    @Column(name = "Thoigianthich", nullable = false)
+    @Column(name = "Thoigianthich")
     private LocalDateTime thoigianthich;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Taikhoan_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Baibao_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Baibao_id")
     @JsonIgnore
     private Baibao baibao;
 

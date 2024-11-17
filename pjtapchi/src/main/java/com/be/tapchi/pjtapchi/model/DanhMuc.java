@@ -21,7 +21,7 @@ public class DanhMuc {
     @Column(name = "danhmuc_id")
     private Long danhmucId;
 
-    @Column(name = "tieude", nullable = false, length = 255)
+    @Column(name = "tieude", length = 255)
     private String tieuDe;
 
     @Column(name = "mota", length = 255)
@@ -30,17 +30,17 @@ public class DanhMuc {
     @Column(name = "url", length = 255)
     private String url;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private Integer status;
 
-    @Column(name = "ngaytao", nullable = false)
+    @Column(name = "ngaytao")
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
-    @Column(name = "tuan", nullable = false)
+    @Column(name = "tuan")
     private Integer tuan;
 
-    @Column(name = "so", nullable = false)
+    @Column(name = "so")
     private Integer so;
 
     @JsonIgnore

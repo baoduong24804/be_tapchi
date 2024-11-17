@@ -71,12 +71,4 @@ public class DanhMucService {
         return danhMucRepository.findAll(pageable);
     }
 
-    public List<Baibao> getBbByIdDanhMuc(Long id) {
-        List<Danhmucbaibao> danhmucbb = danhMucBaiBaoRepository.findByDanhMucId(id);
-        List<Baibao> bB = new ArrayList<>();
-        for (Danhmucbaibao danhmucbaibao : danhmucbb) {
-            baiBaoRepository.findById(danhmucbaibao.getId()).ifPresent(bB::add);
-        }
-        return bB;
-    }
 }
