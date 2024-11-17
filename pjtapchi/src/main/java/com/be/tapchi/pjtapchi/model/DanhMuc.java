@@ -21,13 +21,13 @@ public class DanhMuc {
     @Column(name = "danhmuc_id")
     private Long danhmucId;
 
-    @Column(name = "tieude", length = 255)
+    @Column(name = "tieude")
     private String tieuDe;
 
-    @Column(name = "mota", length = 255)
+    @Column(name = "mota")
     private String moTa;
 
-    @Column(name = "url", length = 255)
+    @Column(name = "url")
     private String url;
 
     @Column(name = "status")

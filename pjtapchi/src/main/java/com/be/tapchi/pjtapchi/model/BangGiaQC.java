@@ -37,7 +37,7 @@ public class BangGiaQC {
     @Column(name = "giatien")
     private Float giaTien;
 
-    @Column(name = "tengoi", length = 100)
+    @Column(name = "tengoi")
     private String tenGoi;
 
     // @OneToMany(mappedBy = "bangGiaQC", fetch = FetchType.LAZY)

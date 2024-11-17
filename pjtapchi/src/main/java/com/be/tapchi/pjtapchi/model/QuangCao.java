@@ -21,19 +21,19 @@ public class QuangCao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quangcao_id")
-    private Long quangCaoId;
+    private Long quangcaoId;
 
-    @Column(nullable = false, length = 255, name = "tieude")
-    private String tieuDe;
+    @Column(name = "tieude")
+    private String tieude;
 
-    @Column(nullable = false, columnDefinition = "TEXT", name = "url")
+    @Column(name = "url")
     private String url;
 
-    @Column(nullable = false, name = "status")
+    @Column(name = "status")
     private int status;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 

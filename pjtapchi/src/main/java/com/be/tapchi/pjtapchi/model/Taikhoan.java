@@ -27,11 +27,11 @@ public class Taikhoan {
     private Long taikhoan_id;
 
     @JsonIgnore
-    @Column(name = "Username", length = 100)
+    @Column(name = "Username", length = 50)
     private String username;
 
     @JsonIgnore
-    @Column(name = "Password", length = 100)
+    @Column(name = "Password", length = 50)
     private String password;
 
     @Column(name = "hovaten")

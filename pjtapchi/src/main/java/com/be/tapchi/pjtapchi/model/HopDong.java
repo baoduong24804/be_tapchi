@@ -21,13 +21,13 @@ public class HopDong {
     @Column(name = "hopdong_id")
     private Long hopDongId; // Chỉnh sửa tên biến cho nhất quán
 
-    @Column(name = "ngaybatdauhd", nullable = false)
+    @Column(name = "ngaybatdauhd")
     private LocalDate ngayBatDauHD;
 
-    @Column(name = "ngayketthuchd", nullable = false)
+    @Column(name = "ngayketthuchd")
     private LocalDate ngayKetThucHD;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private int status;
 
     // @OneToMany(mappedBy = "quangcao_id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

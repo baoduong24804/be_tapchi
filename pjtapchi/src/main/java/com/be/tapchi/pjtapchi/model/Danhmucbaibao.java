@@ -12,7 +12,7 @@ import lombok.Setter;
 public class Danhmucbaibao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "danhmucbaibao_id", nullable = false)
+    @Column(name = "danhmucbaibao_id")
     private Integer id;
 
     @JsonIgnore

@@ -19,29 +19,29 @@ public class HoaDon {
     @Column(name = "hoadon_id")
     private Long hoadonId;
 
-    @Column(name = "tongtien", nullable = false)
+    @Column(name = "tongtien")
     private Float tongTien;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private String status;
 
-    @Column(name = "ngaytao", nullable = false)
+    @Column(name = "ngaytao")
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
-    @Column(name = "paymentid", nullable = false)
+    @Column(name = "paymentid")
     private String paymentId;
 
-    @Column(name = "payerid", nullable = false)
+    @Column(name = "payerid")
     private String payerId;
 
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hopdongId", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hopdongId")
     private HopDong hopDong;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "taikhoan_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "taikhoan_id")
     private Taikhoan taikhoan;
 
 }
