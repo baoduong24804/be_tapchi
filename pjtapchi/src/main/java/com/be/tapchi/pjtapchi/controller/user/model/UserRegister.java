@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserRegister {
 
-   
+    private String url_d = "https://anime404.click/api/files/view/ac0dc7e2-6135-48f5-ad85-340d21097697_user-avatar-4-icon-511x512-wlu19u1d.png";
     //private int[] roles;
     @NotBlank(message = "Username không được để trống")
     private String username;
@@ -27,8 +27,8 @@ public class UserRegister {
     @NotBlank(message = "Số điện thoại không được để trống")
     private String sdt;
 
-    @NotBlank(message = "URL không được để trống")
-    private String url;
+    //@NotBlank(message = "URL không được để trống")
+    private String url = url_d;
 
     @NotBlank(message = "Email không được để trống")
     private String email;

@@ -210,7 +210,7 @@ public class TaiKhoanService {
     }
 
     public boolean existsByEmail(String email) {
-        if (taiKhoanRepository.existsByEmail(email)) {
+        if (taiKhoanRepository.existsByEmailAndGoogleIdIsNull(email)) {
             return true;
         }
         return false;

@@ -111,7 +111,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<?>> userDetail(@RequestBody(required = false) LoginRequest loginRequest) {
         try {
             ApiResponse<?> api = new ApiResponse<>();
-
+            
             Claims claims = jwtUtil.extractClaims(loginRequest.getToken());
             // neu token ko dung hoac bi loi
             if (claims == null) {
@@ -189,7 +189,7 @@ public class UserController {
             }
 
         } catch (AuthenticationException e) {
-            throw new Exception("Loi khong mong muon khi login", e);
+            throw new Exception("Lỗi không mong muốn khi đăng nhập", e);
         }
 
         // Nếu xác thực thành công, tạo JWT
@@ -269,31 +269,15 @@ public class UserController {
             BindingResult bindingResult) {
         // TODO: process POST request
         ApiResponse<?> api = new ApiResponse<>();
-        // kiem tra du lieu bi trong
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.joining(", "));
-            api.setSuccess(false);
-            api.setMessage("Không được để trống dữ liệu");
-            api.setData(errorMessage);
-            return ResponseEntity.badRequest().body(api);
-        }
-
+        
         // kiem tra sub de trong
         try {
             if (entity.getSub() == null || entity.getSub().isEmpty()) {
                 api.setSuccess(false);
-                api.setMessage("Không được để trống dữ liệu");
+                api.setMessage("Có lỗi khi đăng nhập với Google");
                 api.setData(null);
                 return ResponseEntity.badRequest().body(api);
             }
-        } catch (Exception e) {
-            // TODO: handle exception
-            return ResponseEntity.badRequest().body(api);
-        }
-
-        try {
             if (taiKhoanRepository.existsByGoogleId(entity.getSub())) {
                 Taikhoan tk = taiKhoanRepository.findByGoogleId(entity.getSub().trim());
                 if (tk == null) {
@@ -316,6 +300,26 @@ public class UserController {
                 api.setData(map);
                 return ResponseEntity.ok().body(api);
             }
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.badRequest().body(api);
+        }
+
+        // kiem tra du lieu bi trong
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            api.setSuccess(false);
+            api.setMessage("Không được để trống dữ liệu");
+            api.setData(errorMessage);
+            return ResponseEntity.badRequest().body(api);
+        }
+
+        
+
+        try {
+
 
             // dang ky google
             Taikhoan tk = new Taikhoan();
@@ -386,6 +390,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(api);
         }
         try {
+            Taikhoan tk_chuaxacnhan = taiKhoanService.findByEmail(userRegister.getEmail().trim());
             Set<String> err_mes = new HashSet<>();
             if (taiKhoanRepository.existsByUsername(generateUsername(userRegister.getUsername()))) {
                 err_mes.add("Username đã tồn tại");
@@ -403,11 +408,13 @@ public class UserController {
                 // api.setMessage("Email da ton tai");
                 // api.setData(null);
                 // gui ma xac nhan neu tk chua kich hoat
-                if (taiKhoanService.findByEmail(userRegister.getEmail()).getStatus() == 0) {
-                    emailService.sendVerificationEmail(userRegister.getEmail());
-                    api.setSuccess(true);
-                    api.setMessage("Đã gửi mã xác thực");
-                    return ResponseEntity.ok().body(api);
+                if (taiKhoanService.findByEmail(userRegister.getEmail()) != null) {
+                    if(tk_chuaxacnhan.getStatus() == 0){
+                        emailService.sendVerificationEmail(userRegister.getEmail());
+                        api.setSuccess(true);
+                        api.setMessage("Đã gửi mã xác thực");
+                        return ResponseEntity.ok().body(api);
+                    }
                 }
                 // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(api);
             }

@@ -1,7 +1,7 @@
 package com.be.tapchi.pjtapchi.controller.danhmuc;
 
 
-import com.be.tapchi.pjtapchi.api.ApiResponse;
+
 import com.be.tapchi.pjtapchi.model.Baibao;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
