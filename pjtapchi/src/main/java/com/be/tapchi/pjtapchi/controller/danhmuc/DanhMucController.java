@@ -175,6 +175,7 @@ public class DanhMucController {
                     Baibao baibao = danhmucbaibao.getBaibao();
                     // kiemtra taikhoanid co ton tai
                     if (baibao.getTaikhoan() == null || !taiKhoanRepository.existsById(baibao.getTaikhoan().getTaikhoan_id())) {
+                        System.out.println("<<< taikhoanid khong ton tai : " + baibao.getTaikhoan().getTaikhoan_id() + " >>>");
                         continue;
                     }
                 } catch (Exception e) {
