@@ -1,24 +1,17 @@
 package com.be.tapchi.pjtapchi.service;
 
-import com.be.tapchi.pjtapchi.model.Baibao;
-
 import com.be.tapchi.pjtapchi.controller.danhmuc.utils.DateUtils;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
-import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucBaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
-
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 
 @Service
 public class DanhMucService {
@@ -53,7 +46,7 @@ public class DanhMucService {
     public Page<DanhMuc> getDanhmucInCurrentWeek(int page, int size) {
         LocalDate startOfWeek = DateUtils.getStartOfWeek();
         LocalDate endOfWeek = DateUtils.getEndOfWeek();
-        System.out.println(startOfWeek+","+endOfWeek);
+        System.out.println(startOfWeek + "," + endOfWeek);
         Pageable pageable = PageRequest.of(page, size);
 
         return danhMucRepository.findDanhmucByWeek(startOfWeek, endOfWeek, pageable);
@@ -70,5 +63,16 @@ public class DanhMucService {
     public Page<DanhMuc> findAll(Pageable pageable) {
         return danhMucRepository.findAll(pageable);
     }
+
+//    public List<Baibao> getBbByIdDanhMuc(Long id) {
+//        List<Danhmucbaibao> danhmucbaibaos
+//
+//        List<Baibao> baibaos = new ArrayList<>();
+//        for (Danhmucbaibao danhmucbaibao : danhmucbaibaos) {
+//            baibaos.add(danhmucbaibao.getBaibao());
+//        }
+//        return baibaos;
+//    }
+
 
 }
