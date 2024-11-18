@@ -2,21 +2,25 @@ package com.be.tapchi.pjtapchi.controller.like;
 
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.jwt.JwtUtil;
+import com.be.tapchi.pjtapchi.model.Baibao;
+import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Thich;
 import com.be.tapchi.pjtapchi.service.ThichService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/like")
 public class likeController {
+
+    @Autowired
+    JwtUtil jwtUtil;
 
     @Autowired
     private ThichService thichService;
@@ -34,9 +38,16 @@ public class likeController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Thich>> saveThich(Thich thich) {
-        Thich savedThich = thichService.save(thich);
-        return ResponseEntity.ok().body(new ApiResponse<>(true, "Save thich successful", savedThich));
+    public ResponseEntity<ApiResponse<Thich>> saveThich(@RequestBody Map<String, Object> requestBody) {
+        Taikhoan taikhoan = jwtUtil.getTaikhoanFromToken(requestBody.get("token").toString());
+
+        Thich thich = new Thich();
+        thich.setTaikhoan(taikhoan);
+        Baibao baibao = new Baibao();
+        baibao.setId(Integer.parseInt(requestBody.get("baibao_id").toString()));
+        thich.setBaibao(baibao);
+        Thich newThich = thichService.save(thich);
+        return ResponseEntity.ok().body(new ApiResponse<>(true, "Create thich successful", newThich));
     }
 
     @PostMapping("/unlike")

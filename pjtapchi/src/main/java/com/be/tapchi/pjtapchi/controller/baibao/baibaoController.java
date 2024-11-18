@@ -2,9 +2,8 @@ package com.be.tapchi.pjtapchi.controller.baibao;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.dto.BaibaoResponseDTO;
-import com.be.tapchi.pjtapchi.model.Baibao;
-import com.be.tapchi.pjtapchi.model.DanhMuc;
-import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
+import com.be.tapchi.pjtapchi.jwt.JwtUtil;
+import com.be.tapchi.pjtapchi.model.*;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -28,6 +28,9 @@ public class baibaoController {
 
     @Autowired
     private BaibaoService bbService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
 
     @GetMapping("/all")
@@ -123,7 +126,30 @@ public class baibaoController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Baibao>> createBaibao(@RequestBody Baibao baibao) {
+    public ResponseEntity<ApiResponse<Baibao>> createBaibao(@RequestBody Map<String, Object> requestBody) {
+        // Extract token from request body
+        String token = (String) requestBody.get("token");
+        System.out.println("Token: " + token);
+        Taikhoan tk = jwtUtil.getTaikhoanFromToken(token);
+        if (tk == null) {
+            ApiResponse<Baibao> response = new ApiResponse<>(false, "Invalid token", null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Convert request body to Baibao object
+        Baibao baibao = new Baibao();
+        baibao.setTieude((String) requestBody.get("tieude"));
+        baibao.setNoidung((String) requestBody.get("noidung"));
+        baibao.setUrl((String) requestBody.get("url"));
+        baibao.setFile((String) requestBody.get("file"));
+        baibao.setKeyword((String) requestBody.get("keyword"));
+        baibao.setTheloai(new Theloai((Integer) ((Map<String, Object>) requestBody.get("theloai")).get("id")));
+        baibao.setTaikhoan(tk);
+
+
+        // Set default values
+        baibao.setNgaydang(LocalDate.now());
+        baibao.setStatus(0);
+
         Baibao bb = bbService.saveBaibao(baibao);
         ApiResponse<Baibao> response = new ApiResponse<>(true, "Create bai bao successful", bb);
         return ResponseEntity.ok().body(response);
@@ -147,4 +173,6 @@ public class baibaoController {
 
         return new BaibaoResponseDTO(baibao, tieuDe, so, tuan);
     }
+
+
 }
