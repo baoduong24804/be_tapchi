@@ -1,11 +1,11 @@
 package com.be.tapchi.pjtapchi.controller.baibao;
 
-
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
-import com.be.tapchi.pjtapchi.model.Baibao;
+import com.be.tapchi.pjtapchi.dto.BaibaoResponseDTO;
+import com.be.tapchi.pjtapchi.jwt.JwtUtil;
+import com.be.tapchi.pjtapchi.model.*;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
-import com.be.tapchi.pjtapchi.service.TheloaiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -28,82 +30,91 @@ public class baibaoController {
     private BaibaoService bbService;
 
     @Autowired
-    private TheloaiService theloaiService;
+    private JwtUtil jwtUtil;
+
 
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse<Page<Baibao>>> getAllBaibao(
+    public ResponseEntity<ApiResponse<Page<BaibaoResponseDTO>>> getAllBaibao(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Baibao> pageResult = bbService.findAllBaibao(pageable);
-        ApiResponse<Page<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", pageResult);
+        Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
+        ApiResponse<Page<BaibaoResponseDTO>> response = new ApiResponse<>(true, "Fetch bai bao successful", responsePage);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Baibao>> getExample(@PathVariable("id") Integer id) {
+    public ResponseEntity<ApiResponse<BaibaoResponseDTO>> getExample(@PathVariable("id") Integer id) {
         Baibao bb = bbService.getBaibaoById(id);
-        ApiResponse<Baibao> response = new ApiResponse<>(true, "Fetch bai bao successful", bb);
         if (bb != null) {
+            BaibaoResponseDTO responseDTO = convertToDTO(bb);
+            ApiResponse<BaibaoResponseDTO> response = new ApiResponse<>(true, "Fetch bai bao successful", responseDTO);
             return ResponseEntity.ok().body(response);
         } else {
+            ApiResponse<BaibaoResponseDTO> response = new ApiResponse<>(true, "Fetch bai bao successful", null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     @GetMapping("/author/{id}")
-    public ResponseEntity<ApiResponse<Page<Baibao>>> getBaibaoByTacGiaId(
+    public ResponseEntity<ApiResponse<Page<BaibaoResponseDTO>>> getBaibaoByTacGiaId(
             @PathVariable("id") Long id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Baibao> pageResult = bbService.getBaibaoByTacGiaId(id, pageable);
-        ApiResponse<Page<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", pageResult);
+        Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
+        ApiResponse<Page<BaibaoResponseDTO>> response = new ApiResponse<>(true, "Fetch bai bao successful", responsePage);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/theloai/{id}")
-    public ResponseEntity<ApiResponse<Page<Baibao>>> getBaibaoByTheLoaiID(
+    public ResponseEntity<ApiResponse<Page<BaibaoResponseDTO>>> getBaibaoByTheLoaiID(
             @PathVariable("id") Integer id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Baibao> pageResult = bbService.getBaibaoByTheLoaiID(id, pageable);
-        ApiResponse<Page<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", pageResult);
+        Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
+        ApiResponse<Page<BaibaoResponseDTO>> response = new ApiResponse<>(true, "Fetch bai bao successful", responsePage);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/date/{postDate}")
-    public ResponseEntity<ApiResponse<Page<Baibao>>> getBaibaoByNgayDang(
+    public ResponseEntity<ApiResponse<Page<BaibaoResponseDTO>>> getBaibaoByNgayDang(
             @PathVariable("postDate") LocalDate postDate,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Baibao> pageResult = bbService.getBaibaoByNgayDang(postDate, pageable);
-        ApiResponse<Page<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", pageResult);
+        Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
+        ApiResponse<Page<BaibaoResponseDTO>> response = new ApiResponse<>(true, "Fetch bai bao successful", responsePage);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/date/{date1}/{date2}")
-    public ResponseEntity<ApiResponse<Page<Baibao>>> getBaibaiByNgayDangBetween(
+    public ResponseEntity<ApiResponse<Page<BaibaoResponseDTO>>> getBaibaiByNgayDangBetween(
             @PathVariable("date1") LocalDate date1,
             @PathVariable("date2") LocalDate date2,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Baibao> pageResult = bbService.getBaibaiByNgayDangBetween(date1, date2, pageable);
-        ApiResponse<Page<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", pageResult);
+        Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
+        ApiResponse<Page<BaibaoResponseDTO>> response = new ApiResponse<>(true, "Fetch bai bao successful", responsePage);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<ApiResponse<Page<Baibao>>> getBaibaoByTrangThai(
+    public ResponseEntity<ApiResponse<Page<BaibaoResponseDTO>>> getBaibaoByTrangThai(
             @PathVariable("status") Integer status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Baibao> pageResult = bbService.getBaibaoByTrangThai(status, pageable);
-        ApiResponse<Page<Baibao>> response = new ApiResponse<>(true, "Fetch bai bao successful", pageResult);
+        Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
+        ApiResponse<Page<BaibaoResponseDTO>> response = new ApiResponse<>(true, "Fetch bai bao successful", responsePage);
         return ResponseEntity.ok().body(response);
     }
 
@@ -115,9 +126,53 @@ public class baibaoController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Baibao>> createBaibao(@RequestBody Baibao baibao) {
+    public ResponseEntity<ApiResponse<Baibao>> createBaibao(@RequestBody Map<String, Object> requestBody) {
+        // Extract token from request body
+        String token = (String) requestBody.get("token");
+        System.out.println("Token: " + token);
+        Taikhoan tk = jwtUtil.getTaikhoanFromToken(token);
+        if (tk == null) {
+            ApiResponse<Baibao> response = new ApiResponse<>(false, "Invalid token", null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+        // Convert request body to Baibao object
+        Baibao baibao = new Baibao();
+        baibao.setTieude((String) requestBody.get("tieude"));
+        baibao.setNoidung((String) requestBody.get("noidung"));
+        baibao.setUrl((String) requestBody.get("url"));
+        baibao.setFile((String) requestBody.get("file"));
+        baibao.setKeyword((String) requestBody.get("keyword"));
+        baibao.setTheloai(new Theloai((Integer) ((Map<String, Object>) requestBody.get("theloai")).get("id")));
+        baibao.setTaikhoan(tk);
+
+
+        // Set default values
+        baibao.setNgaydang(LocalDate.now());
+        baibao.setStatus(0);
+
         Baibao bb = bbService.saveBaibao(baibao);
         ApiResponse<Baibao> response = new ApiResponse<>(true, "Create bai bao successful", bb);
         return ResponseEntity.ok().body(response);
     }
+
+    private BaibaoResponseDTO convertToDTO(Baibao baibao) {
+        String tieuDe = null;
+        Integer so = null;
+        Integer tuan = null;
+
+        List<Danhmucbaibao> danhmucbaibaos = baibao.getDanhmucbaibaos();
+        for (Danhmucbaibao dmbb : danhmucbaibaos) {
+            DanhMuc dm = dmbb.getDanhmuc();
+            if (dm != null) {
+                tieuDe = dm.getTieuDe();
+                so = dm.getSo();
+                tuan = dm.getTuan();
+                break; // Assuming one-to-one relationship for simplicity
+            }
+        }
+
+        return new BaibaoResponseDTO(baibao, tieuDe, so, tuan);
+    }
+
+
 }

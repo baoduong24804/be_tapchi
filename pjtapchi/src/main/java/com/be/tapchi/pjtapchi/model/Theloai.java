@@ -38,4 +38,8 @@ public class Theloai {
     @JsonIgnore
     private List<Baibao> baibaos;
 
+    public Theloai(Integer id) {
+        this.id = id;
+    }
+
 }

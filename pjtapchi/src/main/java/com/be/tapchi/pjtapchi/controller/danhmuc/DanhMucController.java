@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @CrossOrigin(origins = "*")
@@ -42,7 +44,7 @@ public class DanhMucController {
     public ResponseEntity<ApiResponse<?>> getDanhmucInCurrentWeek(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        // TODO: process POST request
+        // TODO: process POST requestS
         try {
             ApiResponse<?> api = new ApiResponse<>();
             api.setSuccess(true);
@@ -207,6 +209,12 @@ public class DanhMucController {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi xử lý yêu cầu.", null));
+        DanhMuc updatedDanhMuc = danhMucService.updateDanhMuc(id, newDanhMuc);
+        if (updatedDanhMuc != null) {
+            return ResponseEntity.ok().body(new ApiResponse<>(true, "Update danh muc successful", updatedDanhMuc));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(false, "Danh muc not found", null));
         }
     }
 

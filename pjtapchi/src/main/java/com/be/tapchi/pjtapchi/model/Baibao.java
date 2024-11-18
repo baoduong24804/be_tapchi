@@ -1,5 +1,6 @@
 package com.be.tapchi.pjtapchi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,17 +52,18 @@ public class Baibao {
 
     @Column(name = "keyword")
     private String keyword;
-    
+
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Binhluan> binhluans;
 
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Thich> thichs;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Danhmucbaibao> danhmucbaibaos;
 
-
-//    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Danhmucbaibao> danhmucbaibaos;
+    // @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch =
+    // FetchType.LAZY)
+    // private List<Danhmucbaibao> danhmucbaibaos;
 }
