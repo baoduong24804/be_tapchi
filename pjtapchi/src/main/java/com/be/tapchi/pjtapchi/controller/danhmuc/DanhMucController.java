@@ -7,6 +7,7 @@ import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
 import com.be.tapchi.pjtapchi.repository.DanhMucBaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
+import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
 import com.be.tapchi.pjtapchi.service.DanhMucService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,9 @@ public class DanhMucController {
 
     @Autowired
     DanhMucRepository danhMucRepository;
+
+    @Autowired
+    TaiKhoanRepository taiKhoanRepository;
 
     @PostMapping("/get/week")
     public ResponseEntity<ApiResponse<?>> getDanhmucInCurrentWeek(
@@ -64,104 +68,122 @@ public class DanhMucController {
     public ResponseEntity<ApiResponse<Page<DanhMuc>>> getAllDanhMuc(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<DanhMuc> danhMucPage = danhMucService.getAllDanhMuc(pageable);
-        ApiResponse<Page<DanhMuc>> response = new ApiResponse<>(true, "Danh sách danh mục", danhMucPage);
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<DanhMuc> danhMucPage = danhMucService.getAllDanhMuc(pageable);
+            ApiResponse<Page<DanhMuc>> response = new ApiResponse<>(true, "Danh sách danh mục", danhMucPage);
 
-        if (danhMucPage.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        } else {
-            return ResponseEntity.ok().body(response);
+            if (danhMucPage.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            } else {
+                return ResponseEntity.ok().body(response);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi lấy danh mục.", null));
         }
     }
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<DanhMuc>> createDanhMuc(@RequestBody DanhMuc danhMuc) {
-        if (danhMuc.getStatus() == null) {
-            danhMuc.setStatus(0);
+        try {
+            if (danhMuc.getStatus() == null) {
+                danhMuc.setStatus(0);
+            }
+            if (danhMuc.getNgayTao() == null) {
+                danhMuc.setNgayTao(new Date());
+            }
+            DanhMuc dm = danhMucService.saveDanhMuc(danhMuc);
+            ApiResponse<DanhMuc> response = new ApiResponse<>(true, "Create danh muc successful", dm);
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi tạo danh mục.", null));
         }
-        if (danhMuc.getNgayTao() == null) {
-            danhMuc.setNgayTao(new Date());
-        }
-        DanhMuc dm = danhMucService.saveDanhMuc(danhMuc);
-        ApiResponse<DanhMuc> response = new ApiResponse<>(true, "Create danh muc successful", dm);
-        return ResponseEntity.ok().body(response);
     }
-
 
     @GetMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<String>> deleteDanhMuc(@PathVariable("id") Long id) {
-        DanhMuc danhMuc = danhMucService.getDanhMucById(id);
-        if (danhMuc == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(false, "Danh mục không tồn tại", null));
+        try {
+            DanhMuc danhMuc = danhMucService.getDanhMucById(id);
+            if (danhMuc == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(false, "Danh mục không tồn tại", null));
+            }
+            danhMucService.deleteDanhMuc(id);
+            return ResponseEntity.ok().body(new ApiResponse<>(true, "Delete danh muc successful", "Đã xóa danh mục với id = " + id));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi xóa danh mục.", null));
         }
-        danhMucService.deleteDanhMuc(id);
-        return ResponseEntity.ok().body(new ApiResponse<>(true, "Delete danh muc successful", "Đã xóa danh mục với id = " + id));
     }
 
     @GetMapping("/findbyID/{id}")
     public ResponseEntity<ApiResponse<DanhMuc>> findById(@PathVariable("id") Long id) {
-        DanhMuc dm = danhMucService.getDanhMucById(id);
-        if (dm == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(false, "Danh mục không tồn tại", null));
+        try {
+            DanhMuc dm = danhMucService.getDanhMucById(id);
+            if (dm == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(false, "Danh mục không tồn tại", null));
+            }
+            return ResponseEntity.ok().body(new ApiResponse<>(true, "Find danh muc by ID successful", dm));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi tìm kiếm danh mục.", null));
         }
-        return ResponseEntity.ok().body(new ApiResponse<>(true, "Find danh muc by ID successful", dm));
     }
-
 
     @PostMapping("/update/{id}")
     public ResponseEntity<ApiResponse<DanhMuc>> updateDanhMuc(@PathVariable("id") Long id,
                                                               @RequestBody DanhMuc newDanhMuc) {
-        DanhMuc updatedDanhMuc = danhMucService.updateDanhMuc(id, newDanhMuc);
-        if (updatedDanhMuc != null) {
-            return ResponseEntity.ok().body(new ApiResponse<>(true, "Update danh muc successful", updatedDanhMuc));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(false, "Danh muc not found", null));
+        try {
+            DanhMuc updatedDanhMuc = danhMucService.updateDanhMuc(id, newDanhMuc);
+            if (updatedDanhMuc != null) {
+                return ResponseEntity.ok().body(new ApiResponse<>(true, "Update danh muc successful", updatedDanhMuc));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(false, "Danh muc not found", null));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi cập nhật danh mục.", null));
         }
     }
+
 
     // tìm baibao where danhmucid = {danhmucid}
     @GetMapping("/{danhmucId}/listBb")
     public ResponseEntity<ApiResponse<?>> getBaibaosByDanhMuc(@PathVariable Long danhmucId) {
         try {
+            // tim ban ghi danh muc
             DanhMuc dmBaibao = danhMucRepository.findById(danhmucId).orElse(null);
-            System.out.println("1");
+            if (dmBaibao == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(false, "Danh mục không tồn tại", null));
+            }
             List<Danhmucbaibao> listDm = dmBaibao.getDanhmucbaibaos();
-            System.out.println("2");
             List<Baibao> baibaos = new ArrayList<>();
-            System.out.println("3");
+
             for (Danhmucbaibao danhmucbaibao : listDm) {
                 try {
-                    if (danhmucbaibao.getBaibao().getTaikhoan() == null) {
+
+                    Baibao baibao = danhmucbaibao.getBaibao();
+                    // kiemtra taikhoanid co ton tai
+                    if (baibao.getTaikhoan() == null || !taiKhoanRepository.existsById(baibao.getTaikhoan().getTaikhoan_id())) {
                         continue;
                     }
                 } catch (Exception e) {
                     continue;
                 }
                 baibaos.add(danhmucbaibao.getBaibao());
-
             }
-            System.out.println("4");
-            Map<String, Object> map = new HashMap<>();
             List<Baibao> baibaoList = new ArrayList<>();
             for (Baibao baibao : baibaos) {
-                try {
-                    if (baibao.getTaikhoan() == null) {
-                        continue;
-                    }
-                    if (baibao.getBinhluans() == null) {
-                        continue;
-                    }
-                    if (baibao.getThichs() == null) {
-                        continue;
-                    }
-                } catch (Exception e) {
-                    continue;
-                }
                 Baibao bb = new Baibao();
                 bb.setId(baibao.getId());
                 bb.setStatus(baibao.getStatus());
@@ -172,16 +194,19 @@ public class DanhMucController {
                 bb.setUrl(baibao.getUrl());
                 baibaoList.add(bb);
             }
-            map.put("baibaoList", baibaoList);
-            if (baibaos.isEmpty()) {
+            if (baibaoList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ApiResponse<>(false, "Không có bài báo nào trong danh mục này", null));
+                        .body(new ApiResponse<>(false, "Không có bài báo hợp lệ trong danh mục này.", null));
             }
+            Map<String, Object> map = new HashMap<>();
+            map.put("baibaoList", baibaoList);
             return ResponseEntity.ok()
-                    .body(new ApiResponse<>(true, "Danh sach bai bao ", map));
+                    .body(new ApiResponse<>(true, "Danh sách bài báo", map));
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi xử lý yêu cầu.", null));
         }
-        return null;
     }
+
 }
