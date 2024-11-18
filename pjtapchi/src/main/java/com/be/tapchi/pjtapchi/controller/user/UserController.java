@@ -107,11 +107,51 @@ public class UserController {
                 .body(jwtUtil.checkRolesFromToken(token, ManageRoles.getAUTHORRole(), ManageRoles.getADMINRole()));
     }
 
+    @PostMapping("get/taikhoan")
+    public ResponseEntity<ApiResponse<?>> getTaikhoanFromToken(
+            @RequestBody(required = false) LoginRequest loginRequest) {
+        // TODO: process POST request
+        ApiResponse<?> api = new ApiResponse<>();
+        try {
+
+            if (loginRequest.getToken() == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(loginRequest.getToken());
+            if (tk == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+
+            api.setSuccess(true);
+            api.setMessage("Lấy tài khoản thành công");
+            api.setData(tk);
+            return ResponseEntity.ok().body(api);
+        } catch (Exception e) {
+            // TODO: handle exception
+            api.setSuccess(false);
+            api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+            return ResponseEntity.badRequest().body(api);
+        }
+    }
+
     @PostMapping("get/userDetail")
     public ResponseEntity<ApiResponse<?>> userDetail(@RequestBody(required = false) LoginRequest loginRequest) {
         try {
             ApiResponse<?> api = new ApiResponse<>();
-            
+            if (loginRequest.getToken() == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+
             Claims claims = jwtUtil.extractClaims(loginRequest.getToken());
             // neu token ko dung hoac bi loi
             if (claims == null) {
@@ -269,7 +309,7 @@ public class UserController {
             BindingResult bindingResult) {
         // TODO: process POST request
         ApiResponse<?> api = new ApiResponse<>();
-        
+
         // kiem tra sub de trong
         try {
             if (entity.getSub() == null || entity.getSub().isEmpty()) {
@@ -316,10 +356,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(api);
         }
 
-        
-
         try {
-
 
             // dang ky google
             Taikhoan tk = new Taikhoan();
@@ -409,7 +446,7 @@ public class UserController {
                 // api.setData(null);
                 // gui ma xac nhan neu tk chua kich hoat
                 if (taiKhoanService.findByEmail(userRegister.getEmail()) != null) {
-                    if(tk_chuaxacnhan.getStatus() == 0){
+                    if (tk_chuaxacnhan.getStatus() == 0) {
                         emailService.sendVerificationEmail(userRegister.getEmail());
                         api.setSuccess(true);
                         api.setMessage("Đã gửi mã xác thực");

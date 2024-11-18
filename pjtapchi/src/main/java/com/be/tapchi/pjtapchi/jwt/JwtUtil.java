@@ -57,6 +57,35 @@ public class JwtUtil {
         return null;
     }
 
+
+    public Taikhoan getTaikhoanFromToken(String token){
+        try {
+            Claims claims = extractClaims(token);
+            if (claims == null) {
+                return null;
+            }
+            if(isTokenExpired(token)){
+                return null;
+            }
+
+            if(!validateToken(token, claims.getSubject())){
+                return null;
+            }
+            Taikhoan tk = taiKhoanService.findByUsername(claims.getSubject());
+            if(tk == null){
+                return null;
+            }
+            // tim thay tk
+            return tk;
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("loi khi lay tk tu token: "+e.getMessage());
+            return null;
+        }
+        
+    }
+
     
     public boolean checkRolesFromToken(String token, String... roles) {
         try {
