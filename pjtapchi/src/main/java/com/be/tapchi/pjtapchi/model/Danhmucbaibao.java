@@ -39,13 +39,4 @@ public class Danhmucbaibao {
 
     // @Column(name = "baibao_id", insertable = false, updatable = false)
     // private Integer baobaiId;
-
-    // @PostLoad
-    // private void postLoad() {
-    //     if (danhmuc != null) {
-    //         this.tieuDe = danhmuc.getTieuDe();
-    //         this.tuan = danhmuc.getTuan();
-    //         this.so = danhmuc.getSo();
-    //     }
-    // }
 }
