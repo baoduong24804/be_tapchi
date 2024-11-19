@@ -7,12 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DTOBaiBao {
-    private String theloaiId;
-    private String tieude;
-    private String noidung;
-    private String tukhoa;
-    private String file;
-    private String url;
+public class DTOTacGia {
+    
     private String token;
 }

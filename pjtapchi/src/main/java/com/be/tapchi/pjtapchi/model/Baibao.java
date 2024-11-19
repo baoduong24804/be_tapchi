@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,7 +32,10 @@ public class Baibao {
     private String noidung;
 
     @Column(name = "ngaydang")
-    private LocalDate ngaydang;
+    private Date ngaydang;
+
+    @Column(name = "ngaytao")
+    private Date ngaytao;
 
     @Column(name = "url")
     private String url;
@@ -53,12 +57,15 @@ public class Baibao {
     @Column(name = "keyword")
     private String keyword;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Binhluan> binhluans;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Thich> thichs;
 
+    
     @JsonIgnore
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Danhmucbaibao> danhmucbaibaos;
