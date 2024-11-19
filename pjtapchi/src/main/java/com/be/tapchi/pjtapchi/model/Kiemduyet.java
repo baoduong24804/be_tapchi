@@ -34,6 +34,7 @@ public class Kiemduyet {
     @Column(name = "status")
     private Integer status;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taikhoan_id")
     private Taikhoan taikhoan;

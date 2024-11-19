@@ -2,6 +2,7 @@ package com.be.tapchi.pjtapchi.controller.kiemduyet;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.kiemduyet.model.DTOKiemDuyet;
+import com.be.tapchi.pjtapchi.controller.kiemduyet.model.DTOUser;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.Kiemduyet;
@@ -11,8 +12,13 @@ import com.be.tapchi.pjtapchi.repository.KiemduyetRepository;
 import com.be.tapchi.pjtapchi.service.KiemduyetService;
 import com.be.tapchi.pjtapchi.userRole.ManageRoles;
 
+import jakarta.validation.Valid;
+
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -56,7 +63,7 @@ public class kiemduyetController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> createKiemDuyet(@RequestBody DTOKiemDuyet kiemDuyet) {
+    public ResponseEntity<ApiResponse<?>> createKiemDuyet(@Valid @RequestBody DTOKiemDuyet kiemDuyet,BindingResult bindingResult) {
         ApiResponse<?> api = new ApiResponse<>();
         if (kiemDuyet.getToken() == null) {
                 api.setSuccess(false);
@@ -77,7 +84,17 @@ public class kiemduyetController {
 
                 return ResponseEntity.badRequest().body(api);
             }
-        
+
+         // kiem tra du lieu bi trong
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            api.setSuccess(false);
+            api.setMessage("Không được để trống dữ liệu");
+            api.setData(errorMessage);
+            return ResponseEntity.badRequest().body(api);
+        }
 
 
         
@@ -97,6 +114,7 @@ public class kiemduyetController {
             return ResponseEntity.badRequest().body(api);
             }
         }
+
         Kiemduyet kd = new Kiemduyet();
         bb.setStatus(1);
         kd.setBaibao(bb);
@@ -106,7 +124,12 @@ public class kiemduyetController {
         kd.setTaikhoan(tk);
         
         kiemDuyetService.saveKiemduyet(kd);
-        ApiResponse<Kiemduyet> response = new ApiResponse<>(true, "Create kiem duyet successful", kd);
+        Taikhoan tkuser = kd.getTaikhoan();
+        DTOUser dtoUser = new DTOUser(tkuser.getHovaten(), String.valueOf(tkuser.getTaikhoan_id()));
+        Map<String,Object> map = new HashMap<>();
+        map.put("kiemduyet", kd);
+        map.put("taikhoan", dtoUser);
+        ApiResponse<?> response = new ApiResponse<>(true, "Create kiem duyet successful", map);
         return ResponseEntity.ok().body(response);
     }
 
