@@ -526,7 +526,8 @@ public class UserController {
             BindingResult bindingResult) {
         // TODO: process POST request
         ApiResponse<?> api = new ApiResponse<>();
-        // kiem tra du lieu bi trong
+        try {
+            // kiem tra du lieu bi trong
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().stream()
                     .map(error -> error.getDefaultMessage())
@@ -539,7 +540,7 @@ public class UserController {
         // neu tk va mk sai
         if (!taiKhoanService.loginTaikhoan(entity)) {
             api.setSuccess(false);
-            api.setMessage("Sai tk or mk");
+            api.setMessage("Tài khoản hoăc mật khẩu không đúng");
             api.setData(null);
             return ResponseEntity.badRequest().body(api);
         }
@@ -548,15 +549,28 @@ public class UserController {
         if (tk == null) {
             tk = taiKhoanService.findByEmail(entity.getUsername());
         }
-
+        if(tk.getPassword().equals(entity.getNewpassword()) || tk.getPassword().trim().equals(entity.getNewpassword().trim())){
+            api.setSuccess(true);
+            api.setMessage("Mật khẩu mới không được trùng với mật khẩu cũ");
+            api.setData(null);
+            return ResponseEntity.ok().body(api);
+        }
         tk.setPassword(passwordEncoder.encode(entity.getNewpassword().trim()));
 
         taiKhoanService.saveTaiKhoan(tk);
 
         api.setSuccess(true);
-        api.setMessage("Doi mk thanh cong");
+        api.setMessage("Đổi mật khẩu thành công");
         api.setData(null);
-        return ResponseEntity.badRequest().body(api);
+        return ResponseEntity.ok().body(api);
+        } catch (Exception e) {
+            // TODO: handle exception
+            api.setSuccess(false);
+            api.setMessage("Có lỗi khi đổi mật khẩu");
+            api.setData(null);
+            return ResponseEntity.badRequest().body(api);
+        }
+        
 
     }
 
