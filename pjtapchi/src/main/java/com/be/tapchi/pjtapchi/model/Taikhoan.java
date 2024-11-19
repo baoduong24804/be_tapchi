@@ -37,6 +37,7 @@ public class Taikhoan {
     @Column(name = "hovaten")
     private String hovaten;
 
+    @JsonIgnore
     @Column(name = "Google_ID")
     private String googleId;
 
@@ -49,10 +50,12 @@ public class Taikhoan {
     @Column(name = "url")
     private String url;
 
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "ngaytao")
     private Date ngaytao;
 
+    
     @Column(name = "status")
     private Integer status;
 
