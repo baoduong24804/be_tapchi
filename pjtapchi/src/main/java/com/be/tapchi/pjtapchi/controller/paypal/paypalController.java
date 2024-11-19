@@ -36,9 +36,9 @@ public class paypalController {
 
             Payment payment = paypalService.createPayment(
                     paymentReq.getTotal(),
-                    paymentReq.getCurrency(),
-                    paymentReq.getMethod(),
-                    paymentReq.getIntent(),
+                    "USD",
+                    "paypal",
+                    "sale",
                     paymentReq.getDescription(),
 //                    100.0,
 //                    "USD",
