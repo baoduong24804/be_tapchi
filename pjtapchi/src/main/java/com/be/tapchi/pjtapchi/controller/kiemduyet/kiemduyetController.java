@@ -1,12 +1,24 @@
 package com.be.tapchi.pjtapchi.controller.kiemduyet;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.controller.kiemduyet.model.DTOKiemDuyet;
+import com.be.tapchi.pjtapchi.jwt.JwtUtil;
+import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.Kiemduyet;
+import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.KiemduyetRepository;
 import com.be.tapchi.pjtapchi.service.KiemduyetService;
+import com.be.tapchi.pjtapchi.userRole.ManageRoles;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +28,15 @@ public class kiemduyetController {
 
     @Autowired
     private KiemduyetService kiemDuyetService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private BaiBaoRepository baiBaoRepository;
+
+    @Autowired
+    private KiemduyetRepository kiemduyetRepository;
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<Page<Kiemduyet>>> getAllKiemDuyet(
@@ -35,9 +56,57 @@ public class kiemduyetController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Kiemduyet>> createKiemDuyet(@RequestBody Kiemduyet kiemDuyet) {
-        Kiemduyet kiemduyet = kiemDuyetService.saveKiemduyet(kiemDuyet);
-        ApiResponse<Kiemduyet> response = new ApiResponse<>(true, "Create kiem duyet successful", kiemduyet);
+    public ResponseEntity<ApiResponse<?>> createKiemDuyet(@RequestBody DTOKiemDuyet kiemDuyet) {
+        ApiResponse<?> api = new ApiResponse<>();
+        if (kiemDuyet.getToken() == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(kiemDuyet.getToken());
+            if (tk == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            if(!jwtUtil.checkRolesFromToken(kiemDuyet.getToken(), ManageRoles.getEDITORRole())){
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+        
+
+
+        
+        Baibao bb = baiBaoRepository.findBaibaoById(Integer.valueOf(kiemDuyet.getBaibaoId()));
+        if(bb == null){
+            api.setSuccess(false);
+            api.setMessage("Lỗi không tìm thấy bài báo");
+
+            return ResponseEntity.badRequest().body(api);
+        }
+        List<Kiemduyet> list = kiemduyetRepository.findByTaikhoan(tk);
+        for (Kiemduyet kiemduyet2 : list) {
+            if(kiemduyet2.getBaibao().getId().equals(bb.getId())){
+            api.setSuccess(false);
+            api.setMessage("Đã phân công người này");
+
+            return ResponseEntity.badRequest().body(api);
+            }
+        }
+        Kiemduyet kd = new Kiemduyet();
+        bb.setStatus(1);
+        kd.setBaibao(bb);
+        kd.setGhichu(kiemDuyet.getGhichu());
+        kd.setNgaykiemduyet(LocalDate.now());
+        kd.setStatus(0);
+        kd.setTaikhoan(tk);
+        
+        kiemDuyetService.saveKiemduyet(kd);
+        ApiResponse<Kiemduyet> response = new ApiResponse<>(true, "Create kiem duyet successful", kd);
         return ResponseEntity.ok().body(response);
     }
 

@@ -38,6 +38,7 @@ public class Kiemduyet {
     @JoinColumn(name = "taikhoan_id")
     private Taikhoan taikhoan;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "baibao_id")
     private Baibao baibao;

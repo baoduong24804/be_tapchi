@@ -32,10 +32,10 @@ public class Baibao {
     private String noidung;
 
     @Column(name = "ngaydang")
-    private Date ngaydang;
+    private LocalDate ngaydang;
 
     @Column(name = "ngaytao")
-    private Date ngaytao;
+    private LocalDate ngaytao;
 
     @Column(name = "url")
     private String url;
@@ -70,7 +70,12 @@ public class Baibao {
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Danhmucbaibao> danhmucbaibaos;
 
+    
+    @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Kiemduyet> kiemduyets;
+
     // @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch =
     // FetchType.LAZY)
     // private List<Danhmucbaibao> danhmucbaibaos;
+
 }

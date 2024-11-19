@@ -7,6 +7,7 @@ import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.user.model.ChangePassword;
 import com.be.tapchi.pjtapchi.controller.user.model.LoginRequest;
 import com.be.tapchi.pjtapchi.controller.user.model.ResetPassword;
+import com.be.tapchi.pjtapchi.controller.user.model.UserEdit;
 import com.be.tapchi.pjtapchi.controller.user.model.UserRegister;
 import com.be.tapchi.pjtapchi.controller.user.model.UserRegisterByGG;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
@@ -105,6 +106,50 @@ public class UserController {
 
         return ResponseEntity.ok()
                 .body(jwtUtil.checkRolesFromToken(token, ManageRoles.getAUTHORRole(), ManageRoles.getADMINRole()));
+    }
+
+    @PostMapping("get/taikhoan/kiemduyet")
+    public ResponseEntity<ApiResponse<?>> getTaikhoanKiemDuyerFromToken(
+            @RequestBody(required = false) LoginRequest loginRequest) {
+        // TODO: process POST request
+        ApiResponse<?> api = new ApiResponse<>();
+        try {
+
+            if (loginRequest.getToken() == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(loginRequest.getToken());
+            if (tk == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            if(!jwtUtil.checkRolesFromToken(loginRequest.getToken(), ManageRoles.getEDITORRole())){
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            Set<Vaitro> set = new HashSet<>();
+            Vaitro vt = vaiTroRepository.findBytenrole(ManageRoles.getCENSORRole().toString());
+            set.add(vt);
+            List<Taikhoan> list = taiKhoanRepository.findByVaitro(set);
+
+            api.setSuccess(true);
+            api.setMessage("Lấy tài khoản thành công");
+            api.setData(list);
+            return ResponseEntity.ok().body(api);
+        } catch (Exception e) {
+            // TODO: handle exception
+            api.setSuccess(false);
+            api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+            return ResponseEntity.badRequest().body(api);
+        }
     }
 
     @PostMapping("get/taikhoan")
@@ -521,6 +566,8 @@ public class UserController {
 
     }
 
+
+
     @PostMapping("/changepassword")
     public ResponseEntity<?> postchangepassword(@Valid @RequestBody(required = true) ChangePassword entity,
             BindingResult bindingResult) {
@@ -573,6 +620,62 @@ public class UserController {
         
 
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody(required = false) UserEdit entity, BindingResult bindingResult) {
+        //TODO: process POST request
+        ApiResponse<?> api = new ApiResponse<>();
+        if(entity.getToken().isBlank() || entity.getToken() == null){
+            api.setMessage("Lỗi xác thực tài khoản");
+            api.setSuccess(false);
+            api.setData(null);
+            return ResponseEntity.badRequest().body(api);
+        }
+
+        try {
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
+            if(tk == null){
+            api.setMessage("Lỗi xác thực tài khoản");
+            api.setSuccess(false);
+            api.setData(null);
+            return ResponseEntity.badRequest().body(api);
+            }
+
+                    // kiem tra du lieu bi trong
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+            api.setSuccess(false);
+            api.setMessage("Không được để trống dữ liệu");
+            api.setData(errorMessage);
+            return ResponseEntity.badRequest().body(api);
+        }
+
+        tk.setHovaten(entity.getHovaten());
+        tk.setSdt(entity.getSdt());
+        if(!entity.getUrl().isBlank() || entity.getUrl() != null){
+            tk.setUrl(entity.getUrl());
+        }
+        
+        taiKhoanService.saveTaiKhoan(tk);
+        //tk.setUrl(entity.getUrl());
+            
+            
+        api.setSuccess(false);
+        api.setMessage("Thay đổi thông tin thành công");
+        api.setData(null);
+        return ResponseEntity.ok().body(api);
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            api.setMessage("Lỗi thay đổi thông tin tài khoản");
+            api.setSuccess(false);
+            api.setData(null);
+            return ResponseEntity.badRequest().body(api);
+        }
+    }
+    
 
     // quen mk
     @PostMapping("/forgot")

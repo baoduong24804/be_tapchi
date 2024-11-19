@@ -33,6 +33,10 @@ public class BaibaoService {
         return baiBaoRepository.findAll(pageable);
     }
 
+    public Page<Baibao> findBaibaoByStatus(Integer status,Pageable pageable) {
+        return baiBaoRepository.findBaibaoByStatus(status, pageable);
+    }
+
     public Baibao getBaibaoById(Integer id) {
         return baiBaoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid Baibao ID"));
     }

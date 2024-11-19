@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import java.util.List;
+import java.util.Set;
+import com.be.tapchi.pjtapchi.model.Vaitro;
+
 
 @Repository
 public interface TaiKhoanRepository extends JpaRepository<Taikhoan,Long>{
@@ -23,6 +26,8 @@ public interface TaiKhoanRepository extends JpaRepository<Taikhoan,Long>{
     boolean existsBySdt(String sdt);
 
     boolean existsByGoogleId(String google_id);
+
+    List<Taikhoan> findByVaitro(Set<Vaitro> vaitro);
 
 
 }
