@@ -1,9 +1,12 @@
 package com.be.tapchi.pjtapchi.controller.baibao;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.controller.baibao.model.DTOBaiBao;
+import com.be.tapchi.pjtapchi.controller.theloai.theloaiController;
 import com.be.tapchi.pjtapchi.dto.BaibaoResponseDTO;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.*;
+import com.be.tapchi.pjtapchi.repository.TheloaiRepository;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class baibaoController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private TheloaiRepository theloaiRepository;
 
 
     @GetMapping("/all")
@@ -126,23 +132,30 @@ public class baibaoController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Baibao>> createBaibao(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<ApiResponse<Baibao>> createBaibao(@RequestBody DTOBaiBao entity) {
         // Extract token from request body
-        String token = (String) requestBody.get("token");
+        try {
+        String token = entity.getToken();
         System.out.println("Token: " + token);
         Taikhoan tk = jwtUtil.getTaikhoanFromToken(token);
         if (tk == null) {
-            ApiResponse<Baibao> response = new ApiResponse<>(false, "Invalid token", null);
+            ApiResponse<Baibao> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
         // Convert request body to Baibao object
+        Theloai tl = theloaiRepository.findTheloaiById(Integer.valueOf(entity.getTheloaiID()));
+        if(tl == null){
+            ApiResponse<Baibao> response = new ApiResponse<>(false, "Lỗi khi tìm thể loại", null);
+            return ResponseEntity.badRequest().body(response);
+        }
         Baibao baibao = new Baibao();
-        baibao.setTieude((String) requestBody.get("tieude"));
-        baibao.setNoidung((String) requestBody.get("noidung"));
-        baibao.setUrl((String) requestBody.get("url"));
-        baibao.setFile((String) requestBody.get("file"));
-        baibao.setKeyword((String) requestBody.get("keyword"));
-        baibao.setTheloai(new Theloai((Integer) ((Map<String, Object>) requestBody.get("theloai")).get("id")));
+        baibao.setTieude(entity.getTieude());
+        baibao.setNoidung(entity.getNoidung());
+        baibao.setUrl(entity.getUrl());
+        baibao.setFile(entity.getFile());
+        baibao.setKeyword(entity.getTukhoa());
+     
+        baibao.setTheloai(tl);
         baibao.setTaikhoan(tk);
 
 
@@ -151,8 +164,13 @@ public class baibaoController {
         baibao.setStatus(0);
 
         Baibao bb = bbService.saveBaibao(baibao);
-        ApiResponse<Baibao> response = new ApiResponse<>(true, "Create bai bao successful", bb);
+        ApiResponse<Baibao> response = new ApiResponse<>(true, "Tạo bài báo thành công", bb);
         return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        ApiResponse<Baibao> response = new ApiResponse<>(true, "Lỗi khi tạo bài báo", null);
+        return ResponseEntity.badRequest().body(response);
     }
 
     private BaibaoResponseDTO convertToDTO(Baibao baibao) {
