@@ -3,8 +3,12 @@ package com.be.tapchi.pjtapchi.controller.baibao;
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.baibao.model.BaibaoResponseDTO;
 import com.be.tapchi.pjtapchi.controller.baibao.model.DTOBaiBao;
-import com.be.tapchi.pjtapchi.controller.baibao.model.DTOTacGia;
-import com.be.tapchi.pjtapchi.controller.theloai.theloaiController;
+import com.be.tapchi.pjtapchi.controller.baibao.model.DTOBaiBaoEditor;
+
+import com.be.tapchi.pjtapchi.controller.baibao.model.DTOToKen;
+import com.be.tapchi.pjtapchi.controller.baibao.model.KiemduyetED;
+import com.be.tapchi.pjtapchi.controller.baibao.model.TaikhoanED;
+
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.*;
 import com.be.tapchi.pjtapchi.repository.TheloaiRepository;
@@ -21,9 +25,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -42,9 +49,33 @@ public class baibaoController {
     @Autowired
     private TheloaiRepository theloaiRepository;
 
+    public boolean checkToken(String token){
+        try {
+            if (token.isBlank() || token == null) {
+            
+                return false;
+            }
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(token);
+            if(!jwtUtil.checkRolesFromToken(token, ManageRoles.getEDITORRole())){
+        
+                return false;
+            }
+            if (tk == null) {
+                
+                return false;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
     @PostMapping("/get/baibao/all/editor")
     public ResponseEntity<?> getAllBaibao(
-            @RequestBody(required = false) DTOTacGia entity,
+            @RequestBody(required = false) DTOToKen entity,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         try {
@@ -63,10 +94,49 @@ public class baibaoController {
             }
             Pageable pageable = PageRequest.of(page, size);
             Page<Baibao> pageResult = bbService.findAllBaibao(pageable);
+            Map<String,Object> data = new HashMap<>();
             
+            List<DTOBaiBaoEditor> list = new ArrayList<>();
+            for (Baibao baibao : pageResult.getContent()) {
+                DTOBaiBaoEditor dBaoEditor = new DTOBaiBaoEditor();
+                dBaoEditor.setId(String.valueOf(baibao.getId()));
+                dBaoEditor.setTieude(baibao.getTieude());
+                dBaoEditor.setNgaytao(baibao.getNgaytao());
+                dBaoEditor.setNgaydang(baibao.getNgaydang());
+                dBaoEditor.setNoidung(baibao.getNoidung());
+                TaikhoanED tked = new TaikhoanED();
+                tked.setId(String.valueOf(baibao.getTaikhoan().getTaikhoan_id()));
+                tked.setHovaten(baibao.getTaikhoan().getHovaten());
+                dBaoEditor.setTaikhoans(tked);
+                dBaoEditor.setStatus(baibao.getStatus());
+                List<KiemduyetED> lKiemduyets = new ArrayList<>();
+                for (Kiemduyet kditem : baibao.getKiemduyets()) {
+                    KiemduyetED item = new KiemduyetED();
+                    item.setId(String.valueOf(kditem.getId()));
+                    item.setGhichu(kditem.getGhichu());
+                    item.setStatus(kditem.getStatus());
+                    TaikhoanED tEd = new TaikhoanED();
+                    tEd.setId(String.valueOf(kditem.getTaikhoan().getTaikhoan_id()));
+                    tEd.setHovaten(kditem.getTaikhoan().getHovaten());
+                    
+                    item.setTaikhoan(tEd);
+
+                    lKiemduyets.add(item);
+                }
+                dBaoEditor.setKiemduyet(lKiemduyets);
+                list.add(dBaoEditor);
+            }
+            data.put("baibaos", list);
+            Map<String,Object> phantrang = new HashMap<>();
+
+            phantrang.put("trang", pageResult.getNumber());
+            phantrang.put("kichthuoc", pageResult.getSize());
+            phantrang.put("tongbaibao", pageResult.getTotalElements());
+            phantrang.put("tongtrang", pageResult.getTotalPages());
             // Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
-            ApiResponse<Page<?>> response = new ApiResponse<>(true, "Fetch bai bao successful",
-                    pageResult);
+            data.put("phantrang", phantrang);
+            ApiResponse<?> response = new ApiResponse<>(true, "Fetch bai bao successful",
+            data);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             // TODO: handle exception
@@ -76,6 +146,8 @@ public class baibaoController {
         }
 
     }
+
+    
 
     @GetMapping("get/baibao/{id}")
     public ResponseEntity<ApiResponse<?>> getExample(@PathVariable("id") Integer id) {
@@ -105,7 +177,7 @@ public class baibaoController {
 
     @PostMapping("/get/baibao/author")
     public ResponseEntity<ApiResponse<?>> getBaiBaoFromToken(
-            @RequestBody(required = false) DTOTacGia entity,
+            @RequestBody(required = false) DTOToKen entity,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         try {

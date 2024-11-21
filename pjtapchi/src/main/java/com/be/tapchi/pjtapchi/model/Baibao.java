@@ -45,17 +45,19 @@ public class Baibao {
 
     @Column(name = "status")
     private Integer status;
+    
+    @Column(name = "keyword")
+    private String keyword;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theloai_id")
     private Theloai theloai;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
-    @Column(name = "keyword")
-    private String keyword;
 
     @JsonIgnore
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -70,7 +72,7 @@ public class Baibao {
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Danhmucbaibao> danhmucbaibaos;
 
-    
+    @JsonIgnore
     @OneToMany(mappedBy = "baibao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Kiemduyet> kiemduyets;
 

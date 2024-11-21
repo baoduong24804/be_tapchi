@@ -128,7 +128,7 @@ public class UserController {
 
                 return ResponseEntity.badRequest().body(api);
             }
-            if(!jwtUtil.checkRolesFromToken(loginRequest.getToken(), ManageRoles.getEDITORRole())){
+            if (!jwtUtil.checkRolesFromToken(loginRequest.getToken(), ManageRoles.getEDITORRole())) {
                 api.setSuccess(false);
                 api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
 
@@ -350,26 +350,40 @@ public class UserController {
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<ApiResponse<?>> loginorregisterByGG(@Valid @RequestBody UserRegisterByGG entity,
+    public ResponseEntity<ApiResponse<?>> loginorregisterByGG(@Valid @RequestBody(required = false) UserRegisterByGG entity,
             BindingResult bindingResult) {
         // TODO: process POST request
         ApiResponse<?> api = new ApiResponse<>();
+        if(entity == null){
+            api.setSuccess(false);
+            api.setMessage("Lỗi để trống dữ liệu");
+            api.setData(null);
+            return ResponseEntity.badRequest().body(api);
+        }
 
         // kiem tra sub de trong
         try {
-            if (entity.getSub() == null || entity.getSub().isEmpty()) {
-                api.setSuccess(false);
-                api.setMessage("Có lỗi khi đăng nhập với Google");
-                api.setData(null);
-                return ResponseEntity.badRequest().body(api);
-            }
+            // if (entity.getSub() == null) {
+            //     api.setSuccess(false);
+            //     api.setMessage("Có lỗi khi đăng nhập với Google");
+            //     api.setData(null);
+            //     return ResponseEntity.badRequest().body(api);
+            // }
             if (taiKhoanRepository.existsByGoogleId(entity.getSub())) {
                 Taikhoan tk = taiKhoanRepository.findByGoogleId(entity.getSub().trim());
+
                 if (tk == null) {
                     api.setSuccess(false);
                     api.setMessage("Có lỗi không mong muốn xảy ra");
                     return ResponseEntity.badRequest().body(api);
                 }
+
+                if (!tk.getEmail().equals(entity.getEmail())) {
+                    api.setSuccess(false);
+                    api.setMessage("Lỗi khi đăng nhập với Google");
+                    return ResponseEntity.ok().body(api);
+                }
+
                 api.setSuccess(true);
                 api.setMessage("Đăng nhập thành công với tài khoản Google");
                 Map<String, Object> map = new HashMap<>();
@@ -387,6 +401,8 @@ public class UserController {
             }
         } catch (Exception e) {
             // TODO: handle exception
+            api.setSuccess(false);
+            api.setMessage("Lỗi không mong muốn: "+e.getMessage());
             return ResponseEntity.badRequest().body(api);
         }
 
@@ -566,8 +582,6 @@ public class UserController {
 
     }
 
-
-
     @PostMapping("/changepassword")
     public ResponseEntity<?> postchangepassword(@Valid @RequestBody(required = true) ChangePassword entity,
             BindingResult bindingResult) {
@@ -575,41 +589,42 @@ public class UserController {
         ApiResponse<?> api = new ApiResponse<>();
         try {
             // kiem tra du lieu bi trong
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.joining(", "));
-            api.setSuccess(false);
-            api.setMessage("Loi de trong du lieu");
-            api.setData(errorMessage);
-            return ResponseEntity.badRequest().body(api);
-        }
-        // neu tk va mk sai
-        if (!taiKhoanService.loginTaikhoan(entity)) {
-            api.setSuccess(false);
-            api.setMessage("Tài khoản hoăc mật khẩu không đúng");
-            api.setData(null);
-            return ResponseEntity.badRequest().body(api);
-        }
+            if (bindingResult.hasErrors()) {
+                String errorMessage = bindingResult.getFieldErrors().stream()
+                        .map(error -> error.getDefaultMessage())
+                        .collect(Collectors.joining(", "));
+                api.setSuccess(false);
+                api.setMessage("Loi de trong du lieu");
+                api.setData(errorMessage);
+                return ResponseEntity.badRequest().body(api);
+            }
+            // neu tk va mk sai
+            if (!taiKhoanService.loginTaikhoan(entity)) {
+                api.setSuccess(false);
+                api.setMessage("Tài khoản hoăc mật khẩu không đúng");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
 
-        Taikhoan tk = taiKhoanService.findByUsername(entity.getUsername());
-        if (tk == null) {
-            tk = taiKhoanService.findByEmail(entity.getUsername());
-        }
-        if(tk.getPassword().equals(entity.getNewpassword()) || tk.getPassword().trim().equals(entity.getNewpassword().trim())){
+            Taikhoan tk = taiKhoanService.findByUsername(entity.getUsername());
+            if (tk == null) {
+                tk = taiKhoanService.findByEmail(entity.getUsername());
+            }
+            if (tk.getPassword().equals(entity.getNewpassword())
+                    || tk.getPassword().trim().equals(entity.getNewpassword().trim())) {
+                api.setSuccess(true);
+                api.setMessage("Mật khẩu mới không được trùng với mật khẩu cũ");
+                api.setData(null);
+                return ResponseEntity.ok().body(api);
+            }
+            tk.setPassword(passwordEncoder.encode(entity.getNewpassword().trim()));
+
+            taiKhoanService.saveTaiKhoan(tk);
+
             api.setSuccess(true);
-            api.setMessage("Mật khẩu mới không được trùng với mật khẩu cũ");
+            api.setMessage("Đổi mật khẩu thành công");
             api.setData(null);
             return ResponseEntity.ok().body(api);
-        }
-        tk.setPassword(passwordEncoder.encode(entity.getNewpassword().trim()));
-
-        taiKhoanService.saveTaiKhoan(tk);
-
-        api.setSuccess(true);
-        api.setMessage("Đổi mật khẩu thành công");
-        api.setData(null);
-        return ResponseEntity.ok().body(api);
         } catch (Exception e) {
             // TODO: handle exception
             api.setSuccess(false);
@@ -617,15 +632,15 @@ public class UserController {
             api.setData(null);
             return ResponseEntity.badRequest().body(api);
         }
-        
 
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody(required = false) UserEdit entity, BindingResult bindingResult) {
-        //TODO: process POST request
+    public ResponseEntity<?> updateUser(@Valid @RequestBody(required = false) UserEdit entity,
+            BindingResult bindingResult) {
+        // TODO: process POST request
         ApiResponse<?> api = new ApiResponse<>();
-        if(entity.getToken().isBlank() || entity.getToken() == null){
+        if (entity.getToken().isBlank() || entity.getToken() == null) {
             api.setMessage("Lỗi xác thực tài khoản");
             api.setSuccess(false);
             api.setData(null);
@@ -634,38 +649,37 @@ public class UserController {
 
         try {
             Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
-            if(tk == null){
-            api.setMessage("Lỗi xác thực tài khoản");
-            api.setSuccess(false);
-            api.setData(null);
-            return ResponseEntity.badRequest().body(api);
+            if (tk == null) {
+                api.setMessage("Lỗi xác thực tài khoản");
+                api.setSuccess(false);
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
             }
 
-                    // kiem tra du lieu bi trong
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(error -> error.getDefaultMessage())
-                    .collect(Collectors.joining(", "));
-            api.setSuccess(false);
-            api.setMessage("Không được để trống dữ liệu");
-            api.setData(errorMessage);
-            return ResponseEntity.badRequest().body(api);
-        }
+            // kiem tra du lieu bi trong
+            if (bindingResult.hasErrors()) {
+                String errorMessage = bindingResult.getFieldErrors().stream()
+                        .map(error -> error.getDefaultMessage())
+                        .collect(Collectors.joining(", "));
+                api.setSuccess(false);
+                api.setMessage("Không được để trống dữ liệu");
+                api.setData(errorMessage);
+                return ResponseEntity.badRequest().body(api);
+            }
 
-        tk.setHovaten(entity.getHovaten());
-        tk.setSdt(entity.getSdt());
-        if(!entity.getUrl().isBlank() || entity.getUrl() != null){
-            tk.setUrl(entity.getUrl());
-        }
-        
-        taiKhoanService.saveTaiKhoan(tk);
-        //tk.setUrl(entity.getUrl());
-            
-            
-        api.setSuccess(false);
-        api.setMessage("Thay đổi thông tin thành công");
-        api.setData(null);
-        return ResponseEntity.ok().body(api);
+            tk.setHovaten(entity.getHovaten());
+            tk.setSdt(entity.getSdt());
+            if (!entity.getUrl().isBlank() || entity.getUrl() != null) {
+                tk.setUrl(entity.getUrl());
+            }
+
+            taiKhoanService.saveTaiKhoan(tk);
+            // tk.setUrl(entity.getUrl());
+
+            api.setSuccess(false);
+            api.setMessage("Thay đổi thông tin thành công");
+            api.setData(null);
+            return ResponseEntity.ok().body(api);
 
         } catch (Exception e) {
             // TODO: handle exception
@@ -675,7 +689,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(api);
         }
     }
-    
 
     // quen mk
     @PostMapping("/forgot")

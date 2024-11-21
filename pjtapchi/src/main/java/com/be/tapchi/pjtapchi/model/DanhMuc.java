@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +23,10 @@ public class DanhMuc {
     private Long danhmucId;
 
     @Column(name = "tieude")
-    private String tieuDe;
+    private String tieude;
 
     @Column(name = "mota")
-    private String moTa;
+    private String mota;
 
     @Column(name = "url")
     private String url;
@@ -35,7 +36,7 @@ public class DanhMuc {
 
     @Column(name = "ngaytao")
     @Temporal(TemporalType.DATE)
-    private Date ngayTao;
+    private LocalDate ngaytao;
 
     @Column(name = "tuan")
     private Integer tuan;

@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class DTOTacGia {
-    
-    private String token;
+@AllArgsConstructor
+public class KiemduyetED {
+private String id;
+private TaikhoanED taikhoan;
+private String ghichu;
+private Integer status;
 }

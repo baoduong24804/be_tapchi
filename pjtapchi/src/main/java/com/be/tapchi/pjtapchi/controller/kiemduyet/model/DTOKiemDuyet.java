@@ -16,6 +16,9 @@ public class DTOKiemDuyet {
     @NotBlank(message = "Không được để trống bài báo")
     private String baibaoId;
 
+    @NotBlank(message = "Không được để trống tài khoản")
+    private String taikhoanId;
+
     private String ghichu;
     //private LocalDate ngaykiemduyet;
     private Integer status;

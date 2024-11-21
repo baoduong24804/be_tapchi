@@ -43,19 +43,19 @@ public class DanhMucService {
         danhMucRepository.deleteById(id);
     }
 
-    public Page<DanhMuc> getDanhmucInCurrentWeek(int page, int size) {
+    public Page<DanhMuc> getDanhmucInCurrentWeek(int page, int size, int status) {
         LocalDate startOfWeek = DateUtils.getStartOfWeek();
         LocalDate endOfWeek = DateUtils.getEndOfWeek();
         System.out.println(startOfWeek + "," + endOfWeek);
         Pageable pageable = PageRequest.of(page, size);
 
-        return danhMucRepository.findDanhmucByWeek(startOfWeek, endOfWeek, pageable);
+        return danhMucRepository.findDanhmucByWeekAndStatus(startOfWeek, endOfWeek, status, pageable);
     }
 
     public DanhMuc updateDanhMuc(Long id, DanhMuc newDanhMuc) {
         return danhMucRepository.findById(id).map(danhMuc -> {
-            danhMuc.setTieuDe(newDanhMuc.getTieuDe());
-            danhMuc.setMoTa(newDanhMuc.getMoTa());
+            danhMuc.setTieude(newDanhMuc.getTieude());
+            danhMuc.setMota(newDanhMuc.getMota());
             return danhMucRepository.save(danhMuc);
         }).orElse(null);
     }

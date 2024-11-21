@@ -2,6 +2,10 @@ package com.be.tapchi.pjtapchi.controller.danhmuc;
 
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDM;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDanhMuc;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTaiKhoanDM;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTheLoaiDM;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
@@ -17,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -41,15 +46,51 @@ public class DanhMucController {
     @PostMapping("/get/week")
     public ResponseEntity<ApiResponse<?>> getDanhmucInCurrentWeek(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "6") int size) {
         // TODO: process POST request
         try {
             ApiResponse<?> api = new ApiResponse<>();
             api.setSuccess(true);
             api.setMessage("Thành công lấy dữ liệu danh mục theo tuần");
             Map<String, Object> map = new HashMap<>();
-            Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size);
-            map.put("data", dm.getContent());
+            Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size, 5);
+            List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
+            for (DanhMuc danhMuc : dm.getContent()) {
+                DTOBaiBaoDanhMuc bbDM = new DTOBaiBaoDanhMuc();
+                bbDM.setDanhmucId(String.valueOf(danhMuc.getDanhmucId()));
+                bbDM.setTieude(danhMuc.getTieude());
+                bbDM.setMota(danhMuc.getMota());
+                bbDM.setTuan(String.valueOf(danhMuc.getTuan()));
+                bbDM.setSo(String.valueOf(danhMuc.getSo()));
+                bbDM.setUrl(danhMuc.getUrl());
+                bbDM.setNgaytao(danhMuc.getNgaytao());
+                List<DTOBaiBaoDM> listbbDM = new ArrayList<>();
+                for (Danhmucbaibao dmbb : danhMuc.getDanhmucbaibaos()) {
+                    DTOTaiKhoanDM tk1 = new DTOTaiKhoanDM();
+                    tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
+                    tk1.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
+                    DTOTheLoaiDM tl1 = new DTOTheLoaiDM();
+                    tl1.setTheloaiId(String.valueOf(dmbb.getBaibao().getTheloai().getId()));
+                    tl1.setTen(dmbb.getBaibao().getTheloai().getTenloai());
+                    DTOBaiBaoDM bb1 = new DTOBaiBaoDM();
+                    bb1.setBaibaoId(String.valueOf(dmbb.getBaibao().getId()));
+                    bb1.setTieude(dmbb.getBaibao().getTieude());
+                    bb1.setNoidung(dmbb.getBaibao().getNoidung());
+                    bb1.setUrl(dmbb.getBaibao().getUrl());
+                    bb1.setFile(dmbb.getBaibao().getFile());
+                    bb1.setKeyword(dmbb.getBaibao().getKeyword());
+                    bb1.setNgaydang(dmbb.getBaibao().getNgaydang());
+                    bb1.setStatus(String.valueOf(dmbb.getBaibao().getStatus()));
+                    bb1.setTaikhoan(tk1);
+                    bb1.setTheloai(tl1);
+                    listbbDM.add(bb1);
+                    
+                }
+                bbDM.setBaibao(listbbDM);
+                listdata.add(bbDM);
+            }
+            map.put("data", listdata);
+
             map.put("totalPage", String.valueOf(dm.getTotalPages()));
             map.put("pageNumber", String.valueOf(dm.getNumber()));
             map.put("pageSize", String.valueOf(dm.getSize()));
@@ -90,9 +131,9 @@ public class DanhMucController {
             if (danhMuc.getStatus() == null) {
                 danhMuc.setStatus(0);
             }
-            if (danhMuc.getNgayTao() == null) {
-                danhMuc.setNgayTao(new Date());
-            }
+            
+            danhMuc.setNgaytao(LocalDate.now());
+            
             DanhMuc dm = danhMucService.saveDanhMuc(danhMuc);
             ApiResponse<DanhMuc> response = new ApiResponse<>(true, "Create danh muc successful", dm);
             return ResponseEntity.ok().body(response);
