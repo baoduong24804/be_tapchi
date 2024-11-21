@@ -9,11 +9,8 @@
   <component name="ChangeListManager">
     <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="Update baibao add DTO class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/baibao/baibaoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/baibao/baibaoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/comments/commentsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/comments/commentsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/like/likeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/like/likeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Baibao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Theloai.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Theloai.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Payment.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,48 +70,48 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "HTTP Request.PjtapchiApplication | #1.executor": "Run",
-    "HTTP Request.PjtapchiApplication | #2.executor": "Run",
-    "HTTP Request.PjtapchiApplication | #3.executor": "Run",
-    "HTTP Request.PjtapchiApplication | #4.executor": "Run",
-    "HTTP Request.PjtapchiApplication | #6.executor": "Run",
-    "HTTP Request.PjtapchiApplication | #7.executor": "Run",
-    "HTTP Request.PjtapchiApplication | #8.executor": "Run",
-    "HTTP Request.PjtapchiApplication | #9.executor": "Run",
-    "JUnit.TestBaiBaoTest.executor": "Run",
-    "JUnit.TestBaiBaoTest.testGetExampleReturnsEmptyList.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.PjtapchiApplication.executor": "Run",
-    "code.cleanup.on.save": "true",
-    "git-widget-placeholder": "HaiDepChieu",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/DATN/be_tapchi/pjtapchi/src/main/resources",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.stylelint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.stylelint": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Global Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.44367817",
-    "rearrange.code.on.save": "true",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #4.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #6.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #7.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #8.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #9.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestBaiBaoTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestBaiBaoTest.testGetExampleReturnsEmptyList.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PjtapchiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;HaiDepChieu&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/DATN/be_tapchi/pjtapchi/src/main/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.44367817&quot;,
+    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\DATN\be_tapchi\pjtapchi\src\main\resources" />
@@ -243,7 +240,11 @@
       <workItem from="1731817923917" duration="1908000" />
       <workItem from="1731892059100" duration="2922000" />
       <workItem from="1731901102458" duration="612000" />
-      <workItem from="1731902753554" duration="11840000" />
+      <workItem from="1731902753554" duration="13315000" />
+      <workItem from="1731941114144" duration="946000" />
+      <workItem from="1731942740204" duration="256000" />
+      <workItem from="1732002120479" duration="1000" />
+      <workItem from="1732009839867" duration="2401000" />
     </task>
     <task id="LOCAL-00001" summary="Update baibao add DTO class">
       <option name="closed" value="true" />
