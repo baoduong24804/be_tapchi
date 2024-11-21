@@ -1,9 +1,9 @@
 package com.be.tapchi.pjtapchi.controller.danhmuc;
 
-
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDanhMuc;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOCreateDanhMuc;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTaiKhoanDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTheLoaiDM;
 import com.be.tapchi.pjtapchi.model.Baibao;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
-
 
 @CrossOrigin(origins = "*")
 
@@ -84,7 +83,7 @@ public class DanhMucController {
                     bb1.setTaikhoan(tk1);
                     bb1.setTheloai(tl1);
                     listbbDM.add(bb1);
-                    
+
                 }
                 bbDM.setBaibao(listbbDM);
                 listdata.add(bbDM);
@@ -100,7 +99,6 @@ public class DanhMucController {
         } catch (Exception e) {
             // TODO: handle exception
         }
-
 
         return ResponseEntity.badRequest().body(null);
     }
@@ -126,21 +124,32 @@ public class DanhMucController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<DanhMuc>> createDanhMuc(@RequestBody DanhMuc danhMuc) {
+    public ResponseEntity<ApiResponse<?>> createDanhMuc(@RequestBody(required = false) DTOCreateDanhMuc danhMuc) {
         try {
-            if (danhMuc.getStatus() == null) {
-                danhMuc.setStatus(0);
-            }
+
+            List<DanhMuc> list = danhMucRepository.findByTuanAndSo(Integer.valueOf(danhMuc.getTuan()),
+                    Integer.valueOf(danhMuc.getSo()));
+            if (list.size() > 0) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Danh mục có tuần và số đã tồn tại", null);
+                return ResponseEntity.ok().body(response);
+            } 
+                DanhMuc dMuc = new DanhMuc();
+                dMuc.setTieude(danhMuc.getTieude());
+                dMuc.setMota(danhMuc.getMota());
+                dMuc.setNgaytao(LocalDate.now());
+                dMuc.setSo(Integer.valueOf(danhMuc.getSo()));
+                dMuc.setTuan(Integer.valueOf(danhMuc.getTuan()));
+                dMuc.setUrl(danhMuc.getUrl());
+                dMuc.setStatus(0);
+                danhMucService.saveDanhMuc(dMuc);
             
-            danhMuc.setNgaytao(LocalDate.now());
-            
-            DanhMuc dm = danhMucService.saveDanhMuc(danhMuc);
-            ApiResponse<DanhMuc> response = new ApiResponse<>(true, "Create danh muc successful", dm);
+
+            ApiResponse<?> response = new ApiResponse<>(true, "Create danh muc successful", null);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi tạo danh mục.", null));
+                    .body(new ApiResponse<>(false, "Số và tuần không hợp lệ", null));
         }
     }
 
@@ -153,7 +162,8 @@ public class DanhMucController {
                         .body(new ApiResponse<>(false, "Danh mục không tồn tại", null));
             }
             danhMucService.deleteDanhMuc(id);
-            return ResponseEntity.ok().body(new ApiResponse<>(true, "Delete danh muc successful", "Đã xóa danh mục với id = " + id));
+            return ResponseEntity.ok()
+                    .body(new ApiResponse<>(true, "Delete danh muc successful", "Đã xóa danh mục với id = " + id));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -180,7 +190,7 @@ public class DanhMucController {
 
     @PostMapping("/update/{id}")
     public ResponseEntity<ApiResponse<DanhMuc>> updateDanhMuc(@PathVariable("id") Long id,
-                                                              @RequestBody DanhMuc newDanhMuc) {
+            @RequestBody DanhMuc newDanhMuc) {
         try {
             DanhMuc updatedDanhMuc = danhMucService.updateDanhMuc(id, newDanhMuc);
             if (updatedDanhMuc != null) {
@@ -195,7 +205,6 @@ public class DanhMucController {
                     .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi cập nhật danh mục.", null));
         }
     }
-
 
     // tìm baibao where danhmucid = {danhmucid}
     @GetMapping("/{danhmucId}/listBb")
@@ -215,8 +224,10 @@ public class DanhMucController {
 
                     Baibao baibao = danhmucbaibao.getBaibao();
                     // kiemtra taikhoanid co ton tai
-                    if (baibao.getTaikhoan() == null || !taiKhoanRepository.existsById(baibao.getTaikhoan().getTaikhoan_id())) {
-                        System.out.println("<<< taikhoanid khong ton tai : " + baibao.getTaikhoan().getTaikhoan_id() + " >>>");
+                    if (baibao.getTaikhoan() == null
+                            || !taiKhoanRepository.existsById(baibao.getTaikhoan().getTaikhoan_id())) {
+                        System.out.println(
+                                "<<< taikhoanid khong ton tai : " + baibao.getTaikhoan().getTaikhoan_id() + " >>>");
                         continue;
                     }
                 } catch (Exception e) {

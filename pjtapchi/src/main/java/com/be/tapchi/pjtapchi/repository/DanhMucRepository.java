@@ -30,6 +30,9 @@ public interface DanhMucRepository extends JpaRepository<DanhMuc, Long> {
     // Pageable pageable
     // );
 
+    List<DanhMuc> findByTuanAndSo(Integer tuan, Integer so);
+
+
     @Query("SELECT d FROM DanhMuc d JOIN d.danhmucbaibaos b WHERE d.ngaytao BETWEEN :startOfWeek AND :endOfWeek AND b.baibao.status = :status")
     Page<DanhMuc> findDanhmucByWeekAndStatus(
             @Param("startOfWeek") LocalDate startOfWeek,
