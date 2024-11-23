@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +54,7 @@ public class Taikhoan {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     @Column(name = "ngaytao")
-    private Date ngaytao;
+    private LocalDate ngaytao;
 
     
     @Column(name = "status")

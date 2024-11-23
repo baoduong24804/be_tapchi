@@ -13,6 +13,9 @@ public class DTOBaiBao {
     private String id;
     private String tieude;
     private LocalDate ngaytao;
+    private String url;
+    private String file;
     private DTOTaiKhoan taiKhoan;
     private DTOTheLoai theLoai;
+
 }

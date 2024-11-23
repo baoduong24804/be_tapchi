@@ -18,8 +18,8 @@ public class DTOBaiBaoEditor {
     private LocalDate ngaytao;
     private LocalDate ngaydang;
     private Integer status;
-    //private String file;
-    //private String url;
+    private String file;
+    private String url;
     private TaikhoanED taikhoans;
     private List<KiemduyetED> kiemduyet;
     //private String token;

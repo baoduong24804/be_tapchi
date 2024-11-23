@@ -11,10 +11,14 @@ import com.be.tapchi.pjtapchi.controller.baibao.model.TaikhoanED;
 
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.*;
+import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.KiemduyetRepository;
 import com.be.tapchi.pjtapchi.repository.TheloaiRepository;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
 import com.be.tapchi.pjtapchi.userRole.ManageRoles;
+
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,7 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -41,6 +46,9 @@ public class baibaoController {
     BinhluanService BinhluanService;
 
     @Autowired
+    private KiemduyetRepository kiemduyetRepository;
+
+    @Autowired
     private BaibaoService bbService;
 
     @Autowired
@@ -49,19 +57,23 @@ public class baibaoController {
     @Autowired
     private TheloaiRepository theloaiRepository;
 
-    public boolean checkToken(String token){
+    @Autowired
+    private BaiBaoRepository baiBaoRepository;
+
+    public boolean checkToken(String token) {
         try {
             if (token.isBlank() || token == null) {
-            
+
+                return false;
+            }
+
+            if (!jwtUtil.checkRolesFromToken(token, ManageRoles.getEDITORRole())) {
+
                 return false;
             }
             Taikhoan tk = jwtUtil.getTaikhoanFromToken(token);
-            if(!jwtUtil.checkRolesFromToken(token, ManageRoles.getEDITORRole())){
-        
-                return false;
-            }
             if (tk == null) {
-                
+
                 return false;
             }
         } catch (Exception e) {
@@ -84,7 +96,7 @@ public class baibaoController {
                 return ResponseEntity.badRequest().body(response);
             }
             Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
-            if(!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getEDITORRole())){
+            if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getEDITORRole())) {
                 ApiResponse<?> response = new ApiResponse<>(false, "Không được phép truy cập", null);
                 return ResponseEntity.badRequest().body(response);
             }
@@ -94,13 +106,15 @@ public class baibaoController {
             }
             Pageable pageable = PageRequest.of(page, size);
             Page<Baibao> pageResult = bbService.findAllBaibao(pageable);
-            Map<String,Object> data = new HashMap<>();
-            
+            Map<String, Object> data = new HashMap<>();
+
             List<DTOBaiBaoEditor> list = new ArrayList<>();
             for (Baibao baibao : pageResult.getContent()) {
                 DTOBaiBaoEditor dBaoEditor = new DTOBaiBaoEditor();
                 dBaoEditor.setId(String.valueOf(baibao.getId()));
                 dBaoEditor.setTieude(baibao.getTieude());
+                dBaoEditor.setFile(baibao.getFile());
+                dBaoEditor.setUrl(baibao.getUrl());
                 dBaoEditor.setNgaytao(baibao.getNgaytao());
                 dBaoEditor.setNgaydang(baibao.getNgaydang());
                 dBaoEditor.setNoidung(baibao.getNoidung());
@@ -118,7 +132,7 @@ public class baibaoController {
                     TaikhoanED tEd = new TaikhoanED();
                     tEd.setId(String.valueOf(kditem.getTaikhoan().getTaikhoan_id()));
                     tEd.setHovaten(kditem.getTaikhoan().getHovaten());
-                    
+
                     item.setTaikhoan(tEd);
 
                     lKiemduyets.add(item);
@@ -127,7 +141,7 @@ public class baibaoController {
                 list.add(dBaoEditor);
             }
             data.put("baibaos", list);
-            Map<String,Object> phantrang = new HashMap<>();
+            Map<String, Object> phantrang = new HashMap<>();
 
             phantrang.put("trang", pageResult.getNumber());
             phantrang.put("kichthuoc", pageResult.getSize());
@@ -136,18 +150,16 @@ public class baibaoController {
             // Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
             data.put("phantrang", phantrang);
             ApiResponse<?> response = new ApiResponse<>(true, "Fetch bai bao successful",
-            data);
+                    data);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             // TODO: handle exception
             ApiResponse<Page<?>> response = new ApiResponse<>(true, "Loi lay dsbaibao theo tai khoan",
-            null);
-    return ResponseEntity.ok().body(response);
+                    null);
+            return ResponseEntity.ok().body(response);
         }
 
     }
-
-    
 
     @GetMapping("get/baibao/{id}")
     public ResponseEntity<ApiResponse<?>> getExample(@PathVariable("id") Integer id) {
@@ -265,17 +277,44 @@ public class baibaoController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> createBaibao(@RequestBody DTOBaiBao entity) {
+    public ResponseEntity<ApiResponse<?>> createBaibao(@Valid @RequestBody DTOBaiBao entity,
+            BindingResult bindingResult) {
         // Extract token from request body
+        // kiem tra du lieu bi trong
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+                    ApiResponse<?> response = new ApiResponse<>(false, "Lỗi trống dữ liệu", errorMessage);
+            return ResponseEntity.badRequest().body(response);
+        }
         try {
-            String token = String.valueOf(entity.getToken());
-            System.out.println("Token: " + token);
-            Taikhoan tk = jwtUtil.getTaikhoanFromToken(token);
-            if (tk == null) {
-                ApiResponse<?> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
+            // check token va quyen han
+            try {
+                if (entity.getToken() == null) {
+
+                    ApiResponse<?> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                }
+
+                if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getAUTHORRole())) {
+
+                    ApiResponse<?> response = new ApiResponse<>(false, "Không có quyền", null);
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                }
+                Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
+                if (tk == null) {
+
+                    ApiResponse<?> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                ApiResponse<?> response = new ApiResponse<>(false, "Lỗi token", e.getMessage());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
-            // Convert request body to Baibao object
+
+            // kiem tra the loai
             try {
                 if (entity.getTheloaiId() == null) {
                     ApiResponse<Baibao> response = new ApiResponse<>(false, "Lỗi khi tìm thể loại", null);
@@ -287,16 +326,52 @@ public class baibaoController {
                 }
             } catch (Exception e) {
                 // TODO: handle exception
-                ApiResponse<Baibao> response = new ApiResponse<>(false, "Lỗi khi tìm thể loại", null);
-                System.out.println("Loi tao bb: " + e.getMessage());
+                ApiResponse<?> response = new ApiResponse<>(false, "Lỗi khi tìm thể loại", e.getMessage());
+
                 return ResponseEntity.badRequest().body(response);
             }
 
             Theloai tl = theloaiRepository.findTheloaiById(Integer.valueOf(entity.getTheloaiId()));
             if (tl == null) {
-                ApiResponse<Baibao> response = new ApiResponse<>(false, "Lỗi khi tìm thể loại", null);
+                ApiResponse<?> response = new ApiResponse<>(false, "Lỗi khi tìm thể loại", null);
                 return ResponseEntity.badRequest().body(response);
             }
+            try {
+                if (entity.getBaibaoId() != null) {
+                    
+                    Baibao bb = baiBaoRepository.findById(Integer.valueOf(entity.getBaibaoId())).orElse(null);
+                    if (bb == null) {
+                        ApiResponse<?> response = new ApiResponse<>(false, "Lỗi khi tim bai bao", null);
+                        return ResponseEntity.badRequest().body(response);
+                    }
+                    bb.setTieude(entity.getTieude());
+                    bb.setNoidung(entity.getNoidung());
+                    bb.setUrl(entity.getUrl());
+                    bb.setFile(entity.getFile());
+                    bb.setKeyword(entity.getTukhoa());
+                    bb.setTheloai(tl);
+                    bb.setNgaytao(LocalDate.now());
+                    bb.setStatus(1);
+                    bbService.saveBaibao(bb);
+                    for (Kiemduyet kd : bb.getKiemduyets()) {
+                        try {
+                            kiemduyetRepository.delete(kd);
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            e.printStackTrace();
+                        }
+                    }
+                    
+                    ApiResponse<Baibao> response = new ApiResponse<>(true, "Cập nhật bài báo thành công", bb);
+                    return ResponseEntity.ok().body(response);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                ApiResponse<?> response = new ApiResponse<>(false, "Lỗi khi tim bai bao", e.getMessage());
+                return ResponseEntity.badRequest().body(response);
+            }
+            // cap nhat neu baibaoid != null
+
             Baibao baibao = new Baibao();
             baibao.setTieude(entity.getTieude());
             baibao.setNoidung(entity.getNoidung());
@@ -305,11 +380,12 @@ public class baibaoController {
             baibao.setKeyword(entity.getTukhoa());
 
             baibao.setTheloai(tl);
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
             baibao.setTaikhoan(tk);
 
             // Set default values
             baibao.setNgaytao(LocalDate.now());
-            baibao.setStatus(0);
+            baibao.setStatus(1);
 
             Baibao bb = bbService.saveBaibao(baibao);
             ApiResponse<Baibao> response = new ApiResponse<>(true, "Tạo bài báo thành công", bb);

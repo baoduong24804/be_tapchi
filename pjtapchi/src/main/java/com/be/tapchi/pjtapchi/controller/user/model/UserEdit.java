@@ -15,8 +15,6 @@ public class UserEdit {
 
     private String url_d = "https://anime404.click/api/files/view/ac0dc7e2-6135-48f5-ad85-340d21097697_user-avatar-4-icon-511x512-wlu19u1d.png";
     //private int[] roles;
-    @NotBlank(message = "Username không được để trống")
-    private String username;
 
     @NotBlank(message = "Họ và tên không được để trống")
     private String hovaten;

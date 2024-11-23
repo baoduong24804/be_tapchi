@@ -13,19 +13,21 @@ public class UserRegisterByGG {
 
    
     //private int[] roles;
-    @NotBlank(message = "Name không được để trống")
-    private String name;
+    //@NotBlank(message = "Name không được để trống")
+    //private String name;
 
-    @NotBlank(message = "Sub không được để trống")
-    private String sub;
+    //@NotBlank(message = "Sub không được để trống")
+    //private String sub;
 
-    @NotBlank(message = "Email không được để trống")
-    private String email;
+    //@NotBlank(message = "Email không được để trống")
+    //private String email;
 
-    @NotBlank(message = "Picture không được để trống")
-    private String picture;
+    //@NotBlank(message = "Picture không được để trống")
+    //private String picture;
 
-    private boolean verified_email;
+    //private boolean verified_email;
+
+    private String credential;
 
     // @NotNull(message = "Ngày tạo không được để trống")
     // private Date ngaytao;

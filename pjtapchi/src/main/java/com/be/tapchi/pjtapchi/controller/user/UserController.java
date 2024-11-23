@@ -10,6 +10,7 @@ import com.be.tapchi.pjtapchi.controller.user.model.ResetPassword;
 import com.be.tapchi.pjtapchi.controller.user.model.UserEdit;
 import com.be.tapchi.pjtapchi.controller.user.model.UserRegister;
 import com.be.tapchi.pjtapchi.controller.user.model.UserRegisterByGG;
+import com.be.tapchi.pjtapchi.jwt.GoogleTokenUtil;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 
@@ -30,6 +31,7 @@ import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -224,9 +226,9 @@ public class UserController {
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> userData = new HashMap<>();
             Map<String, Object> roles = new HashMap<>();
-            SimpleDateFormat fmd = new SimpleDateFormat("dd-MM-yyyy");
+            //SimpleDateFormat fmd = new SimpleDateFormat("dd-MM-yyyy");
 
-            userData.put("date", fmd.format(tk.getNgaytao()));
+            userData.put("date", tk.getNgaytao());
 
             for (Vaitro vt : tk.getVaitro()) {
                 roles.put(String.valueOf(vt.getVaitroId()), vt.getTenrole());
@@ -242,11 +244,12 @@ public class UserController {
                 data.put("newToken", newToken);
             }
 
-            ApiResponse<?> response = new ApiResponse<>(true, "Fetch successful", data);
+            ApiResponse<?> response = new ApiResponse<>(true, "Lấy dữ liệu thành công", data);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             // TODO: handle exception
-            throw e;
+            ApiResponse<?> response = new ApiResponse<>(false, "Lỗi lấy dữ liệu", e.getMessage());
+            return ResponseEntity.ok().body(response);
         }
 
     }
@@ -350,27 +353,58 @@ public class UserController {
     }
 
     @PostMapping("/login/google")
-    public ResponseEntity<ApiResponse<?>> loginorregisterByGG(@Valid @RequestBody(required = false) UserRegisterByGG entity,
+    public ResponseEntity<ApiResponse<?>> loginorregisterByGG(
+            @Valid @RequestBody(required = false) UserRegisterByGG entity,
             BindingResult bindingResult) {
         // TODO: process POST request
         ApiResponse<?> api = new ApiResponse<>();
-        if(entity == null){
+        if (entity == null || entity.getCredential() == null) {
             api.setSuccess(false);
             api.setMessage("Lỗi để trống dữ liệu");
-            api.setData(null);
+            api.setData("Token trống");
             return ResponseEntity.badRequest().body(api);
         }
 
-        // kiem tra sub de trong
+        // kiem tra token cua google
+        String sub = null;
+        String email_tk = null;
+        try {
+            if (entity.getCredential().isBlank()) {
+                api.setSuccess(false);
+                api.setMessage("Lỗi token Google không hợp lệ");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
+
+            // token het han
+            if (!GoogleTokenUtil.isTokenExpired(entity.getCredential())) {
+                api.setSuccess(false);
+                api.setMessage("Token hết hạn");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
+
+            // lay sub va email tu token
+            sub = GoogleTokenUtil.getSubFromTokenGoogle(entity.getCredential());
+            email_tk = GoogleTokenUtil.getEmailFromTokenGoogle(entity.getCredential());
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            api.setSuccess(false);
+            api.setMessage("Lỗi xác minh token");
+            api.setData(e.getMessage());
+            return ResponseEntity.badRequest().body(api);
+        }
+
         try {
             // if (entity.getSub() == null) {
-            //     api.setSuccess(false);
-            //     api.setMessage("Có lỗi khi đăng nhập với Google");
-            //     api.setData(null);
-            //     return ResponseEntity.badRequest().body(api);
+            // api.setSuccess(false);
+            // api.setMessage("Có lỗi khi đăng nhập với Google");
+            // api.setData(null);
+            // return ResponseEntity.badRequest().body(api);
             // }
-            if (taiKhoanRepository.existsByGoogleId(entity.getSub())) {
-                Taikhoan tk = taiKhoanRepository.findByGoogleId(entity.getSub().trim());
+            if (taiKhoanRepository.existsByGoogleId(sub)) {
+                Taikhoan tk = taiKhoanRepository.findByGoogleId(sub);
 
                 if (tk == null) {
                     api.setSuccess(false);
@@ -378,7 +412,7 @@ public class UserController {
                     return ResponseEntity.badRequest().body(api);
                 }
 
-                if (!tk.getEmail().equals(entity.getEmail())) {
+                if (!tk.getEmail().equals(email_tk)) {
                     api.setSuccess(false);
                     api.setMessage("Lỗi khi đăng nhập với Google");
                     return ResponseEntity.ok().body(api);
@@ -402,7 +436,7 @@ public class UserController {
         } catch (Exception e) {
             // TODO: handle exception
             api.setSuccess(false);
-            api.setMessage("Lỗi không mong muốn: "+e.getMessage());
+            api.setMessage("Lỗi không mong muốn: " + e.getMessage());
             return ResponseEntity.badRequest().body(api);
         }
 
@@ -420,14 +454,24 @@ public class UserController {
         try {
 
             // dang ky google
+            String usname = GoogleTokenUtil.getNameFromTokenGoogle(entity.getCredential());
+            String pic = GoogleTokenUtil.getPictureFromTokenGoogle(entity.getCredential());
+            if (pic.isBlank() || usname.isBlank()) {
+                api.setSuccess(false);
+                api.setMessage("Không được để trống dữ liệu");
+                api.setData("Lỗi ảnh hoặc tên");
+                return ResponseEntity.badRequest().body(api);
+            }
             Taikhoan tk = new Taikhoan();
-            tk.setUsername(generateUsernameByGG(entity.getName()));
-            tk.setGoogleId(entity.getSub());
-            tk.setEmail(entity.getEmail());
-            tk.setHovaten(entity.getName());
-            tk.setStatus(entity.isVerified_email() ? 1 : 0);
-            tk.setNgaytao(new Date());
-            tk.setUrl(entity.getPicture());
+            tk.setUsername(generateUsernameByGG(usname));
+            tk.setGoogleId(sub);
+            tk.setEmail(email_tk);
+            tk.setHovaten(usname);
+            boolean checkem = GoogleTokenUtil.getVerifiedEmailFromTokenGoogle(entity.getCredential());
+            tk.setStatus(checkem ? 1 : 0);
+            tk.setNgaytao(LocalDate.now());
+
+            tk.setUrl(pic);
 
             Vaitro vt = vaiTroRepository.findBytenrole(RoleName.CUSTOMER.toString());
             List<Vaitro> vaitros = new ArrayList<>();
@@ -556,7 +600,7 @@ public class UserController {
 
             tk.setHovaten(userRegister.getHovaten());
             tk.setEmail(userRegister.getEmail());
-            tk.setNgaytao(new Date());
+            tk.setNgaytao(LocalDate.now());
             tk.setSdt(userRegister.getSdt());
             tk.setUrl(userRegister.getUrl());
             tk.setStatus(0);
@@ -667,10 +711,13 @@ public class UserController {
                 return ResponseEntity.badRequest().body(api);
             }
 
-            tk.setHovaten(entity.getHovaten());
-            tk.setSdt(entity.getSdt());
-            if (!entity.getUrl().isBlank() || entity.getUrl() != null) {
-                tk.setUrl(entity.getUrl());
+            tk.setHovaten(entity.getHovaten()+"".trim());
+            tk.setSdt(entity.getSdt()+"".trim());
+            if (entity.getUrl() != null) {
+                if(!entity.getUrl().isBlank()){
+                    tk.setUrl(entity.getUrl()+"".trim());
+                }
+                
             }
 
             taiKhoanService.saveTaiKhoan(tk);
