@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.controller.kiemduyet.model.DTOToken;
 import com.be.tapchi.pjtapchi.controller.user.model.ChangePassword;
 import com.be.tapchi.pjtapchi.controller.user.model.LoginRequest;
 import com.be.tapchi.pjtapchi.controller.user.model.ResetPassword;
@@ -28,17 +29,15 @@ import com.be.tapchi.pjtapchi.userRole.RoleName;
 import io.github.bucket4j.Bucket;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -46,16 +45,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -108,6 +104,41 @@ public class UserController {
 
         return ResponseEntity.ok()
                 .body(jwtUtil.checkRolesFromToken(token, ManageRoles.getAUTHORRole(), ManageRoles.getADMINRole()));
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<?> checkToken(@RequestBody(required = false) DTOToken entity) {
+        // TODO: process POST request
+        ApiResponse<?> api = new ApiResponse<>();
+        if (entity.getToken() == null) {
+
+            api.setSuccess(false);
+            api.setMessage("Lỗi token trống");
+            api.setData(null);
+            return ResponseEntity.badRequest().body(api);
+        }
+        // String tk = entity.getToken()+"";
+        try {
+            Map<String, Object> check = jwtUtil.checkTokenConHSD(entity.getToken());
+            if (check.get("status").toString() == "false") {
+                api.setSuccess(false);
+                api.setMessage(check.get("message").toString());
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
+
+            api.setSuccess(true);
+            api.setMessage("Token hợp lệ");
+            api.setData(check.get("message"));
+            return ResponseEntity.ok().body(api);
+        } catch (Exception e) {
+            // TODO: handle exception
+            api.setSuccess(false);
+            api.setMessage("Token ko hợp lệ");
+            api.setData(e.getMessage());
+            return ResponseEntity.badRequest().body(api);
+        }
+
     }
 
     @PostMapping("get/taikhoan/kiemduyet")
@@ -226,7 +257,7 @@ public class UserController {
             Map<String, Object> data = new HashMap<>();
             Map<String, Object> userData = new HashMap<>();
             Map<String, Object> roles = new HashMap<>();
-            //SimpleDateFormat fmd = new SimpleDateFormat("dd-MM-yyyy");
+            // SimpleDateFormat fmd = new SimpleDateFormat("dd-MM-yyyy");
 
             userData.put("date", tk.getNgaytao());
 
@@ -711,19 +742,29 @@ public class UserController {
                 return ResponseEntity.badRequest().body(api);
             }
 
-            tk.setHovaten(entity.getHovaten()+"".trim());
-            tk.setSdt(entity.getSdt()+"".trim());
-            if (entity.getUrl() != null) {
-                if(!entity.getUrl().isBlank()){
-                    tk.setUrl(entity.getUrl()+"".trim());
+            tk.setHovaten(entity.getHovaten() + "".trim());
+            if (!(entity.getSdt() + "".trim()).equals(tk.getSdt() + "".trim())) {
+                if (taiKhoanRepository.existsBySdt(entity.getSdt() + "".trim())) {
+                    api.setSuccess(false);
+                    api.setMessage("Vui lòng dùng SDT khác");
+                    api.setData(null);
+                    return ResponseEntity.badRequest().body(api);
                 }
-                
+                tk.setSdt(entity.getSdt() + "".trim());
+            }
+
+            
+            if (entity.getUrl() != null) {
+                if (!entity.getUrl().isBlank()) {
+                    tk.setUrl(entity.getUrl() + "".trim());
+                }
+
             }
 
             taiKhoanService.saveTaiKhoan(tk);
             // tk.setUrl(entity.getUrl());
 
-            api.setSuccess(false);
+            api.setSuccess(true);
             api.setMessage("Thay đổi thông tin thành công");
             api.setData(null);
             return ResponseEntity.ok().body(api);

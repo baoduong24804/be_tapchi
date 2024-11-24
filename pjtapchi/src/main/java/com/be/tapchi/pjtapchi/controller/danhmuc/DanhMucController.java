@@ -4,6 +4,7 @@ import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDanhMuc;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOCreateDanhMuc;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTODanhMucBaiBao2;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTaiKhoanDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTheLoaiDM;
 import com.be.tapchi.pjtapchi.model.Baibao;
@@ -52,7 +53,7 @@ public class DanhMucController {
             api.setSuccess(true);
             api.setMessage("Thành công lấy dữ liệu danh mục theo tuần");
             Map<String, Object> map = new HashMap<>();
-            Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size, 5);
+            Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size, 4);
             List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
             for (DanhMuc danhMuc : dm.getContent()) {
                 DTOBaiBaoDanhMuc bbDM = new DTOBaiBaoDanhMuc();
@@ -62,6 +63,7 @@ public class DanhMucController {
                 bbDM.setTuan(String.valueOf(danhMuc.getTuan()));
                 bbDM.setSo(String.valueOf(danhMuc.getSo()));
                 bbDM.setUrl(danhMuc.getUrl());
+                bbDM.setStatus(danhMuc.getStatus() + "");
                 bbDM.setNgaytao(danhMuc.getNgaytao());
                 List<DTOBaiBaoDM> listbbDM = new ArrayList<>();
                 for (Danhmucbaibao dmbb : danhMuc.getDanhmucbaibaos()) {
@@ -82,6 +84,7 @@ public class DanhMucController {
                     bb1.setStatus(String.valueOf(dmbb.getBaibao().getStatus()));
                     bb1.setTaikhoan(tk1);
                     bb1.setTheloai(tl1);
+                    bb1.setNgaytao(dmbb.getBaibao().getNgaytao());
                     listbbDM.add(bb1);
 
                 }
@@ -103,25 +106,92 @@ public class DanhMucController {
         return ResponseEntity.badRequest().body(null);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<ApiResponse<Page<DanhMuc>>> getAllDanhMuc(
+    @PostMapping("/all")
+    public ResponseEntity<ApiResponse<?>> getAllDanhMuc(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<DanhMuc> danhMucPage = danhMucService.getAllDanhMuc(pageable);
-            ApiResponse<Page<DanhMuc>> response = new ApiResponse<>(true, "Danh sách danh mục", danhMucPage);
-
-            if (danhMucPage.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            } else {
-                return ResponseEntity.ok().body(response);
+            if (danhMucPage == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
+            Map<String, Object> data = new HashMap<>();
+            List<DTODanhMucBaiBao2> list = new ArrayList<>();
+            for (DanhMuc danhMuc : danhMucPage.getContent()) {
+                DTODanhMucBaiBao2 et = new DTODanhMucBaiBao2();
+                et.setDanhmucId(danhMuc.getDanhmucId() + "");
+                et.setTieude(danhMuc.getTieude());
+                et.setMota(danhMuc.getMota());
+                et.setTuan(danhMuc.getTuan() + "");
+                et.setSo(danhMuc.getSo() + "");
+                et.setStatus(danhMuc.getStatus() + "");
+                et.setUrl(danhMuc.getUrl());
+                et.setNgaytao(danhMuc.getNgaytao());
+                List<DTOBaiBaoDM> baibaos = new ArrayList<>();
+                for (Danhmucbaibao dmbb : danhMuc.getDanhmucbaibaos()) {
+                    DTOBaiBaoDM et2 = new DTOBaiBaoDM();
+                    et2.setBaibaoId(dmbb.getBaibao().getId() + "");
+                    et2.setTieude(dmbb.getBaibao().getTieude());
+                    et2.setNoidung(dmbb.getBaibao().getNoidung());
+                    et2.setFile(dmbb.getBaibao().getFile());
+                    et2.setKeyword(dmbb.getBaibao().getKeyword());
+                    et2.setNgaydang(dmbb.getBaibao().getNgaydang());
+                    et2.setNgaytao(dmbb.getBaibao().getNgaytao());
+                    et2.setStatus(dmbb.getBaibao().getStatus() + "");
+                    et2.setUrl(dmbb.getBaibao().getUrl());
+                    DTOTaiKhoanDM tk = new DTOTaiKhoanDM();
+                    tk.setTaikhoanId(dmbb.getBaibao().getTaikhoan().getTaikhoan_id() + "");
+                    tk.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
+                    et2.setTaikhoan(tk);
+                    DTOTheLoaiDM tl = new DTOTheLoaiDM();
+                    tl.setTheloaiId(dmbb.getBaibao().getTheloai().getId() + "");
+                    tl.setTen(dmbb.getBaibao().getTheloai().getTenloai());
+                    et2.setTheloai(tl);
+                    baibaos.add(et2);
+                }
+                et.setBaibaos(baibaos);
+                list.add(et);
+            }
+            data.put("data", list);
+
+            Map<String, Object> phantrang = new HashMap<>();
+
+            phantrang.put("trang", danhMucPage.getNumber());
+            phantrang.put("kichthuoc", danhMucPage.getSize());
+            phantrang.put("tongbaibao", danhMucPage.getTotalElements());
+            phantrang.put("tongtrang", danhMucPage.getTotalPages());
+            // Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
+            data.put("phantrang", phantrang);
+            ApiResponse<?> response = new ApiResponse<>(true, "Danh sách danh mục", data);
+            return ResponseEntity.ok().body(response);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi lấy danh mục.", null));
         }
     }
+
+
+    // @GetMapping("/all")
+    // public ResponseEntity<ApiResponse<Page<DanhMuc>>> getAllDanhMuc(
+    //         @RequestParam(defaultValue = "0") int page,
+    //         @RequestParam(defaultValue = "6") int size) {
+    //     try {
+    //         Pageable pageable = PageRequest.of(page, size);
+    //         Page<DanhMuc> danhMucPage = danhMucService.getAllDanhMuc(pageable);
+    //         ApiResponse<Page<DanhMuc>> response = new ApiResponse<>(true, "Danh sách danh mục", danhMucPage);
+
+    //         if (danhMucPage.isEmpty()) {
+    //             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    //         } else {
+    //             return ResponseEntity.ok().body(response);
+    //         }
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi lấy danh mục.", null));
+    //     }
+    // }
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<?>> createDanhMuc(@RequestBody(required = false) DTOCreateDanhMuc danhMuc) {
