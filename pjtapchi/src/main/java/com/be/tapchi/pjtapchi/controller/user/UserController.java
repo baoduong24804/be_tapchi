@@ -285,30 +285,47 @@ public class UserController {
 
     }
 
+    public boolean checkPassword(String password) {
+        try {
+            // Biểu thức chính quy kiểm tra điều kiện
+            String regex = "^(?=.*[A-Z]).{8,16}$";
+
+            // So khớp mật khẩu với regex
+            return password != null && (password + "".trim()).matches(regex);
+        } catch (Exception e) {
+            // TODO: handle exception
+            return false;
+        }
+
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<?>> createAuthenticationToken(@RequestBody LoginRequest loginRequest)
-            throws Exception {
+    public ResponseEntity<ApiResponse<?>> createAuthenticationToken(
+            @RequestBody(required = false) LoginRequest loginRequest) {
         ApiResponse<?> response = new ApiResponse<>();
         try {
 
             // kiem tra tai khoan ton tai
             if (!taiKhoanService.checkTaikhoan(loginRequest)) {
                 response.setSuccess(false);
-                response.setMessage("Tài khoản hoặc mật khẩu không đúng");
+                response.setMessage("Tài khoản hoặc mật khẩu không đúng 1");
                 response.setData(null);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             // login that bai, co tk nhung sai mk
             if (!taiKhoanService.loginTaikhoan(loginRequest)) {
                 response.setSuccess(false);
-                response.setMessage("Tài khoản hoặc mật khẩu không đúng");
+                response.setMessage("Tài khoản hoặc mật khẩu không đúng 2");
                 response.setData(null);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
-        } catch (AuthenticationException e) {
-            throw new Exception("Lỗi không mong muốn khi đăng nhập", e);
+        } catch (Exception e) {
+            response.setSuccess(false);
+            response.setMessage("Tài khoản hoặc mật khẩu không đúng");
+            response.setData(null);
+            return ResponseEntity.badRequest().body(response);
         }
 
         // Nếu xác thực thành công, tạo JWT
@@ -443,6 +460,20 @@ public class UserController {
                     return ResponseEntity.badRequest().body(api);
                 }
 
+                if (taiKhoanService.checkUserLockedorNotActice(tk)) {
+                    if (tk.getStatus() == -1) {
+                        api.setSuccess(false);
+                        api.setMessage("Tài khoản của bạn đã bị khóa vui lòng liên hệ với admin");
+                        return ResponseEntity.badRequest().body(api);
+                    }
+                    if (tk.getStatus() == 0) {
+                        api.setSuccess(false);
+                        api.setMessage("Vui lòng kích hoạt tài khoản");
+                        return ResponseEntity.badRequest().body(api);
+                    }
+                }
+        
+
                 if (!tk.getEmail().equals(email_tk)) {
                     api.setSuccess(false);
                     api.setMessage("Lỗi khi đăng nhập với Google");
@@ -505,6 +536,12 @@ public class UserController {
             tk.setUrl(pic);
 
             Vaitro vt = vaiTroRepository.findBytenrole(RoleName.CUSTOMER.toString());
+            if (vt == null) {
+                api.setSuccess(false);
+                api.setMessage("Lỗi khi tạo vai trò");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
             List<Vaitro> vaitros = new ArrayList<>();
             vaitros.add(vt);
             Set<Vaitro> setVaitros = new HashSet<>();
@@ -563,7 +600,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(api);
         }
         try {
-            Taikhoan tk_chuaxacnhan = taiKhoanService.findByEmail(userRegister.getEmail().trim());
+
             Set<String> err_mes = new HashSet<>();
             if (taiKhoanRepository.existsByUsername(generateUsername(userRegister.getUsername()))) {
                 err_mes.add("Username đã tồn tại");
@@ -581,11 +618,12 @@ public class UserController {
                 // api.setMessage("Email da ton tai");
                 // api.setData(null);
                 // gui ma xac nhan neu tk chua kich hoat
+                Taikhoan tk_chuaxacnhan = taiKhoanService.findByEmail(userRegister.getEmail().trim());
                 if (taiKhoanService.findByEmail(userRegister.getEmail()) != null) {
                     if (tk_chuaxacnhan.getStatus() == 0) {
                         emailService.sendVerificationEmail(userRegister.getEmail());
                         api.setSuccess(true);
-                        api.setMessage("Đã gửi mã xác thực");
+                        api.setMessage("Đã gửi mã xác thực đến Email. Vui lòng kích hoạt tài khoản");
                         return ResponseEntity.ok().body(api);
                     }
                 }
@@ -604,6 +642,13 @@ public class UserController {
             if (!err_mes.isEmpty()) {
                 api.setMessage("Lỗi khi đăng ký tài khoản");
                 api.setData(err_mes);
+                return ResponseEntity.badRequest().body(api);
+            }
+            // mk ko hop le
+            if (!checkPassword(userRegister.getPassword() + "".trim())) {
+                api.setSuccess(false);
+                api.setMessage("Mật khẩu không hợp lệ");
+                api.setData(null);
                 return ResponseEntity.badRequest().body(api);
             }
             Taikhoan tk = new Taikhoan();
@@ -669,7 +714,7 @@ public class UserController {
                         .map(error -> error.getDefaultMessage())
                         .collect(Collectors.joining(", "));
                 api.setSuccess(false);
-                api.setMessage("Loi de trong du lieu");
+                api.setMessage("Lỗi để trống dữ liệu");
                 api.setData(errorMessage);
                 return ResponseEntity.badRequest().body(api);
             }
@@ -685,14 +730,20 @@ public class UserController {
             if (tk == null) {
                 tk = taiKhoanService.findByEmail(entity.getUsername());
             }
-            if (tk.getPassword().equals(entity.getNewpassword())
-                    || tk.getPassword().trim().equals(entity.getNewpassword().trim())) {
+            if (!checkPassword(entity.getNewpassword() + "".trim())) {
+                api.setSuccess(false);
+                api.setMessage("Mật khẩu không hợp lệ");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
+            if ((tk.getPassword() + "".trim()).equals(entity.getNewpassword() + "".trim())
+                    || (tk.getPassword() + "".trim()).equals(entity.getNewpassword() + "".trim())) {
                 api.setSuccess(true);
                 api.setMessage("Mật khẩu mới không được trùng với mật khẩu cũ");
                 api.setData(null);
-                return ResponseEntity.ok().body(api);
+                return ResponseEntity.badRequest().body(api);
             }
-            tk.setPassword(passwordEncoder.encode(entity.getNewpassword().trim()));
+            tk.setPassword(passwordEncoder.encode(entity.getNewpassword() + "".trim()));
 
             taiKhoanService.saveTaiKhoan(tk);
 
@@ -753,7 +804,6 @@ public class UserController {
                 tk.setSdt(entity.getSdt() + "".trim());
             }
 
-            
             if (entity.getUrl() != null) {
                 if (!entity.getUrl().isBlank()) {
                     tk.setUrl(entity.getUrl() + "".trim());
@@ -799,7 +849,7 @@ public class UserController {
                 api.setSuccess(false);
                 api.setMessage("Hãy đảm bảo rằng bạn nhập đúng email cần khôi phục");
                 api.setData(null);
-                return ResponseEntity.ok().body(api);
+                return ResponseEntity.badRequest().body(api);
             }
             api.setSuccess(true);
             api.setMessage("Thành công! Vui lòng kiểm tra email");
@@ -820,15 +870,21 @@ public class UserController {
                 return ResponseEntity.badRequest().body(null);
             }
             ApiResponse<?> api = new ApiResponse<>();
+            if (!checkPassword(enity.getNewpassword() + "".trim())) {
+                api.setSuccess(false);
+                api.setMessage("Mật khẩu không hợp lệ");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
             if (taikhoanTokenService.changePassword(enity.getToken(), enity.getNewpassword())) {
 
                 api.setSuccess(true);
-                api.setMessage("Doi mk thanh cong");
+                api.setMessage("Đổi mật khẩu thành công");
                 api.setData(null);
                 return ResponseEntity.ok().body(api);
             }
             api.setSuccess(false);
-            api.setMessage("Token het han hoac sai");
+            api.setMessage("Token sai hoặc đã hết hạn");
             api.setData(null);
             //
             return ResponseEntity.badRequest().body(api);

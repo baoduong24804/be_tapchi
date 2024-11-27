@@ -43,13 +43,13 @@ public class DanhMucService {
         danhMucRepository.deleteById(id);
     }
 
-    public Page<DanhMuc> getDanhmucInCurrentWeek(int page, int size, int status) {
+    public Page<DanhMuc> getDanhmucInCurrentWeek(int page, int size) {
         LocalDate startOfWeek = DateUtils.getStartOfWeek();
         LocalDate endOfWeek = DateUtils.getEndOfWeek();
         System.out.println(startOfWeek + "," + endOfWeek);
         Pageable pageable = PageRequest.of(page, size);
 
-        return danhMucRepository.findDanhmucByWeekAndStatus(startOfWeek, endOfWeek, status, pageable);
+        return danhMucRepository.findDanhmucByWeekAndStatus(startOfWeek, endOfWeek, pageable);
     }
 
     public DanhMuc updateDanhMuc(Long id, DanhMuc newDanhMuc) {

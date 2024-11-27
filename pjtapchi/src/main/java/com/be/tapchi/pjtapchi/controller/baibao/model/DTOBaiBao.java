@@ -21,6 +21,7 @@ public class DTOBaiBao {
     private String file;
     @NotBlank(message = "Ảnh trống")
     private String url;
+
     //@NotBlank(message = "Token trống")
     private String token;
 }

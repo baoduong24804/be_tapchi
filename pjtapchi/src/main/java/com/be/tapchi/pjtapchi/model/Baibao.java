@@ -45,6 +45,9 @@ public class Baibao {
 
     @Column(name = "status")
     private Integer status;
+
+    @Column(name = "lichsu")
+    private String lichsu;
     
     @Column(name = "keyword")
     private String keyword;

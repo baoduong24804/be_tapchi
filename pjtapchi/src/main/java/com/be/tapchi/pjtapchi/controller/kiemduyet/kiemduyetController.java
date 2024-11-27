@@ -344,6 +344,81 @@ public class kiemduyetController {
       
     }
 
+    @PostMapping("/update/kiemduyet/baibao")
+    public ResponseEntity<ApiResponse<?>> updateBaiBao(@RequestBody(required = false) DTOUpdate entity) {
+        ApiResponse<?> api = new ApiResponse<>();
+        try {
+            if (entity.getToken() == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
+            if (tk == null) {
+                api.setSuccess(false);
+                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getEDITORRole())) {
+                api.setSuccess(false);
+                api.setMessage("Yêu cầu quyền EDITOR");
+
+                return ResponseEntity.badRequest().body(api);
+            }
+            if(entity.getStatus() == null){
+                api.setSuccess(false);
+                api.setMessage("Lỗi trống dữ liệu");
+
+                return ResponseEntity.badRequest().body(api);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            api.setSuccess(false);
+            api.setMessage("Lỗi không mong muốn");
+            api.setData(e.getMessage());
+            return ResponseEntity.badRequest().body(api);
+        }
+
+        try {
+            Kiemduyet kd = kiemduyetRepository.findById(Long.valueOf(entity.getKiemduyetId())).orElse(null);
+            if (kd == null) {
+                api.setSuccess(false);
+                api.setMessage("Lỗi không tìm thấy kiểm duyệt");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
+            Baibao bb = kd.getBaibao();
+            if(bb == null){
+                api.setSuccess(false);
+                api.setMessage("Lỗi không tìm thấy bài báo");
+                api.setData(null);
+                return ResponseEntity.badRequest().body(api);
+            }
+            bb.setStatus(Integer.valueOf(entity.getStatus()));
+            //kd.setStatus(Integer.valueOf(entity.getStatus()));
+            kd.setGhichu(entity.getGhichu());
+            //kd.setNgaykiemduyet(LocalDate.now());
+
+            kiemduyetRepository.save(kd);
+
+            api.setSuccess(true);
+            api.setMessage("Cập nhật thành công");
+            api.setData(null);
+            return ResponseEntity.ok().body(api);
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            api.setSuccess(false);
+            api.setMessage("Lỗi không mong muốn 2");
+            api.setData(e.getMessage());
+            return ResponseEntity.badRequest().body(api);
+        }
+
+      
+    }
+
     // @PostMapping("bientapvien/phanhoi")
     // public ResponseEntity<ApiResponse<?>> btvPhanHoi(@RequestBody(required = false) DTOUpdate entity) {
     //     ApiResponse<?> api = new ApiResponse<>();

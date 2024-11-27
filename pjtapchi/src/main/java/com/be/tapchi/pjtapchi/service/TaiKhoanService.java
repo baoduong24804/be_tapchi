@@ -50,38 +50,43 @@ public class TaiKhoanService {
     public boolean checkTaikhoan(LoginRequest user) {
         // trong username
         try {
-            if (user.getUsername().isBlank() || user.getUsername().isEmpty() || user.getPassword().isBlank()
-                    || user.getPassword().isEmpty()) {
+            
+            if (user.getUsername() == null ||  user.getPassword() == null) {
                 return false;
             }
+            System.out.println("Tim tk: "+user.getUsername());
             Taikhoan tk = findByUsername(user.getUsername().trim());
+            
             Taikhoan tk_e = taiKhoanRepository.findByEmailAndGoogleIdIsNull(user.getUsername().trim());
+            
             Taikhoan tk_sdt = findBySdt(user.getUsername().trim());
-            if (tk != null || tk_e != null || tk_sdt != null) {
-                return true;
+            if(tk == null && tk_e == null && tk_sdt == null){
+                return false;
             }
+
         } catch (Exception e) {
             // TODO: handle exception
+            e.printStackTrace();
             return false;
         }
 
-        return false;
+        return true;
 
     }
 
     public Taikhoan getTaikhoanLogin(LoginRequest entity) {
 
         try {
-            Taikhoan username = taiKhoanRepository.findByUsername(entity.getUsername().trim());
+            Taikhoan username = taiKhoanRepository.findByUsername(entity.getUsername()+"".trim());
             if (username != null) {
                 return username;
             }
-            Taikhoan email = taiKhoanRepository.findByEmailAndGoogleIdIsNull(entity.getUsername().trim());
+            Taikhoan email = taiKhoanRepository.findByEmailAndGoogleIdIsNull(entity.getUsername()+"".trim());
             if (email != null) {
                 return email;
             }
 
-            Taikhoan sdt = taiKhoanRepository.findBySdt(entity.getUsername().trim());
+            Taikhoan sdt = taiKhoanRepository.findBySdt(entity.getUsername()+"".trim());
             if (sdt != null) {
                 return sdt;
             }
@@ -141,7 +146,7 @@ public class TaiKhoanService {
 
         if (tk != null) {
 
-            if (passwordEncoder.matches(user.getPassword(), tk.getPassword())) {
+            if (passwordEncoder.matches(user.getPassword().trim(), tk.getPassword().trim())) {
                 return true;
             }
 

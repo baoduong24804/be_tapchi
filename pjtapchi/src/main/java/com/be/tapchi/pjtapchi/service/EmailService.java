@@ -141,10 +141,8 @@ public class EmailService {
                 return;
             } catch (Exception ex) {
                 // TODO: handle exception
-                System.out.println("Loi xoa tat ca email verify: "+ex.getMessage());
+                System.out.println("Loi xoa tat ca email verify: " + ex.getMessage());
             }
-            
-            
 
         }
 
@@ -168,13 +166,10 @@ public class EmailService {
             // Build the activation link
             // String activationLink = token; // assuming 'token' is the full link or use to
             // construct the link
-
-            // Email content in proper string format
             String emailContent = "<html>" +
                     "  <head>" +
                     "    <meta name=\"viewport\" content=\"width=device-width\" />" +
-                    "    <meta name=\"description\" content=\"Email Verification\" />"
-                    +
+                    "    <meta name=\"description\" content=\"Email Verification\" />" +
                     "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />" +
                     "    <title>" + title + "</title>" +
                     "    <style>" +
@@ -204,6 +199,16 @@ public class EmailService {
                     "      a {" +
                     "          text-decoration: none;" +
                     "      }" +
+                    "      .button {" +
+                    "          display: inline-block;" +
+                    "          padding: 10px 20px;" +
+                    "          font-size: 16px;" +
+                    "cursor: pointer;" +
+                    "          background-color: #007BFF;" +
+                    "          border-radius: 5px;" +
+                    "          text-align: center;" +
+                    "          text-decoration: none;" +
+                    "      }" +
                     "    </style>" +
                     "  </head>" +
                     "  <body style=\"margin: 0; padding: 0 !important; background: #F8F8F8;\">" +
@@ -212,20 +217,82 @@ public class EmailService {
                     "      <tr>" +
                     "        <td align=\"center\">" +
                     "          <h1 style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">" + title
-                    + "</h1>"
-                    +
+                    + "</h1>" +
                     "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">" + content
-                    + "</p>"
-                    +
-                    "          <p style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">" + token
                     + "</p>" +
-                    "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">Hỗ trợ 24/7, gửi email qua <a href=\"mailto:dthaibao2482004@gmail.com\">dthaibao2482004@gmail.com</a></p>"
+                    "          <a style=\"color: #212529; font-weight: bold;\" href=\"" + token
+                    + "\" class=\"button\">Reset Password</a>" +
+                    "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">Hỗ trợ 24/7, gửi email qua <a style=\"color: #007BFF;\" href=\"mailto:dthaibao2482004@gmail.com\">dthaibao2482004@gmail.com</a></p>"
                     +
                     "        </td>" +
                     "      </tr>" +
                     "    </table>" +
                     "  </body>" +
                     "</html>";
+            // Email content in proper string format
+            // String emailContent = "<html>" +
+            // " <head>" +
+            // " <meta name=\"viewport\" content=\"width=device-width\" />" +
+            // " <meta name=\"description\" content=\"Email Verification\" />"
+            // +
+            // " <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />"
+            // +
+            // " <title>" + title + "</title>" +
+            // " <style>" +
+            // " html, body {" +
+            // " margin: 0 auto !important;" +
+            // " padding: 0 !important;" +
+            // " width: 100% !important;" +
+            // " font-family: sans-serif;" +
+            // " line-height: 1.4;" +
+            // " -webkit-font-smoothing: antialiased;" +
+            // " -ms-text-size-adjust: 100%;" +
+            // " -webkit-text-size-adjust: 100%;" +
+            // " }" +
+            // " * {" +
+            // " -ms-text-size-adjust: 100%;" +
+            // " }" +
+            // " table, td {" +
+            // " mso-table-lspace: 0pt !important;" +
+            // " mso-table-rspace: 0pt !important;" +
+            // " }" +
+            // " img {" +
+            // " display: block;" +
+            // " border: none;" +
+            // " max-width: 100%;" +
+            // " -ms-interpolation-mode: bicubic;" +
+            // " }" +
+            // " a {" +
+            // " text-decoration: none;" +
+            // " }" +
+            // " </style>" +
+            // " </head>" +
+            // " <body style=\"margin: 0; padding: 0 !important; background: #F8F8F8;\">" +
+            // " <table align=\"center\" valign=\"top\" width=\"100%\" bgcolor=\"#FFFFFF\"
+            // style=\"background: #FFFFFF\">"
+            // +
+            // " <tr>" +
+            // " <td align=\"center\">" +
+            // " <h1 style=\"font-family: Arial, Helvetica; font-size: 35px; color:
+            // #010E28;\">" + title
+            // + "</h1>"
+            // +
+            // " <p style=\"font-family: Arial, Helvetica; font-size: 14px; color:
+            // #5B6987;\">" + content
+            // + "</p>"
+            // +
+            // " <p style=\"font-family: Arial, Helvetica; font-size: 35px; color:
+            // #010E28;\">" + token
+            // + "</p>" +
+            // " <p style=\"font-family: Arial, Helvetica; font-size: 14px; color:
+            // #5B6987;\">Hỗ trợ 24/7, gửi email qua <a
+            // href=\"mailto:dthaibao2482004@gmail.com\">dthaibao2482004@gmail.com</a></p>"
+            // +
+            // " </td>" +
+            // " </tr>" +
+            // " </table>" +
+            // " </body>" +
+            // "</html>";
 
             helper.setTo(to);
             helper.setSubject(title);

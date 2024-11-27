@@ -1,11 +1,13 @@
 package com.be.tapchi.pjtapchi.service;
 
+import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.Kiemduyet;
 import com.be.tapchi.pjtapchi.repository.KiemduyetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Dịch vụ KiemduyetService cung cấp các phương thức để thao tác với đối tượng
@@ -22,8 +24,19 @@ public class KiemduyetService {
      *
      * @param id ID của đối tượng Kiemduyet cần xóa
      */
+
     public void deleteKiemduyet(Long id) {
         kiemduyetRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteKiemduyets(Baibao bb) {
+        Integer[] kdid = bb.getKiemduyets().stream()
+                .map(Kiemduyet::getId)
+                .toArray(Integer[]::new);
+        for (Integer id : kdid) {
+            kiemduyetRepository.deleteById(Long.valueOf(id));
+        }
     }
 
     /**
@@ -35,16 +48,16 @@ public class KiemduyetService {
         return kiemduyetRepository.findAll(pageable);
     }
 
-
     /**
      * Lấy một đối tượng Kiemduyet theo ID.
      *
      * @param id ID của đối tượng Kiemduyet cần lấy
      * @return đối tượng Kiemduyet nếu tìm thấy, hoặc Optional rỗng nếu không tìm
-     * thấy
+     *         thấy
      */
     public Kiemduyet getKiemduyetById(Integer id) {
-        return kiemduyetRepository.findById(Long.valueOf(id)).orElseThrow(() -> new IllegalArgumentException("Invalid KiemDuyet ID"));
+        return kiemduyetRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new IllegalArgumentException("Invalid KiemDuyet ID"));
     }
 
     /**

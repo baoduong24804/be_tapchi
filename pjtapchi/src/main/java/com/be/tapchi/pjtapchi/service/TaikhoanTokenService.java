@@ -43,7 +43,7 @@ public class TaikhoanTokenService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    @Value("${app.token.expiration:15}")
+    @Value("${app.token.expiration:5}")
     private long defaultTokenExpiration;
 
     public boolean createPasswordResetTokenForUser(String email) {
@@ -55,7 +55,7 @@ public class TaikhoanTokenService {
             }
 
           
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
             
             LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(defaultTokenExpiration);
@@ -78,7 +78,7 @@ public class TaikhoanTokenService {
             tokenRepository.save(myToken);
 
             sendResetPasswordEmail(user.getEmail(), token, "Đặt lại mật khẩu",
-                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn 15 phút");
+                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn "+defaultTokenExpiration+" phút. Thời gian hiệu lực đến hết: "+formattedExpiryDate);
         } catch (Exception e) {
             // TODO: handle exception
             return false;

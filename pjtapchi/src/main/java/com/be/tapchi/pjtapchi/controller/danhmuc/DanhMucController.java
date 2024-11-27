@@ -1,29 +1,40 @@
 package com.be.tapchi.pjtapchi.controller.danhmuc;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOAddBBDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDanhMuc;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOCreateDanhMuc;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTODanhMucBaiBao2;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTaiKhoanDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTheLoaiDM;
+import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
+import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucBaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
+import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.DanhMucService;
+import com.be.tapchi.pjtapchi.userRole.ManageRoles;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 
@@ -38,7 +49,16 @@ public class DanhMucController {
     DanhMucBaiBaoRepository danhMucBaiBaoRepository;
 
     @Autowired
+    private BaiBaoRepository baiBaoRepository;
+
+    @Autowired
+    private BaibaoService baibaoService;
+
+    @Autowired
     DanhMucRepository danhMucRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Autowired
     TaiKhoanRepository taiKhoanRepository;
@@ -53,7 +73,8 @@ public class DanhMucController {
             api.setSuccess(true);
             api.setMessage("Thành công lấy dữ liệu danh mục theo tuần");
             Map<String, Object> map = new HashMap<>();
-            Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size, 4);
+            Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size);
+            System.out.println(dm.getContent().size() + "sizeeeeeeeee");
             List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
             for (DanhMuc danhMuc : dm.getContent()) {
                 DTOBaiBaoDanhMuc bbDM = new DTOBaiBaoDanhMuc();
@@ -67,6 +88,14 @@ public class DanhMucController {
                 bbDM.setNgaytao(danhMuc.getNgaytao());
                 List<DTOBaiBaoDM> listbbDM = new ArrayList<>();
                 for (Danhmucbaibao dmbb : danhMuc.getDanhmucbaibaos()) {
+                    if (dmbb.getBaibao().getStatus() == null) {
+                        continue;
+                    }
+
+                    if (dmbb.getBaibao().getStatus() != 5) {
+                        continue;
+                    }
+
                     DTOTaiKhoanDM tk1 = new DTOTaiKhoanDM();
                     tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
                     tk1.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
@@ -172,38 +201,69 @@ public class DanhMucController {
         }
     }
 
-
     // @GetMapping("/all")
     // public ResponseEntity<ApiResponse<Page<DanhMuc>>> getAllDanhMuc(
-    //         @RequestParam(defaultValue = "0") int page,
-    //         @RequestParam(defaultValue = "6") int size) {
-    //     try {
-    //         Pageable pageable = PageRequest.of(page, size);
-    //         Page<DanhMuc> danhMucPage = danhMucService.getAllDanhMuc(pageable);
-    //         ApiResponse<Page<DanhMuc>> response = new ApiResponse<>(true, "Danh sách danh mục", danhMucPage);
+    // @RequestParam(defaultValue = "0") int page,
+    // @RequestParam(defaultValue = "6") int size) {
+    // try {
+    // Pageable pageable = PageRequest.of(page, size);
+    // Page<DanhMuc> danhMucPage = danhMucService.getAllDanhMuc(pageable);
+    // ApiResponse<Page<DanhMuc>> response = new ApiResponse<>(true, "Danh sách danh
+    // mục", danhMucPage);
 
-    //         if (danhMucPage.isEmpty()) {
-    //             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    //         } else {
-    //             return ResponseEntity.ok().body(response);
-    //         }
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi lấy danh mục.", null));
-    //     }
+    // if (danhMucPage.isEmpty()) {
+    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    // } else {
+    // return ResponseEntity.ok().body(response);
+    // }
+    // } catch (Exception e) {
+    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    // .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi lấy danh mục.", null));
+    // }
     // }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> createDanhMuc(@RequestBody(required = false) DTOCreateDanhMuc danhMuc) {
+    public ResponseEntity<ApiResponse<?>> createDanhMuc(@Valid @RequestBody(required = false) DTOCreateDanhMuc danhMuc,
+            BindingResult bindingResult) {
         try {
+            try {
+                if (danhMuc.getToken() == null) {
+                    ApiResponse<?> response = new ApiResponse<>(false, "Lỗi trống", null);
+                    return ResponseEntity.badRequest().body(response);
+                }
+                Taikhoan tk = jwtUtil.getTaikhoanFromToken(danhMuc.getToken());
+                if (tk == null) {
+                    ApiResponse<Page<?>> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
+                    return ResponseEntity.badRequest().body(response);
+                }
+                if (!jwtUtil.checkRolesFromToken(danhMuc.getToken(), ManageRoles.getEDITORRole())) {
+                    ApiResponse<?> response = new ApiResponse<>(false, "Không được phép truy cập", "Yêu cầu EDITTOR");
+                    return ResponseEntity.badRequest().body(response);
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                ApiResponse<Page<?>> response = new ApiResponse<>(false, "Lỗi token", null);
+                return ResponseEntity.badRequest().body(response);
+            }
+            // kiem tra du lieu bi trong
+            if (bindingResult.hasErrors()) {
+                String errorMessage = bindingResult.getFieldErrors().stream()
+                        .map(error -> error.getDefaultMessage())
+                        .collect(Collectors.joining(", "));
+                ApiResponse<?> response = new ApiResponse<>(false, "Không được để trống dữ liệu", errorMessage);
+                return ResponseEntity.badRequest().body(response);
+            }
+            if (danhMuc.getDanhmucId() == null) {
+                List<DanhMuc> list = danhMucRepository.findByTuanAndSo(Integer.valueOf(danhMuc.getTuan()),
+                        Integer.valueOf(danhMuc.getSo()));
+                if (list.size() > 0) {
+                    ApiResponse<?> response = new ApiResponse<>(false, "Danh mục có tuần và số đã tồn tại", null);
+                    return ResponseEntity.ok().body(response);
+                }
+            }
 
-            List<DanhMuc> list = danhMucRepository.findByTuanAndSo(Integer.valueOf(danhMuc.getTuan()),
-                    Integer.valueOf(danhMuc.getSo()));
-            if (list.size() > 0) {
-                ApiResponse<?> response = new ApiResponse<>(false, "Danh mục có tuần và số đã tồn tại", null);
-                return ResponseEntity.ok().body(response);
-            } 
-                DanhMuc dMuc = new DanhMuc();
+            DanhMuc dMuc = new DanhMuc();
+            if (danhMuc.getDanhmucId() == null) {
                 dMuc.setTieude(danhMuc.getTieude());
                 dMuc.setMota(danhMuc.getMota());
                 dMuc.setNgaytao(LocalDate.now());
@@ -212,16 +272,100 @@ public class DanhMucController {
                 dMuc.setUrl(danhMuc.getUrl());
                 dMuc.setStatus(0);
                 danhMucService.saveDanhMuc(dMuc);
-            
+                ApiResponse<?> response = new ApiResponse<>(true, "them danh muc successful", null);
+                return ResponseEntity.ok().body(response);
+            } else {
+                DanhMuc dMuc2 = danhMucRepository.findById(Long.valueOf(danhMuc.getDanhmucId())).orElse(null);
+                if(dMuc2 == null){
+                    ApiResponse<?> response = new ApiResponse<>(true, "ko tim thay danh muc", null);
+                    return ResponseEntity.badRequest().body(response);
+                }
+                dMuc2.setTieude(danhMuc.getTieude());
+                dMuc2.setMota(danhMuc.getMota());
+                // dMuc.setNgaytao(LocalDate.now());
+                dMuc2.setSo(Integer.valueOf(danhMuc.getSo()));
+                dMuc2.setTuan(Integer.valueOf(danhMuc.getTuan()));
+                if (dMuc2.getUrl() != null) {
+                    dMuc2.setUrl(danhMuc.getUrl());
+                }
+                dMuc2.setStatus(0);
+                danhMucService.saveDanhMuc(dMuc2);
+                ApiResponse<?> response = new ApiResponse<>(true, "cap nhat danh muc successful", null);
+                return ResponseEntity.ok().body(response);
+            }
 
-            ApiResponse<?> response = new ApiResponse<>(true, "Create danh muc successful", null);
-            return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(false, "Số và tuần không hợp lệ", null));
         }
     }
+
+    // @PostMapping("/create")
+    // public ResponseEntity<ApiResponse<?>> updateDanhMuc(@Valid
+    // @RequestBody(required = false) DTOCreateDanhMuc danhMuc,
+    // BindingResult bindingResult) {
+    // try {
+    // try {
+    // if (danhMuc.getToken() == null) {
+    // ApiResponse<?> response = new ApiResponse<>(false, "Lỗi trống", null);
+    // return ResponseEntity.badRequest().body(response);
+    // }
+    // Taikhoan tk = jwtUtil.getTaikhoanFromToken(danhMuc.getToken());
+    // if (tk == null) {
+    // ApiResponse<Page<?>> response = new ApiResponse<>(false, "Lỗi token không hợp
+    // lệ", null);
+    // return ResponseEntity.badRequest().body(response);
+    // }
+    // if (!jwtUtil.checkRolesFromToken(danhMuc.getToken(),
+    // ManageRoles.getEDITORRole())) {
+    // ApiResponse<?> response = new ApiResponse<>(false, "Không được phép truy
+    // cập", "Yêu cầu EDITTOR");
+    // return ResponseEntity.badRequest().body(response);
+    // }
+    // } catch (Exception e) {
+    // // TODO: handle exception
+    // ApiResponse<?> response = new ApiResponse<>(false, "Lỗi token", null);
+    // return ResponseEntity.badRequest().body(response);
+    // }
+
+    // // kiem tra du lieu bi trong
+    // if (bindingResult.hasErrors()) {
+    // String errorMessage = bindingResult.getFieldErrors().stream()
+    // .map(error -> error.getDefaultMessage())
+    // .collect(Collectors.joining(", "));
+    // ApiResponse<?> response = new ApiResponse<>(false, "Không được để trống dữ
+    // liệu", errorMessage);
+    // return ResponseEntity.badRequest().body(response);
+    // }
+
+    // List<DanhMuc> list =
+    // danhMucRepository.findByTuanAndSo(Integer.valueOf(danhMuc.getTuan()),
+    // Integer.valueOf(danhMuc.getSo()));
+    // if (list.size() > 0) {
+    // ApiResponse<?> response = new ApiResponse<>(false, "Danh mục có tuần và số đã
+    // tồn tại", null);
+    // return ResponseEntity.ok().body(response);
+    // }
+    // DanhMuc dMuc = new DanhMuc();
+    // dMuc.setTieude(danhMuc.getTieude());
+    // dMuc.setMota(danhMuc.getMota());
+    // dMuc.setNgaytao(LocalDate.now());
+    // dMuc.setSo(Integer.valueOf(danhMuc.getSo()));
+    // dMuc.setTuan(Integer.valueOf(danhMuc.getTuan()));
+    // dMuc.setUrl(danhMuc.getUrl());
+    // dMuc.setStatus(0);
+    // danhMucService.saveDanhMuc(dMuc);
+
+    // ApiResponse<?> response = new ApiResponse<>(true, "Create danh muc
+    // successful", null);
+    // return ResponseEntity.ok().body(response);
+    // } catch (Exception e) {
+    // System.out.println(e.getMessage());
+    // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    // .body(new ApiResponse<>(false, "Số và tuần không hợp lệ", null));
+    // }
+    // }
 
     @GetMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<String>> deleteDanhMuc(@PathVariable("id") Long id) {
@@ -256,6 +400,61 @@ public class DanhMucController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi tìm kiếm danh mục.", null));
         }
+    }
+
+    @PostMapping("/add/baibao/danhmuc")
+    public ResponseEntity<?> addBaiBaoToDanhMuc(@RequestBody(required = false) DTOAddBBDM entity) {
+        // TODO: process POST request
+
+        try {
+            if (entity.getToken() == null || entity.getBaibaoId() == null || entity.getDanhmucId() == null) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Lỗi trống", null);
+                return ResponseEntity.badRequest().body(response);
+            }
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
+            if (tk == null) {
+                ApiResponse<Page<?>> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
+                return ResponseEntity.badRequest().body(response);
+            }
+            if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getEDITORRole())) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Không được phép truy cập", "Yêu cầu EDITTOR");
+                return ResponseEntity.badRequest().body(response);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            ApiResponse<Page<?>> response = new ApiResponse<>(false, "Lỗi token", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        try {
+            Baibao bb = baiBaoRepository.findById(Integer.valueOf(entity.getBaibaoId())).orElse(null);
+            DanhMuc dm = danhMucRepository.findById(Long.valueOf(entity.getDanhmucId())).orElse(null);
+            if (bb == null) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Không tìm thấy bb", null);
+                return ResponseEntity.badRequest().body(response);
+            }
+            if (dm == null) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Không tìm thấy dm", null);
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            Danhmucbaibao dmbb = new Danhmucbaibao();
+            bb.setStatus(7);
+            bb.setNgaydang(LocalDate.now());
+            dmbb.setBaibao(bb);
+            dmbb.setDanhmuc(dm);
+            Danhmucbaibao sdmbb = danhMucBaiBaoRepository.save(dmbb);
+
+            ApiResponse<?> response = new ApiResponse<>(true, "Thêm bb vào dm thành công", sdmbb);
+            return ResponseEntity.ok().body(response);
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            ApiResponse<?> response = new ApiResponse<>(false, "Lỗi khi thêm bb vào dm", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // return entity;
     }
 
     @PostMapping("/update/{id}")

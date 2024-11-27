@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DTOBaiBaoEditor {
+public class DTOBaiBaoAuthor {
     private String id;
     private String tieude;
     private String noidung;
@@ -20,8 +20,7 @@ public class DTOBaiBaoEditor {
     private Integer status;
     private String file;
     private String url;
-    private TaikhoanED taikhoans;
-    private List<KiemduyetED> kiemduyet;
+    private List<KiemduyetAT> kiemduyet;
     //private String token;
     
     
