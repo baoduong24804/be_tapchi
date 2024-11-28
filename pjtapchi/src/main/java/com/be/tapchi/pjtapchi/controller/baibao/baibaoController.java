@@ -5,7 +5,7 @@ import com.be.tapchi.pjtapchi.controller.baibao.model.BaibaoResponseDTO;
 import com.be.tapchi.pjtapchi.controller.baibao.model.DTOBaiBao;
 import com.be.tapchi.pjtapchi.controller.baibao.model.DTOBaiBaoAuthor;
 import com.be.tapchi.pjtapchi.controller.baibao.model.DTOBaiBaoEditor;
-
+import com.be.tapchi.pjtapchi.controller.baibao.model.DTOKeyword;
 import com.be.tapchi.pjtapchi.controller.baibao.model.DTOToKen;
 import com.be.tapchi.pjtapchi.controller.baibao.model.KiemduyetAT;
 import com.be.tapchi.pjtapchi.controller.baibao.model.KiemduyetED;
@@ -43,6 +43,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -472,6 +475,27 @@ public class baibaoController {
         }
 
     }
+
+    @PostMapping("search/keyword")
+    public ResponseEntity<?> postMethodName(@RequestBody DTOKeyword entity) {
+        //TODO: process POST request
+        try {
+            if(entity.getKeyword() == null){
+                return ResponseEntity.badRequest().body(null);
+            }else{
+                if(entity.getKeyword().isEmpty()){
+
+                }else{
+                    // tim
+                }
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return null;
+    }
+    
 
     // private BaibaoResponseDTO convertToDTO(Baibao baibao) {
     // String tieuDe = null;

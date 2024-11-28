@@ -6,6 +6,8 @@ import com.be.tapchi.pjtapchi.model.Theloai;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -39,5 +41,7 @@ public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
 
     Page<Baibao> findBaibaoByNoidungContainingAndStatus(String noidung, Integer status, Pageable pageable);
 
+    @Query("SELECT b FROM Baibao b WHERE b.keyword LIKE %:keyword%")
+    Page<Baibao> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
 }
