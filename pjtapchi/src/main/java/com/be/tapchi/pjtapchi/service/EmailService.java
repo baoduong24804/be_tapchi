@@ -104,7 +104,7 @@ public class EmailService {
     public void deleteTokenExpiryDate() {
         try {
             List<EmailVerification> list = emailVerificationRepository.findByCreatedAtBefore(LocalDateTime.now());
-            System.out.println("haahhah" + list.size());
+            //System.out.println("haahhah" + list.size());
             if (list == null || list.size() == 0) {
                 System.out.println("Ko co email verify het han");
                 return;

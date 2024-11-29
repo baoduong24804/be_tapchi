@@ -481,19 +481,23 @@ public class baibaoController {
         //TODO: process POST request
         try {
             if(entity.getKeyword() == null){
-                return ResponseEntity.badRequest().body(null);
+                // keyword null
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Không tìm thấy bài báo phù hợp", null));
             }else{
                 if(entity.getKeyword().isEmpty()){
-
+                    // de trong keyword
+                    return ResponseEntity.badRequest().body(new ApiResponse<>(false, "1", null));
                 }else{
-                    // tim
+                    // tim kiem theo keyword
+                    return ResponseEntity.badRequest().body(new ApiResponse<>(false, "2", null));
                 }
             }
 
         } catch (Exception e) {
             // TODO: handle exception
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi khi tìm kiếm bài báo", e.getMessage()));
         }
-        return null;
+        
     }
     
 

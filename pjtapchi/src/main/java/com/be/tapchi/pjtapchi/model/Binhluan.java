@@ -9,6 +9,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Represents a comment (Binhluan) entity.
@@ -41,7 +43,7 @@ public class Binhluan {
      * The timestamp when the comment was made.
      */
     @Column(name = "thoigianbl")
-    private Instant thoigianbl;
+    private LocalDateTime thoigianbl;
 
     /**
      * The content of the comment.
