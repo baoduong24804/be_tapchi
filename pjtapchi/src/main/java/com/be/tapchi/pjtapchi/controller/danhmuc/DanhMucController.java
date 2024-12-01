@@ -74,7 +74,7 @@ public class DanhMucController {
             api.setMessage("Thành công lấy dữ liệu danh mục theo tuần");
             Map<String, Object> map = new HashMap<>();
             Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size);
-            System.out.println(dm.getContent().size() + "sizeeeeeeeee");
+            //System.out.println(dm.getContent().size() + "sizeeeeeeeee");
             List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
             for (DanhMuc danhMuc : dm.getContent()) {
                 DTOBaiBaoDanhMuc bbDM = new DTOBaiBaoDanhMuc();
@@ -92,7 +92,7 @@ public class DanhMucController {
                         continue;
                     }
 
-                    if (dmbb.getBaibao().getStatus() != 5) {
+                    if (dmbb.getBaibao().getStatus() != 7) {
                         continue;
                     }
 
