@@ -32,11 +32,18 @@ public interface DanhMucRepository extends JpaRepository<DanhMuc, Long> {
 
     List<DanhMuc> findByTuanAndSo(Integer tuan, Integer so);
 
-
     @Query("SELECT d FROM DanhMuc d LEFT JOIN d.danhmucbaibaos b WHERE d.ngaytao BETWEEN :startOfWeek AND :endOfWeek")
     Page<DanhMuc> findDanhmucByWeekAndStatus(
             @Param("startOfWeek") LocalDate startOfWeek,
             @Param("endOfWeek") LocalDate endOfWeek,
             Pageable pageable);
+
+    // @Query("SELECT b.danhmucbaibaos.danhmuc FROM Baibao b WHERE LOWER(b.keyword)
+    // LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    // Page<DanhMuc> findDanhmucByKeyword(@Param("keyword") String keyword, Pageable
+    // pageable);
+
+    @Query("SELECT d.danhmuc FROM Baibao b JOIN b.danhmucbaibaos d WHERE LOWER(b.keyword) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<DanhMuc> findDanhmucByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
 }

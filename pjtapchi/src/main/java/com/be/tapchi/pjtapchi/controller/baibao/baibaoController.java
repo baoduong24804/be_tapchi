@@ -10,13 +10,23 @@ import com.be.tapchi.pjtapchi.controller.baibao.model.DTOToKen;
 import com.be.tapchi.pjtapchi.controller.baibao.model.KiemduyetAT;
 import com.be.tapchi.pjtapchi.controller.baibao.model.KiemduyetED;
 import com.be.tapchi.pjtapchi.controller.baibao.model.TaikhoanED;
-
+import com.be.tapchi.pjtapchi.controller.danhmuc.DanhMucController;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDM;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDanhMuc;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBinhluan;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTaiKhoanDM;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTheLoaiDM;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOThich;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Baibao;
+import com.be.tapchi.pjtapchi.model.Binhluan;
+import com.be.tapchi.pjtapchi.model.DanhMuc;
+import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
 import com.be.tapchi.pjtapchi.model.Kiemduyet;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Theloai;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
 import com.be.tapchi.pjtapchi.repository.KiemduyetRepository;
 import com.be.tapchi.pjtapchi.repository.TheloaiRepository;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
@@ -43,9 +53,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -69,6 +76,9 @@ public class baibaoController {
 
     @Autowired
     private TheloaiRepository theloaiRepository;
+
+    @Autowired
+    private DanhMucRepository danhMucRepository;
 
     @Autowired
     private BaiBaoRepository baiBaoRepository;
@@ -157,10 +167,15 @@ public class baibaoController {
             data.put("baibaos", list);
             Map<String, Object> phantrang = new HashMap<>();
 
-            phantrang.put("trang", pageResult.getNumber());
-            phantrang.put("kichthuoc", pageResult.getSize());
-            phantrang.put("tongbaibao", pageResult.getTotalElements());
-            phantrang.put("tongtrang", pageResult.getTotalPages());
+            // phantrang.put("trang", pageResult.getNumber());
+            // phantrang.put("kichthuoc", pageResult.getSize());
+            // phantrang.put("tongbaibao", pageResult.getTotalElements());
+            // phantrang.put("tongtrang", pageResult.getTotalPages());
+
+            phantrang.put("totalPage", String.valueOf(pageResult.getTotalPages()));
+            phantrang.put("pageNumber", String.valueOf(pageResult.getNumber()));
+            phantrang.put("pageSize", String.valueOf(pageResult.getSize()));
+            phantrang.put("totalElements", String.valueOf(pageResult.getTotalElements()));
             // Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
             data.put("phantrang", phantrang);
             ApiResponse<?> response = new ApiResponse<>(true, "Fetch bai bao successful",
@@ -353,7 +368,7 @@ public class baibaoController {
         ApiResponse<?> response = new ApiResponse<>(true, "Delete bai bao successful", null);
         return ResponseEntity.ok().body(response);
     }
-    
+
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<?>> createBaibao(@Valid @RequestBody DTOBaiBao entity,
             BindingResult bindingResult) {
@@ -392,7 +407,6 @@ public class baibaoController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
 
-            
             Theloai tl = theloaiRepository.findTheloaiById(Integer.valueOf(entity.getTheloaiId()));
             if (tl == null) {
                 ApiResponse<?> response = new ApiResponse<>(false, "Lỗi khi tìm thể loại", null);
@@ -406,7 +420,6 @@ public class baibaoController {
                         ApiResponse<?> response = new ApiResponse<>(false, "Lỗi khi tim bai bao", null);
                         return ResponseEntity.badRequest().body(response);
                     }
-                    
 
                     Integer[] kdid = bb.getKiemduyets().stream().map(Kiemduyet::getId).toArray(Integer[]::new);
                     if (kdid.length > 0) {
@@ -423,9 +436,9 @@ public class baibaoController {
                         System.out.println("Da xoa kiem duyet");
                     }
 
-                    //kiemduyetService.deleteKiemduyets(bb);
+                    // kiemduyetService.deleteKiemduyets(bb);
 
-                    //kiemduyetRepository.deleteById(Long.valueOf(14));
+                    // kiemduyetRepository.deleteById(Long.valueOf(14));
 
                     bb.setTieude(entity.getTieude());
                     bb.setNoidung(entity.getNoidung());
@@ -477,29 +490,109 @@ public class baibaoController {
     }
 
     @PostMapping("search/keyword")
-    public ResponseEntity<?> postMethodName(@RequestBody DTOKeyword entity) {
-        //TODO: process POST request
+    public ResponseEntity<?> postMethodName(@RequestBody DTOKeyword entity, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+        // TODO: process POST request
         try {
-            if(entity.getKeyword() == null){
+            if (entity.getKeyword() == null) {
                 // keyword null
-                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Không tìm thấy bài báo phù hợp", null));
-            }else{
-                if(entity.getKeyword().isEmpty()){
+                return ResponseEntity.ok()
+                        .body(new ApiResponse<>(true, "Không tìm thấy bài báo phù hợp", null));
+            } else {
+                if (entity.getKeyword().isEmpty() || entity.getKeyword().trim().isEmpty()) {
                     // de trong keyword
-                    return ResponseEntity.badRequest().body(new ApiResponse<>(false, "1", null));
-                }else{
+                    return ResponseEntity.ok().body(new ApiResponse<>(true, "Vui lòng nhập từ khóa", null));
+                } else {
                     // tim kiem theo keyword
-                    return ResponseEntity.badRequest().body(new ApiResponse<>(false, "2", null));
+                    Pageable pageable = PageRequest.of(page, size);
+                    Page<DanhMuc> result = danhMucRepository.findDanhmucByKeyword(entity.getKeyword(), pageable);
+                    ///
+                    Map<String, Object> map = new HashMap<>();
+                    List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
+                    for (DanhMuc danhMuc : result.getContent()) {
+                        DTOBaiBaoDanhMuc bbDM = new DTOBaiBaoDanhMuc();
+                        bbDM.setDanhmucId(String.valueOf(danhMuc.getDanhmucId()));
+                        bbDM.setTieude(danhMuc.getTieude());
+                        bbDM.setMota(danhMuc.getMota());
+                        bbDM.setTuan(String.valueOf(danhMuc.getTuan()));
+                        bbDM.setSo(String.valueOf(danhMuc.getSo()));
+                        bbDM.setUrl(danhMuc.getUrl());
+                        bbDM.setStatus(danhMuc.getStatus() + "");
+                        bbDM.setNgaytao(danhMuc.getNgaytao());
+                        List<DTOBaiBaoDM> listbbDM = new ArrayList<>();
+                        for (Danhmucbaibao dmbb : danhMuc.getDanhmucbaibaos()) {
+                            if (dmbb.getBaibao().getStatus() == null) {
+                                continue;
+                            }
+        
+                            if (dmbb.getBaibao().getStatus() != 7) {
+                                continue;
+                            }
+        
+                            DTOTaiKhoanDM tk1 = new DTOTaiKhoanDM();
+                            //tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
+                            tk1.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
+                            DTOTheLoaiDM tl1 = new DTOTheLoaiDM();
+                            tl1.setTheloaiId(String.valueOf(dmbb.getBaibao().getTheloai().getId()));
+                            tl1.setTen(dmbb.getBaibao().getTheloai().getTenloai());
+                            DTOBaiBaoDM bb1 = new DTOBaiBaoDM();
+                            bb1.setBaibaoId(String.valueOf(dmbb.getBaibao().getId()));
+                            bb1.setTieude(dmbb.getBaibao().getTieude());
+                            bb1.setNoidung(dmbb.getBaibao().getNoidung());
+                            bb1.setUrl(dmbb.getBaibao().getUrl());
+                            bb1.setFile(dmbb.getBaibao().getFile());
+                            bb1.setKeyword(dmbb.getBaibao().getKeyword());
+                            bb1.setNgaydang(dmbb.getBaibao().getNgaydang());
+                            bb1.setStatus(String.valueOf(dmbb.getBaibao().getStatus()));
+                            bb1.setTaikhoan(tk1);
+                            bb1.setTheloai(tl1);
+                            bb1.setNgaytao(dmbb.getBaibao().getNgaytao());
+                            int slike = 0;
+                            if(dmbb.getBaibao().getThichs() != null){
+                                if(dmbb.getBaibao().getThichs().size() > 0){
+                                    slike = dmbb.getBaibao().getThichs().size();
+                                }
+                            }
+                            DTOThich thich = new DTOThich();
+                            thich.setThich(String.valueOf(slike));
+                            bb1.setThich(thich);
+                            // bl
+                            List<DTOBinhluan> list = new ArrayList<>();
+                            for (Binhluan bl : dmbb.getBaibao().getBinhluans()) {
+                                DTOBinhluan dtoBinhluan = new DTOBinhluan();
+                                dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
+                                dtoBinhluan.setNoidung(bl.getNoidung());
+                                dtoBinhluan.setThoigian(DanhMucController.formatDateTime(bl.getThoigianbl()+""));
+                                list.add(dtoBinhluan);
+                            }
+        
+                            bb1.setBinhluans(list);
+                            
+                            listbbDM.add(bb1);
+        
+                        }
+                        bbDM.setBaibao(listbbDM);
+                        listdata.add(bbDM);
+                    }
+                    map.put("data", listdata);
+                    Map<String, Object> phantrang = new HashMap<>();
+                    phantrang.put("totalPage", String.valueOf(result.getTotalPages()));
+                    phantrang.put("pageNumber", String.valueOf(result.getNumber()));
+                    phantrang.put("pageSize", String.valueOf(result.getSize()));
+                    phantrang.put("totalElements", String.valueOf(result.getTotalElements()));
+                    map.put("phantrang", phantrang);
+                    ///
+                    return ResponseEntity.ok().body(new ApiResponse<>(true, "2", map));
                 }
             }
 
         } catch (Exception e) {
             // TODO: handle exception
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi khi tìm kiếm bài báo", e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse<>(false, "Lỗi khi tìm kiếm bài báo", e.getMessage()));
         }
-        
+
     }
-    
 
     // private BaibaoResponseDTO convertToDTO(Baibao baibao) {
     // String tieuDe = null;

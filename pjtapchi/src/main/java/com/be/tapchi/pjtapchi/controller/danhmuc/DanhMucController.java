@@ -4,15 +4,19 @@ import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOAddBBDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBaiBaoDanhMuc;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOBinhluan;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOCreateDanhMuc;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTODanhMucBaiBao2;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTaiKhoanDM;
 import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOTheLoaiDM;
+import com.be.tapchi.pjtapchi.controller.danhmuc.model.DTOThich;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Baibao;
+import com.be.tapchi.pjtapchi.model.Binhluan;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.model.Thich;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucBaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
@@ -30,9 +34,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,6 +75,23 @@ public class DanhMucController {
 
     @Autowired
     TaiKhoanRepository taiKhoanRepository;
+
+    public static String formatDateTime(String inputDateTime) {
+        try {
+            // Định dạng của chuỗi đầu vào
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+            // Định dạng của chuỗi đầu ra
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+            // Parse chuỗi đầu vào sang LocalDateTime
+            LocalDateTime dateTime = LocalDateTime.parse(inputDateTime, inputFormatter);
+            // Định dạng lại chuỗi đầu ra
+            return dateTime.format(outputFormatter);
+        } catch (Exception e) {
+            // Xử lý ngoại lệ nếu chuỗi không đúng định dạng
+            return "Invalid date format: " + e.getMessage();
+        }
+    }
 
     @PostMapping("/get/week")
     public ResponseEntity<ApiResponse<?>> getDanhmucInCurrentWeek(
@@ -97,7 +127,7 @@ public class DanhMucController {
                     }
 
                     DTOTaiKhoanDM tk1 = new DTOTaiKhoanDM();
-                    tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
+                    //tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
                     tk1.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
                     DTOTheLoaiDM tl1 = new DTOTheLoaiDM();
                     tl1.setTheloaiId(String.valueOf(dmbb.getBaibao().getTheloai().getId()));
@@ -114,6 +144,27 @@ public class DanhMucController {
                     bb1.setTaikhoan(tk1);
                     bb1.setTheloai(tl1);
                     bb1.setNgaytao(dmbb.getBaibao().getNgaytao());
+                    int slike = 0;
+                    if(dmbb.getBaibao().getThichs() != null){
+                        if(dmbb.getBaibao().getThichs().size() > 0){
+                            slike = dmbb.getBaibao().getThichs().size();
+                        }
+                    }
+                    DTOThich thich = new DTOThich();
+                    thich.setThich(String.valueOf(slike));
+                    bb1.setThich(thich);
+                    // bl
+                    List<DTOBinhluan> list = new ArrayList<>();
+                    for (Binhluan bl : dmbb.getBaibao().getBinhluans()) {
+                        DTOBinhluan dtoBinhluan = new DTOBinhluan();
+                        dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
+                        dtoBinhluan.setNoidung(bl.getNoidung());
+                        dtoBinhluan.setThoigian(formatDateTime(bl.getThoigianbl()+""));
+                        list.add(dtoBinhluan);
+                    }
+
+                    bb1.setBinhluans(list);
+                    
                     listbbDM.add(bb1);
 
                 }
@@ -170,7 +221,7 @@ public class DanhMucController {
                     et2.setStatus(dmbb.getBaibao().getStatus() + "");
                     et2.setUrl(dmbb.getBaibao().getUrl());
                     DTOTaiKhoanDM tk = new DTOTaiKhoanDM();
-                    tk.setTaikhoanId(dmbb.getBaibao().getTaikhoan().getTaikhoan_id() + "");
+                    //tk.setTaikhoanId(dmbb.getBaibao().getTaikhoan().getTaikhoan_id() + "");
                     tk.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
                     et2.setTaikhoan(tk);
                     DTOTheLoaiDM tl = new DTOTheLoaiDM();
@@ -186,10 +237,10 @@ public class DanhMucController {
 
             Map<String, Object> phantrang = new HashMap<>();
 
-            phantrang.put("trang", danhMucPage.getNumber());
-            phantrang.put("kichthuoc", danhMucPage.getSize());
-            phantrang.put("tongbaibao", danhMucPage.getTotalElements());
-            phantrang.put("tongtrang", danhMucPage.getTotalPages());
+            phantrang.put("totalPage", String.valueOf(danhMucPage.getTotalPages()));
+            phantrang.put("pageNumber", String.valueOf(danhMucPage.getNumber()));
+            phantrang.put("pageSize", String.valueOf(danhMucPage.getSize()));
+            phantrang.put("totalElements", String.valueOf(danhMucPage.getTotalElements()));
             // Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
             data.put("phantrang", phantrang);
             ApiResponse<?> response = new ApiResponse<>(true, "Danh sách danh mục", data);

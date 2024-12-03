@@ -1,6 +1,7 @@
 package com.be.tapchi.pjtapchi.controller.danhmuc.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,7 @@ public class DTOBaiBaoDM {
     private LocalDate ngaydang;
     private DTOTaiKhoanDM taikhoan;
     private DTOTheLoaiDM theloai;
+    private DTOThich thich;
+    private List<DTOBinhluan> binhluans;
     
 }

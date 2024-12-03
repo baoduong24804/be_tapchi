@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DTOTaiKhoanDM {
-    //private String taikhoanId;
-    private String hovaten;
+public class DTOThich {
+    private String thich;
 }

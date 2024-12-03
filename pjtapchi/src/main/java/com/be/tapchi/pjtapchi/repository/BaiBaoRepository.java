@@ -34,14 +34,18 @@ public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
 
     Page<Baibao> findBaibaoByNgaydangAndStatus(LocalDate ngaydang, Integer status, Pageable pageable);
 
-    Page<Baibao> findBaibaoByNgaydangBetweenAndStatus(LocalDate date1, LocalDate date2, Integer status, Pageable pageable);
-
+    Page<Baibao> findBaibaoByNgaydangBetweenAndStatus(LocalDate date1, LocalDate date2, Integer status,
+            Pageable pageable);
 
     Page<Baibao> findBaibaoByTieudeContainingAndStatus(String tieude, Integer status, Pageable pageable);
 
     Page<Baibao> findBaibaoByNoidungContainingAndStatus(String noidung, Integer status, Pageable pageable);
 
-    @Query("SELECT b FROM Baibao b WHERE b.keyword LIKE %:keyword%")
+    // @Query("SELECT b FROM Baibao b WHERE b.keyword LIKE %:keyword%")
+    // Page<Baibao> findByKeyword(@Param("keyword") String keyword, Pageable
+    // pageable);
+
+    @Query("SELECT b FROM Baibao b WHERE LOWER(b.keyword) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Baibao> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
 }
