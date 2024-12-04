@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DTOThich {
     private String thich;
+    private boolean dathich;
 }

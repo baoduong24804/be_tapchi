@@ -25,10 +25,12 @@ import com.be.tapchi.pjtapchi.model.Danhmucbaibao;
 import com.be.tapchi.pjtapchi.model.Kiemduyet;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Theloai;
+import com.be.tapchi.pjtapchi.model.Thich;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
 import com.be.tapchi.pjtapchi.repository.KiemduyetRepository;
 import com.be.tapchi.pjtapchi.repository.TheloaiRepository;
+import com.be.tapchi.pjtapchi.repository.ThichRepository;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.BinhluanService;
 import com.be.tapchi.pjtapchi.service.KiemduyetService;
@@ -61,6 +63,9 @@ public class baibaoController {
 
     @Autowired
     BinhluanService BinhluanService;
+
+    @Autowired
+    private ThichRepository thichRepository;
 
     @Autowired
     private KiemduyetRepository kiemduyetRepository;
@@ -509,6 +514,12 @@ public class baibaoController {
                     ///
                     Map<String, Object> map = new HashMap<>();
                     List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
+                    Taikhoan tk = null;
+                    if (entity.getToken() != null) {
+                        if (!entity.getToken().trim().isEmpty()) {
+                            tk = jwtUtil.getTaikhoanFromToken(entity.getToken() + "".trim());
+                        }
+                    }
                     for (DanhMuc danhMuc : result.getContent()) {
                         DTOBaiBaoDanhMuc bbDM = new DTOBaiBaoDanhMuc();
                         bbDM.setDanhmucId(String.valueOf(danhMuc.getDanhmucId()));
@@ -524,13 +535,13 @@ public class baibaoController {
                             if (dmbb.getBaibao().getStatus() == null) {
                                 continue;
                             }
-        
+
                             if (dmbb.getBaibao().getStatus() != 7) {
                                 continue;
                             }
-        
+
                             DTOTaiKhoanDM tk1 = new DTOTaiKhoanDM();
-                            //tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
+                            // tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
                             tk1.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
                             DTOTheLoaiDM tl1 = new DTOTheLoaiDM();
                             tl1.setTheloaiId(String.valueOf(dmbb.getBaibao().getTheloai().getId()));
@@ -548,28 +559,47 @@ public class baibaoController {
                             bb1.setTheloai(tl1);
                             bb1.setNgaytao(dmbb.getBaibao().getNgaytao());
                             int slike = 0;
-                            if(dmbb.getBaibao().getThichs() != null){
-                                if(dmbb.getBaibao().getThichs().size() > 0){
+                            if (dmbb.getBaibao().getThichs() != null) {
+                                if (dmbb.getBaibao().getThichs().size() > 0) {
                                     slike = dmbb.getBaibao().getThichs().size();
                                 }
                             }
                             DTOThich thich = new DTOThich();
                             thich.setThich(String.valueOf(slike));
                             bb1.setThich(thich);
+
+                            if (tk != null) {
+                                Thich islike = thichRepository
+                                        .findByBaibaoidAndTaikhoanid(Long.valueOf(dmbb.getBaibao().getId()),
+                                                Long.valueOf(tk.getTaikhoan_id()))
+                                        .orElse(null);
+                                if (islike != null) {
+
+                                    if (islike.getStatus() == 1) {
+                                        thich.setDathich(true);
+                                    } else {
+                                        thich.setDathich(false);
+                                    }
+
+                                } else {
+                                    thich.setDathich(false);
+                                }
+                            }
+
                             // bl
                             List<DTOBinhluan> list = new ArrayList<>();
                             for (Binhluan bl : dmbb.getBaibao().getBinhluans()) {
                                 DTOBinhluan dtoBinhluan = new DTOBinhluan();
                                 dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
                                 dtoBinhluan.setNoidung(bl.getNoidung());
-                                dtoBinhluan.setThoigian(DanhMucController.formatDateTime(bl.getThoigianbl()+""));
+                                dtoBinhluan.setThoigian(DanhMucController.formatDateTime(bl.getThoigianbl() + ""));
                                 list.add(dtoBinhluan);
                             }
-        
+
                             bb1.setBinhluans(list);
-                            
+
                             listbbDM.add(bb1);
-        
+
                         }
                         bbDM.setBaibao(listbbDM);
                         listdata.add(bbDM);

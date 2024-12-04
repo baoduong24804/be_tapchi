@@ -82,9 +82,9 @@ public class likeController {
             //cap nhat like
             Thich ulike = thichRepository.findByBaibaoidAndTaikhoanid(Long.valueOf(entity.getBaibaoId()), Long.valueOf(tk.getTaikhoan_id())).orElse(null);
             if(ulike != null){
-                ulike.setStatus(ulike.getStatus() == 1 ? 2 : 1);
+                ulike.setStatus(ulike.getStatus() == 1 ? 0 : 1);
                 thichRepository.save(ulike);
-                return ResponseEntity.ok().body(new ApiResponse<>(true, "Cap nhat like thanh cong", null));
+                return ResponseEntity.ok().body(new ApiResponse<>(true, "Cap nhat like thanh cong", ulike.getStatus()));
             }
             
             // tao like moi
@@ -96,14 +96,16 @@ public class likeController {
                 th.setStatus(0);
             } else {
                 if (entity.getStatus().isEmpty()) {
+                    // 0 chua thich
                     th.setStatus(0);
                 } else {
+                    // 1 : thich
                     th.setStatus(1);
                 }
             }
 
             thichService.save(th);
-            return ResponseEntity.ok().body(new ApiResponse<>(true, "Them like thanh cong", null));
+            return ResponseEntity.ok().body(new ApiResponse<>(true, "Them like thanh cong", th.getStatus()));
         } catch (Exception e) {
             // TODO: handle exception
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Loi khi tao like", e.getMessage()));

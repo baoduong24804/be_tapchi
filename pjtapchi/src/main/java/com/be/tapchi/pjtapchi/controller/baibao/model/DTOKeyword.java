@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class DTOKeyword {
     
     private String keyword;
+    private String token;
 }

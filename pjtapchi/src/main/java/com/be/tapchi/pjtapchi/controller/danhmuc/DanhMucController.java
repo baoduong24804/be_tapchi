@@ -21,6 +21,7 @@ import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucBaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.DanhMucRepository;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
+import com.be.tapchi.pjtapchi.repository.ThichRepository;
 import com.be.tapchi.pjtapchi.service.BaibaoService;
 import com.be.tapchi.pjtapchi.service.DanhMucService;
 import com.be.tapchi.pjtapchi.userRole.ManageRoles;
@@ -76,6 +77,9 @@ public class DanhMucController {
     @Autowired
     TaiKhoanRepository taiKhoanRepository;
 
+    @Autowired
+    private ThichRepository thichRepository;
+
     public static String formatDateTime(String inputDateTime) {
         try {
             // Định dạng của chuỗi đầu vào
@@ -96,7 +100,8 @@ public class DanhMucController {
     @PostMapping("/get/week")
     public ResponseEntity<ApiResponse<?>> getDanhmucInCurrentWeek(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+            @RequestParam(defaultValue = "6") int size,
+            @RequestBody DTOAddBBDM entity) {
         // TODO: process POST request
         try {
             ApiResponse<?> api = new ApiResponse<>();
@@ -104,7 +109,13 @@ public class DanhMucController {
             api.setMessage("Thành công lấy dữ liệu danh mục theo tuần");
             Map<String, Object> map = new HashMap<>();
             Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size);
-            //System.out.println(dm.getContent().size() + "sizeeeeeeeee");
+            // System.out.println(dm.getContent().size() + "sizeeeeeeeee");
+            Taikhoan tk = null;
+            if(entity.getToken() != null){
+                if(!entity.getToken().trim().isEmpty()){
+                    tk = jwtUtil.getTaikhoanFromToken(entity.getToken()+"".trim());
+                }
+            }
             List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
             for (DanhMuc danhMuc : dm.getContent()) {
                 DTOBaiBaoDanhMuc bbDM = new DTOBaiBaoDanhMuc();
@@ -127,7 +138,7 @@ public class DanhMucController {
                     }
 
                     DTOTaiKhoanDM tk1 = new DTOTaiKhoanDM();
-                    //tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
+                    // tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
                     tk1.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
                     DTOTheLoaiDM tl1 = new DTOTheLoaiDM();
                     tl1.setTheloaiId(String.valueOf(dmbb.getBaibao().getTheloai().getId()));
@@ -145,13 +156,31 @@ public class DanhMucController {
                     bb1.setTheloai(tl1);
                     bb1.setNgaytao(dmbb.getBaibao().getNgaytao());
                     int slike = 0;
-                    if(dmbb.getBaibao().getThichs() != null){
-                        if(dmbb.getBaibao().getThichs().size() > 0){
+                    if (dmbb.getBaibao().getThichs() != null) {
+                        if (dmbb.getBaibao().getThichs().size() > 0) {
                             slike = dmbb.getBaibao().getThichs().size();
                         }
                     }
+                    
+                    
                     DTOThich thich = new DTOThich();
                     thich.setThich(String.valueOf(slike));
+
+                    if(tk != null){
+                        Thich islike = thichRepository.findByBaibaoidAndTaikhoanid(Long.valueOf(dmbb.getBaibao().getId()), Long.valueOf(tk.getTaikhoan_id())).orElse(null);
+                        if(islike != null){
+                            
+                            if(islike.getStatus() == 1){
+                                thich.setDathich(true);
+                            }else{
+                                thich.setDathich(false);
+                            }
+                            
+                        }else{
+                            thich.setDathich(false);
+                        }
+                    }
+
                     bb1.setThich(thich);
                     // bl
                     List<DTOBinhluan> list = new ArrayList<>();
@@ -159,12 +188,12 @@ public class DanhMucController {
                         DTOBinhluan dtoBinhluan = new DTOBinhluan();
                         dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
                         dtoBinhluan.setNoidung(bl.getNoidung());
-                        dtoBinhluan.setThoigian(formatDateTime(bl.getThoigianbl()+""));
+                        dtoBinhluan.setThoigian(formatDateTime(bl.getThoigianbl() + ""));
                         list.add(dtoBinhluan);
                     }
 
                     bb1.setBinhluans(list);
-                    
+
                     listbbDM.add(bb1);
 
                 }
@@ -221,7 +250,7 @@ public class DanhMucController {
                     et2.setStatus(dmbb.getBaibao().getStatus() + "");
                     et2.setUrl(dmbb.getBaibao().getUrl());
                     DTOTaiKhoanDM tk = new DTOTaiKhoanDM();
-                    //tk.setTaikhoanId(dmbb.getBaibao().getTaikhoan().getTaikhoan_id() + "");
+                    // tk.setTaikhoanId(dmbb.getBaibao().getTaikhoan().getTaikhoan_id() + "");
                     tk.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
                     et2.setTaikhoan(tk);
                     DTOTheLoaiDM tl = new DTOTheLoaiDM();
@@ -327,7 +356,7 @@ public class DanhMucController {
                 return ResponseEntity.ok().body(response);
             } else {
                 DanhMuc dMuc2 = danhMucRepository.findById(Long.valueOf(danhMuc.getDanhmucId())).orElse(null);
-                if(dMuc2 == null){
+                if (dMuc2 == null) {
                     ApiResponse<?> response = new ApiResponse<>(true, "ko tim thay danh muc", null);
                     return ResponseEntity.badRequest().body(response);
                 }
