@@ -111,9 +111,9 @@ public class DanhMucController {
             Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size);
             // System.out.println(dm.getContent().size() + "sizeeeeeeeee");
             Taikhoan tk = null;
-            if(entity.getToken() != null){
-                if(!entity.getToken().trim().isEmpty()){
-                    tk = jwtUtil.getTaikhoanFromToken(entity.getToken()+"".trim());
+            if (entity.getToken() != null) {
+                if (!entity.getToken().trim().isEmpty()) {
+                    tk = jwtUtil.getTaikhoanFromToken(entity.getToken() + "".trim());
                 }
             }
             List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
@@ -161,22 +161,22 @@ public class DanhMucController {
                             slike = dmbb.getBaibao().getThichs().size();
                         }
                     }
-                    
-                    
+
                     DTOThich thich = new DTOThich();
                     thich.setThich(String.valueOf(slike));
 
-                    if(tk != null){
-                        Thich islike = thichRepository.findByBaibaoidAndTaikhoanid(Long.valueOf(dmbb.getBaibao().getId()), Long.valueOf(tk.getTaikhoan_id())).orElse(null);
-                        if(islike != null){
-                            
-                            if(islike.getStatus() == 1){
+                    if (tk != null) {
+                        Thich islike = thichRepository.findByBaibaoidAndTaikhoanid(
+                                Long.valueOf(dmbb.getBaibao().getId()), Long.valueOf(tk.getTaikhoan_id())).orElse(null);
+                        if (islike != null) {
+
+                            if (islike.getStatus() == 1) {
                                 thich.setDathich(true);
-                            }else{
+                            } else {
                                 thich.setDathich(false);
                             }
-                            
-                        }else{
+
+                        } else {
                             thich.setDathich(false);
                         }
                     }
@@ -218,67 +218,124 @@ public class DanhMucController {
     @PostMapping("/all")
     public ResponseEntity<ApiResponse<?>> getAllDanhMuc(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
+            @RequestParam(defaultValue = "6") int size,
+            @RequestBody DTOAddBBDM entity) {
+
         try {
+            ApiResponse<?> api = new ApiResponse<>();
+            api.setSuccess(true);
+            api.setMessage("Thành công lấy dữ liệu danh mục");
+            Map<String, Object> map = new HashMap<>();
             Pageable pageable = PageRequest.of(page, size);
             Page<DanhMuc> danhMucPage = danhMucService.getAllDanhMuc(pageable);
             if (danhMucPage == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            Map<String, Object> data = new HashMap<>();
-            List<DTODanhMucBaiBao2> list = new ArrayList<>();
-            for (DanhMuc danhMuc : danhMucPage.getContent()) {
-                DTODanhMucBaiBao2 et = new DTODanhMucBaiBao2();
-                et.setDanhmucId(danhMuc.getDanhmucId() + "");
-                et.setTieude(danhMuc.getTieude());
-                et.setMota(danhMuc.getMota());
-                et.setTuan(danhMuc.getTuan() + "");
-                et.setSo(danhMuc.getSo() + "");
-                et.setStatus(danhMuc.getStatus() + "");
-                et.setUrl(danhMuc.getUrl());
-                et.setNgaytao(danhMuc.getNgaytao());
-                List<DTOBaiBaoDM> baibaos = new ArrayList<>();
-                for (Danhmucbaibao dmbb : danhMuc.getDanhmucbaibaos()) {
-                    DTOBaiBaoDM et2 = new DTOBaiBaoDM();
-                    et2.setBaibaoId(dmbb.getBaibao().getId() + "");
-                    et2.setTieude(dmbb.getBaibao().getTieude());
-                    et2.setNoidung(dmbb.getBaibao().getNoidung());
-                    et2.setFile(dmbb.getBaibao().getFile());
-                    et2.setKeyword(dmbb.getBaibao().getKeyword());
-                    et2.setNgaydang(dmbb.getBaibao().getNgaydang());
-                    et2.setNgaytao(dmbb.getBaibao().getNgaytao());
-                    et2.setStatus(dmbb.getBaibao().getStatus() + "");
-                    et2.setUrl(dmbb.getBaibao().getUrl());
-                    DTOTaiKhoanDM tk = new DTOTaiKhoanDM();
-                    // tk.setTaikhoanId(dmbb.getBaibao().getTaikhoan().getTaikhoan_id() + "");
-                    tk.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
-                    et2.setTaikhoan(tk);
-                    DTOTheLoaiDM tl = new DTOTheLoaiDM();
-                    tl.setTheloaiId(dmbb.getBaibao().getTheloai().getId() + "");
-                    tl.setTen(dmbb.getBaibao().getTheloai().getTenloai());
-                    et2.setTheloai(tl);
-                    baibaos.add(et2);
+            // Page<DanhMuc> dm = danhMucService.getDanhmucInCurrentWeek(page, size);
+            // System.out.println(dm.getContent().size() + "sizeeeeeeeee");
+            Taikhoan tk = null;
+            if (entity.getToken() != null) {
+                if (!entity.getToken().trim().isEmpty()) {
+                    tk = jwtUtil.getTaikhoanFromToken(entity.getToken() + "".trim());
                 }
-                et.setBaibaos(baibaos);
-                list.add(et);
             }
-            data.put("data", list);
+            List<DTOBaiBaoDanhMuc> listdata = new ArrayList<>();
+            for (DanhMuc danhMuc : danhMucPage.getContent()) {
+                DTOBaiBaoDanhMuc bbDM = new DTOBaiBaoDanhMuc();
+                bbDM.setDanhmucId(String.valueOf(danhMuc.getDanhmucId()));
+                bbDM.setTieude(danhMuc.getTieude());
+                bbDM.setMota(danhMuc.getMota());
+                bbDM.setTuan(String.valueOf(danhMuc.getTuan()));
+                bbDM.setSo(String.valueOf(danhMuc.getSo()));
+                bbDM.setUrl(danhMuc.getUrl());
+                bbDM.setStatus(danhMuc.getStatus() + "");
+                bbDM.setNgaytao(danhMuc.getNgaytao());
+                List<DTOBaiBaoDM> listbbDM = new ArrayList<>();
+                for (Danhmucbaibao dmbb : danhMuc.getDanhmucbaibaos()) {
+                    if (dmbb.getBaibao().getStatus() == null) {
+                        continue;
+                    }
 
-            Map<String, Object> phantrang = new HashMap<>();
+                    if (dmbb.getBaibao().getStatus() != 7) {
+                        continue;
+                    }
 
-            phantrang.put("totalPage", String.valueOf(danhMucPage.getTotalPages()));
-            phantrang.put("pageNumber", String.valueOf(danhMucPage.getNumber()));
-            phantrang.put("pageSize", String.valueOf(danhMucPage.getSize()));
-            phantrang.put("totalElements", String.valueOf(danhMucPage.getTotalElements()));
-            // Page<BaibaoResponseDTO> responsePage = pageResult.map(this::convertToDTO);
-            data.put("phantrang", phantrang);
-            ApiResponse<?> response = new ApiResponse<>(true, "Danh sách danh mục", data);
-            return ResponseEntity.ok().body(response);
+                    DTOTaiKhoanDM tk1 = new DTOTaiKhoanDM();
+                    // tk1.setTaikhoanId(String.valueOf(dmbb.getBaibao().getTaikhoan().getTaikhoan_id()));
+                    tk1.setHovaten(dmbb.getBaibao().getTaikhoan().getHovaten());
+                    DTOTheLoaiDM tl1 = new DTOTheLoaiDM();
+                    tl1.setTheloaiId(String.valueOf(dmbb.getBaibao().getTheloai().getId()));
+                    tl1.setTen(dmbb.getBaibao().getTheloai().getTenloai());
+                    DTOBaiBaoDM bb1 = new DTOBaiBaoDM();
+                    bb1.setBaibaoId(String.valueOf(dmbb.getBaibao().getId()));
+                    bb1.setTieude(dmbb.getBaibao().getTieude());
+                    bb1.setNoidung(dmbb.getBaibao().getNoidung());
+                    bb1.setUrl(dmbb.getBaibao().getUrl());
+                    bb1.setFile(dmbb.getBaibao().getFile());
+                    bb1.setKeyword(dmbb.getBaibao().getKeyword());
+                    bb1.setNgaydang(dmbb.getBaibao().getNgaydang());
+                    bb1.setStatus(String.valueOf(dmbb.getBaibao().getStatus()));
+                    bb1.setTaikhoan(tk1);
+                    bb1.setTheloai(tl1);
+                    bb1.setNgaytao(dmbb.getBaibao().getNgaytao());
+                    int slike = 0;
+                    if (dmbb.getBaibao().getThichs() != null) {
+                        if (dmbb.getBaibao().getThichs().size() > 0) {
+                            slike = dmbb.getBaibao().getThichs().size();
+                        }
+                    }
 
+                    DTOThich thich = new DTOThich();
+                    thich.setThich(String.valueOf(slike));
+
+                    if (tk != null) {
+                        Thich islike = thichRepository.findByBaibaoidAndTaikhoanid(
+                                Long.valueOf(dmbb.getBaibao().getId()), Long.valueOf(tk.getTaikhoan_id())).orElse(null);
+                        if (islike != null) {
+
+                            if (islike.getStatus() == 1) {
+                                thich.setDathich(true);
+                            } else {
+                                thich.setDathich(false);
+                            }
+
+                        } else {
+                            thich.setDathich(false);
+                        }
+                    }
+
+                    bb1.setThich(thich);
+                    // bl
+                    List<DTOBinhluan> list = new ArrayList<>();
+                    for (Binhluan bl : dmbb.getBaibao().getBinhluans()) {
+                        DTOBinhluan dtoBinhluan = new DTOBinhluan();
+                        dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
+                        dtoBinhluan.setNoidung(bl.getNoidung());
+                        dtoBinhluan.setThoigian(formatDateTime(bl.getThoigianbl() + ""));
+                        list.add(dtoBinhluan);
+                    }
+
+                    bb1.setBinhluans(list);
+
+                    listbbDM.add(bb1);
+
+                }
+                bbDM.setBaibao(listbbDM);
+                listdata.add(bbDM);
+            }
+            map.put("data", listdata);
+
+            map.put("totalPage", String.valueOf(danhMucPage.getTotalPages()));
+            map.put("pageNumber", String.valueOf(danhMucPage.getNumber()));
+            map.put("pageSize", String.valueOf(danhMucPage.getSize()));
+            map.put("totalElements", String.valueOf(danhMucPage.getTotalElements()));
+            api.setData(map);
+            return ResponseEntity.ok().body(api);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse<>(false, "Đã xảy ra lỗi khi lấy danh mục.", null));
+            // TODO: handle exception
         }
+
+        return ResponseEntity.badRequest().body(null);
     }
 
     // @GetMapping("/all")
