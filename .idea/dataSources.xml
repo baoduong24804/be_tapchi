@@ -16,15 +16,16 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="ahihi@dpg-csee50btq21c7389sm90-a.singapore-postgres.render.com" uuid="8deffbcb-8f0f-42b1-80b3-4be1ff9e4480">
+    <data-source source="LOCAL" name="adminfake@dpg-ct20qotsvqrc73e401n0-a.oregon-postgres.render.com" uuid="f3b7fc8d-2ce3-4d7c-a996-9b616744a909">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://dpg-csee50btq21c7389sm90-a.singapore-postgres.render.com/ahihi</jdbc-url>
+      <jdbc-url>jdbc:postgresql://dpg-ct20qotsvqrc73e401n0-a.oregon-postgres.render.com/adminfake</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
+        <property name="com.intellij.clouds.kubernetes.db.resource.type" value="Deployment" />
         <property name="com.intellij.clouds.kubernetes.db.container.port" />
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>

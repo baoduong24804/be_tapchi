@@ -8,9 +8,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="Update baibao add DTO class">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480/storage_v2/_src_/database/ahihi.o8WHBQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480/storage_v2/_src_/database/ahihi.o8WHBQ/schema/public.abK9xQ.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Payment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/TaikhoanTokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/TaikhoanTokenService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +101,7 @@
     &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;HaiDepChieu&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/DATN/be_tapchi/pjtapchi/src/main/resources&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/numpa/Downloads&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -245,6 +251,21 @@
       <workItem from="1731942740204" duration="256000" />
       <workItem from="1732002120479" duration="1000" />
       <workItem from="1732009839867" duration="2401000" />
+      <workItem from="1732166143116" duration="637000" />
+      <workItem from="1732177883973" duration="199000" />
+      <workItem from="1732194450124" duration="1048000" />
+      <workItem from="1732195512310" duration="712000" />
+      <workItem from="1732341121526" duration="2195000" />
+      <workItem from="1732362671853" duration="1204000" />
+      <workItem from="1732450418615" duration="4617000" />
+      <workItem from="1732514566101" duration="36000" />
+      <workItem from="1732515849358" duration="1158000" />
+      <workItem from="1732543486372" duration="1276000" />
+      <workItem from="1732554010954" duration="160000" />
+      <workItem from="1732562115008" duration="746000" />
+      <workItem from="1732591242044" duration="167000" />
+      <workItem from="1732595392269" duration="634000" />
+      <workItem from="1732721378109" duration="1945000" />
     </task>
     <task id="LOCAL-00001" summary="Update baibao add DTO class">
       <option name="closed" value="true" />

@@ -1,15 +1,11 @@
 package com.be.tapchi.pjtapchi.service;
 
+import com.be.tapchi.pjtapchi.model.EmailVerification;
+import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.repository.EmailVerificationRepository;
 import jakarta.mail.internet.MimeMessage;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -17,10 +13,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.be.tapchi.pjtapchi.model.EmailVerification;
-import com.be.tapchi.pjtapchi.model.Taikhoan;
-import com.be.tapchi.pjtapchi.model.TaikhoanToken;
-import com.be.tapchi.pjtapchi.repository.EmailVerificationRepository;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EmailService {
@@ -33,6 +29,9 @@ public class EmailService {
 
     @Autowired
     private TaiKhoanService taiKhoanService;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     @Value("${app.token.expiration:15}")
     private long defaultTokenExpiration;
@@ -131,22 +130,23 @@ public class EmailService {
 
             }
 
-            return;
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println("err get email expriryDate: " + e.getMessage());
             try {
                 emailVerificationRepository.deleteAll();
                 System.out.println("Xoa tat ca email verify");
-                return;
             } catch (Exception ex) {
                 // TODO: handle exception
                 System.out.println("Loi xoa tat ca email verify: " + ex.getMessage());
             }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
         }
 
-        return;
     }
 
     // Scheduled task để xóa token hết hạn
@@ -300,6 +300,86 @@ public class EmailService {
 
             mailSender.send(message);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // EmailService.java
+
+    public void sendResetPasswordEmail(String userEmail, String token, String title, String content) {
+        String resetUrl = baseUrl + "/reset-password?token=" + token;
+
+        // HTML content with a button and an image
+        String emailContent = "<html>" +
+                "  <head>" +
+                "    <meta name=\"viewport\" content=\"width=device-width\" />" +
+                "    <meta name=\"description\" content=\"Email Verification\" />" +
+                "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />" +
+                "    <title>" + title + "</title>" +
+                "    <style>" +
+                "      html, body {" +
+                "          margin: 0 auto !important;" +
+                "          padding: 0 !important;" +
+                "          width: 100% !important;" +
+                "          font-family: sans-serif;" +
+                "          line-height: 1.4;" +
+                "          -webkit-font-smoothing: antialiased;" +
+                "          -ms-text-size-adjust: 100%;" +
+                "          -webkit-text-size-adjust: 100%;" +
+                "      }" +
+                "      * {" +
+                "          -ms-text-size-adjust: 100%;" +
+                "      }" +
+                "      table, td {" +
+                "          mso-table-lspace: 0pt !important;" +
+                "          mso-table-rspace: 0pt !important;" +
+                "      }" +
+                "      img {" +
+                "          display: block;" +
+                "          border: none;" +
+                "          max-width: 100%;" +
+                "          -ms-interpolation-mode: bicubic;" +
+                "      }" +
+                "      a {" +
+                "          text-decoration: none;" +
+                "      }" +
+                "      .button {" +
+                "          display: inline-block;" +
+                "          padding: 10px 20px;" +
+                "          font-size: 16px;" +
+                "          color: #ffffff;" +
+                "          background-color: #007BFF;" +
+                "          border-radius: 5px;" +
+                "          text-align: center;" +
+                "          text-decoration: none;" +
+                "      }" +
+                "    </style>" +
+                "  </head>" +
+                "  <body style=\"margin: 0; padding: 0 !important; background: #F8F8F8;\">" +
+                "    <table align=\"center\" valign=\"top\" width=\"100%\" bgcolor=\"#FFFFFF\" style=\"background: #FFFFFF\">" +
+                "      <tr>" +
+                "        <td align=\"center\">" +
+                "          <img src=\"https://cdn.templates.unlayer.com/assets/1676547950700-Asset%201.png\" alt=\"Reset Password\" />" +
+                "          <h1 style=\"font-family: Arial, Helvetica; font-size: 35px; color: #010E28;\">" + title + "</h1>" +
+                "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">" + content + "</p>" +
+                "          <a href=\"" + resetUrl + "\" class=\"button\">Reset Password</a>" +
+                "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">Hỗ trợ 24/7, gửi email qua <a href=\"mailto:dthaibao2482004@gmail.com\">dthaibao2482004@gmail.com</a></p>" +
+                "        </td>" +
+                "      </tr>" +
+                "    </table>" +
+                "  </body>" +
+                "</html>";
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(userEmail);
+            helper.setSubject(title);
+            helper.setText(emailContent, true); // 'true' indicates it's an HTML email
+
+            mailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();
         }

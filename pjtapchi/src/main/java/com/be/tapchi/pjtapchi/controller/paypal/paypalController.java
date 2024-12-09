@@ -13,7 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -28,23 +31,23 @@ public class paypalController {
     HoaDonService hoaDonService;
 
     @PostMapping("/create")
-    public RedirectView createPayment(@RequestBody com.be.tapchi.pjtapchi.model.Payment paymentReq) {
-//    public RedirectView createPayment() {
+//    public RedirectView createPayment(@RequestBody com.be.tapchi.pjtapchi.model.Payment paymentReq) {
+    public RedirectView createPayment() {
         try {
             String cancelUrl = "http://localhost:9000/pay/cancel";
             String successUrl = "http://localhost:9000/pay/success";
 
             Payment payment = paypalService.createPayment(
-                    paymentReq.getTotal(),
-                    "USD",
-                    "paypal",
-                    "sale",
-                    paymentReq.getDescription(),
-//                    100.0,
+////                    paymentReq.getTotal(),
 //                    "USD",
 //                    "paypal",
 //                    "sale",
-//                    "Thanh toan don hang",
+////                    paymentReq.getDescription(),
+                    100.0,
+                    "USD",
+                    "paypal",
+                    "sale",
+                    "Thanh toan don hang",
                     cancelUrl,
                     successUrl
             );
@@ -66,6 +69,7 @@ public class paypalController {
     ) {
         try {
             Payment payment = paypalService.excutePayment(paymentId, payerId);
+            String des = payment.getTransactions().get(0).getDescription();
             if (payment.getState().equals("approved")) {
                 HoaDon hoaDon = new HoaDon();
                 hoaDon.setTongTien(Float.parseFloat(payment.getTransactions().get(0).getAmount().getTotal()));
