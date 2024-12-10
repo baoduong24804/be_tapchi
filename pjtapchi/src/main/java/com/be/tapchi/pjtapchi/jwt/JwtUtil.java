@@ -151,12 +151,14 @@ public class JwtUtil {
             Set<String> userRoles = new HashSet<>();
 
             for (Vaitro vt : tk.getVaitro()) {
+                //System.out.println("add: "+vt.getTenrole());
                 userRoles.add(vt.getTenrole());
             }
 
             // Kiểm tra nếu bất kỳ vai trò nào của user trùng khớp với danh sách roles yêu
             // cầu
             for (String role : roles) {
+                //System.out.println("check: "+role);
                 if (userRoles.contains(role)) {
                     return true;
                 }
