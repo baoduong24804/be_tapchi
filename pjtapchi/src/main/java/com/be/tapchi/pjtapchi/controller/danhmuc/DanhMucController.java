@@ -46,6 +46,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -89,8 +91,12 @@ public class DanhMucController {
 
             // Parse chuỗi đầu vào sang LocalDateTime
             LocalDateTime dateTime = LocalDateTime.parse(inputDateTime, inputFormatter);
+
+            // Chuyển LocalDateTime sang ZonedDateTime với múi giờ VN
+            ZonedDateTime zonedDateTime = dateTime.atZone(ZoneId.of("Asia/Ho_Chi_Minh"));
+
             // Định dạng lại chuỗi đầu ra
-            return dateTime.format(outputFormatter);
+            return zonedDateTime.format(outputFormatter);
         } catch (Exception e) {
             // Xử lý ngoại lệ nếu chuỗi không đúng định dạng
             return "Invalid date format: " + e.getMessage();
@@ -101,7 +107,7 @@ public class DanhMucController {
     public ResponseEntity<ApiResponse<?>> getDanhmucInCurrentWeek(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size,
-            @RequestBody DTOAddBBDM entity) {
+            @RequestBody(required = false) DTOAddBBDM entity) {
         // TODO: process POST request
         try {
             ApiResponse<?> api = new ApiResponse<>();
@@ -156,9 +162,16 @@ public class DanhMucController {
                     bb1.setTheloai(tl1);
                     bb1.setNgaytao(dmbb.getBaibao().getNgaytao());
                     int slike = 0;
+
                     if (dmbb.getBaibao().getThichs() != null) {
                         if (dmbb.getBaibao().getThichs().size() > 0) {
-                            slike = dmbb.getBaibao().getThichs().size();
+                            for (Thich th : dmbb.getBaibao().getThichs()) {
+                                if (th.getStatus() == 1) {
+                                    slike += 1;
+                                }
+
+                            }
+
                         }
                     }
 
@@ -184,12 +197,28 @@ public class DanhMucController {
                     bb1.setThich(thich);
                     // bl
                     List<DTOBinhluan> list = new ArrayList<>();
+
                     for (Binhluan bl : dmbb.getBaibao().getBinhluans()) {
-                        DTOBinhluan dtoBinhluan = new DTOBinhluan();
-                        dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
-                        dtoBinhluan.setNoidung(bl.getNoidung());
-                        dtoBinhluan.setThoigian(formatDateTime(bl.getThoigianbl() + ""));
-                        list.add(dtoBinhluan);
+                        if (tk != null) {
+                            DTOBinhluan dtoBinhluan = new DTOBinhluan();
+                            dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
+                            dtoBinhluan.setNoidung(bl.getNoidung());
+                            dtoBinhluan.setThoigian(formatDateTime(bl.getThoigianbl() + ""));
+                            if(bl.getTaikhoan().getTaikhoan_id() == tk.getTaikhoan_id()){
+                                dtoBinhluan.setDabinhluan(true);
+                            }else{
+                                dtoBinhluan.setDabinhluan(false);
+                            }
+                            list.add(dtoBinhluan);
+                        } else {
+                            DTOBinhluan dtoBinhluan = new DTOBinhluan();
+                            dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
+                            dtoBinhluan.setNoidung(bl.getNoidung());
+                            dtoBinhluan.setThoigian(formatDateTime(bl.getThoigianbl() + ""));
+                            dtoBinhluan.setDabinhluan(false);
+                            list.add(dtoBinhluan);
+                        }
+
                     }
 
                     bb1.setBinhluans(list);
