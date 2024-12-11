@@ -12,6 +12,8 @@ import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Vaitro;
+import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.QuangCaoRepository;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
 import com.be.tapchi.pjtapchi.userRole.ManageRoles;
 
@@ -39,6 +41,12 @@ public class AdminController {
 
     @Autowired
     private TaiKhoanRepository taiKhoanRepository;
+
+    @Autowired
+    private BaiBaoRepository baiBaoRepository;
+
+    @Autowired
+    private QuangCaoRepository quangCaoRepository;
 
     @PostMapping("get/user")
     public ResponseEntity<?> postMethodName(@RequestBody(required = false) DTOAdmin entity,
@@ -171,7 +179,25 @@ public class AdminController {
             ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
             return ResponseEntity.badRequest().body(response);
         }
-        return null;
+
+        
+        long slbaibao = baiBaoRepository.count();
+        long sltaikhoan = taiKhoanRepository.count();
+        long slquangcao = quangCaoRepository.count();
+        double doanhthu = 0.0;
+
+        Map<Object,Object> data = new HashMap<>();
+
+        data.put("slbaibao", slbaibao);
+        data.put("sltaikhoan", sltaikhoan);
+        data.put("slquangcao", slquangcao);
+        data.put("doanhthu", doanhthu);
+
+        Map<Object,Object> result = new HashMap<>();
+
+        result.put("data", data);
+        ApiResponse<?> response = new ApiResponse<>(true, "Lay data thanh cong", result);
+        return ResponseEntity.ok().body(response);
     }
     
 
