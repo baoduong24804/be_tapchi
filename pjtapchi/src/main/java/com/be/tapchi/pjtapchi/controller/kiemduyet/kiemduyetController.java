@@ -103,11 +103,14 @@ public class kiemduyetController {
             @RequestParam(defaultValue = "6") int size) {
         // TODO: process POST request
         ApiResponse<?> api = new ApiResponse<>();
-        if (!checkToken(kiemDuyet.getToken())) {
-            api.setSuccess(false);
-            api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
+        if (jwtUtil.checkTokenAndTaiKhoan(kiemDuyet.getToken()) ==  false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
 
-            return ResponseEntity.badRequest().body(api);
+        if(!jwtUtil.checkRolesFromToken(kiemDuyet.getToken(), ManageRoles.getADMINRole(), ManageRoles.getEDITORRole(),ManageRoles.getCENSORRole())){
+            ApiResponse<?> response = new ApiResponse<>(false, "Can quyen admin, editor, censor", null);
+            return ResponseEntity.badRequest().body(response);
         }
 
         Pageable pageable = PageRequest.of(page, size);
@@ -171,25 +174,20 @@ public class kiemduyetController {
         ApiResponse<?> api = new ApiResponse<>();
 
         try {
-            if (kiemDuyet.getToken() == null) {
-                api.setSuccess(false);
-                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
-
-                return ResponseEntity.badRequest().body(api);
+            if (jwtUtil.checkTokenAndTaiKhoan(kiemDuyet.getToken()) ==  false) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+                return ResponseEntity.badRequest().body(response);
             }
-            Taikhoan tk = jwtUtil.getTaikhoanFromToken(kiemDuyet.getToken());
-            if (tk == null) {
-                api.setSuccess(false);
-                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
 
-                return ResponseEntity.badRequest().body(api);
-            }
-            if (!jwtUtil.checkRolesFromToken(kiemDuyet.getToken(), ManageRoles.getEDITORRole())) {
-                api.setSuccess(false);
-                api.setMessage(HttpStatus.NON_AUTHORITATIVE_INFORMATION.toString());
 
-                return ResponseEntity.badRequest().body(api);
+            // Taikhoan tk = jwtUtil.getTaikhoanFromToken(kiemDuyet.getToken());
+            
+            if(!jwtUtil.checkRolesFromToken(kiemDuyet.getToken(), ManageRoles.getADMINRole(), ManageRoles.getEDITORRole(),ManageRoles.getCENSORRole())){
+                ApiResponse<?> response = new ApiResponse<>(false, "Can quyen admin, editor, censor", null);
+                return ResponseEntity.badRequest().body(response);
             }
+
+
         } catch (Exception e) {
             // TODO: handle exception
             api.setSuccess(false);

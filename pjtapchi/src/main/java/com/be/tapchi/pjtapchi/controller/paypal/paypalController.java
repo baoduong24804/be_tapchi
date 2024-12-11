@@ -71,7 +71,8 @@ public class paypalController {
                 hoaDon.setTongTien(Float.parseFloat(payment.getTransactions().get(0).getAmount().getTotal()));
                 hoaDon.setPaymentId(paymentId);
                 hoaDon.setPayerId(payerId);
-                hoaDon.setStatus("approved");
+                // approved = 1;
+                hoaDon.setStatus(1);
                 hoaDon.setNgayTao(new java.sql.Date(System.currentTimeMillis()));
                 hoaDonService.save(hoaDon);
 

@@ -52,15 +52,14 @@ public class likeController {
     @PostMapping("/add/user")
     public ResponseEntity<?> saveThich(@RequestBody DTOLike entity) {
         try {
-            if (entity.getToken() == null) {
-                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi token", null));
+            if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) ==  false) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+                return ResponseEntity.badRequest().body(response);
             }
             if (entity.getBaibaoId() == null) {
                 return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi baibaoId", null));
             }
-            if (jwtUtil.getTaikhoanFromToken(entity.getToken()) == null) {
-                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Không được phép", null));
-            }
+            
             if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getCUSTOMERRole())) {
                 return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Không được phép can CUSTOMER", null));
             }

@@ -24,7 +24,7 @@ public class hopdongController {
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<HopDong>> createContract(@RequestBody HopDong hopDong) {
-
+        
         HopDong contract = hopDongService.saveHopDong(hopDong);
         ApiResponse<HopDong> response = new ApiResponse<>(true, "Create contract successful", null);
         return ResponseEntity.ok().body(response);

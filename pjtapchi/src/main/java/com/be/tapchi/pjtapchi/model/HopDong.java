@@ -19,7 +19,7 @@ public class HopDong {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hopdong_id")
-    private Long hopDongId; // Chỉnh sửa tên biến cho nhất quán
+    private Long hopdong_id; // Chỉnh sửa tên biến cho nhất quán
 
     @Column(name = "ngaybatdauhd")
     private LocalDate ngayBatDauHD;
@@ -30,14 +30,14 @@ public class HopDong {
     @Column(name = "status")
     private int status;
 
-    // @OneToMany(mappedBy = "quangcao_id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    // private Set<QuangCao> QuangCao = new HashSet<>();
+    @OneToMany(mappedBy = "quangcao_id", fetch = FetchType.LAZY)
+    private Set<QuangCao> QuangCao = new HashSet<>();
 
-    // @OneToMany(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "banggiaqc_id", nullable = false, insertable = false, updatable = false)
-    // private Set<BangGiaQC> bangGiaQC = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "banggiaqc_id")
+    private Set<BangGiaQC> bgqc = new HashSet<>();
 
-    // @OneToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "hoadon_id", nullable = false)
-    // private HoaDon hoaDon;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hoadon_id", nullable = false)
+    private HoaDon hoaDon;
 }

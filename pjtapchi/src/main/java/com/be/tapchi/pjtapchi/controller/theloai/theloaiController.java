@@ -26,7 +26,7 @@ public class theloaiController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/create/theloai")
-    public ResponseEntity<ApiResponse<Theloai>> createTheloai(@RequestBody(required = false) DTOTheloai theloai) {
+    public ResponseEntity<?> createTheloai(@RequestBody(required = false) DTOTheloai theloai) {
         if (theloai.getTentheloai() == null) {
             ApiResponse<Theloai> response = new ApiResponse<>(false, "Ten the loai ko dc de trong", null);
             return ResponseEntity.ok().body(response);
@@ -35,20 +35,11 @@ public class theloaiController {
             ApiResponse<Theloai> response = new ApiResponse<>(false, "Ten the loai ko dc de trong", null);
             return ResponseEntity.ok().body(response);
         }
-        if (theloai.getToken() == null) {
-            ApiResponse<Theloai> response = new ApiResponse<>(false, "Token de trong", null);
-            return ResponseEntity.ok().body(response);
+        if (jwtUtil.checkTokenAndTaiKhoan(theloai.getToken()) ==  false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
         }
-        if (theloai.getToken().isEmpty()) {
-            ApiResponse<Theloai> response = new ApiResponse<>(false, "Token de trong", null);
-            return ResponseEntity.ok().body(response);
-        }
-        Taikhoan tk = null;
-        tk = jwtUtil.getTaikhoanFromToken(theloai.getToken());
-        if(tk == null){
-            ApiResponse<Theloai> response = new ApiResponse<>(false, "Khong duoc phep", null);
-            return ResponseEntity.ok().body(response);
-        }
+        
         if(!jwtUtil.checkRolesFromToken(theloai.getToken(), ManageRoles.getADMINRole(),ManageRoles.getEDITORRole())){
             ApiResponse<Theloai> response = new ApiResponse<>(false, "Can quyen admin va editor", null);
             return ResponseEntity.ok().body(response);
