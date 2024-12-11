@@ -1,13 +1,11 @@
 package com.be.tapchi.pjtapchi.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.be.tapchi.pjtapchi.model.BangGiaQC;
+import com.be.tapchi.pjtapchi.repository.BangGiaQCRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.be.tapchi.pjtapchi.model.BangGiaQC;
-import com.be.tapchi.pjtapchi.repository.BangGiaQCRepository;
+import java.util.List;
 
 @Service
 public class BangGiaQCService {
@@ -22,8 +20,8 @@ public class BangGiaQCService {
         return bangGiaQCRepository.findAll();
     }
 
-    public Optional<BangGiaQC> findById(Long id) {
-        return bangGiaQCRepository.findById(id);
+    public BangGiaQC findById(Long id) {
+        return bangGiaQCRepository.findBangGiaQCByBangGiaQCId(id);
     }
 
     public BangGiaQC save(BangGiaQC bangGiaQC) {
@@ -34,5 +32,8 @@ public class BangGiaQCService {
         bangGiaQCRepository.deleteById(id);
     }
 
+    public Integer findSoNgayByID(Long id) {
+        return bangGiaQCRepository.findSoNgayByID(id);
+    }
     // Thêm các phương thức khác nếu cần
 }

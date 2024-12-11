@@ -1,9 +1,5 @@
 package com.be.tapchi.pjtapchi.model;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,14 +28,11 @@ public class QuangCao {
     @Column(name = "status")
     private int status;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
-    // @OneToMany(mappedBy = "QuangCao", fetch = FetchType.LAZY)
-    // @JsonIgnore
-    // private List<HopDong> HopDongs;
-
-
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "Hopdong_id")
+//    private HopDong hopDong;
 }

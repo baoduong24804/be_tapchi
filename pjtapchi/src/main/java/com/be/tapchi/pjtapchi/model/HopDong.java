@@ -1,9 +1,7 @@
 package com.be.tapchi.pjtapchi.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,6 +11,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "hopdong")
 public class HopDong {
 
@@ -30,14 +30,19 @@ public class HopDong {
     @Column(name = "status")
     private int status;
 
-    // @OneToMany(mappedBy = "quangcao_id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    // private Set<QuangCao> QuangCao = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "quangcao_id", nullable = false, insertable = false, updatable = false)
+    private Set<QuangCao> QuangCao = new HashSet<>();
 
-    // @OneToMany(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "banggiaqc_id", nullable = false, insertable = false, updatable = false)
-    // private Set<BangGiaQC> bangGiaQC = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "banggiaqc_id")
+    private BangGiaQC bangGiaQC;
 
-    // @OneToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "hoadon_id", nullable = false)
-    // private HoaDon hoaDon;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hoadon_id", nullable = false)
+    private HoaDon hoaDon;
+
+    public HopDong(Integer hdId) {
+        hopDongId = hdId.longValue();
+    }
 }

@@ -1,13 +1,12 @@
 package com.be.tapchi.pjtapchi.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.be.tapchi.pjtapchi.model.HoaDon;
+import com.be.tapchi.pjtapchi.repository.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.be.tapchi.pjtapchi.model.HoaDon;
-import com.be.tapchi.pjtapchi.repository.HoaDonRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HoaDonService {
@@ -29,6 +28,10 @@ public class HoaDonService {
 
     public HoaDon save(HoaDon hoaDon) {
         return hoaDonRepository.save(hoaDon);
+    }
+
+    public int updateStatusById(Long id, int status) {
+        return hoaDonRepository.updateStatusById(id, status);
     }
 
     public void deleteById(Long id) {

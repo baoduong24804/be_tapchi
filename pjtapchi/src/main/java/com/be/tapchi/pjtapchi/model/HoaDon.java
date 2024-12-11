@@ -23,7 +23,10 @@ public class HoaDon {
     private Float tongTien;
 
     @Column(name = "status")
-    private String status;
+    private Integer status;
+    // 0: chưa thanh toán
+    // 1: đã thanh toán
+    // 2: đã hủy
 
     @Column(name = "ngaytao")
     @Temporal(TemporalType.DATE)
