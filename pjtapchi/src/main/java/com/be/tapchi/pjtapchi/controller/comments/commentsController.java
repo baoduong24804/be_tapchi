@@ -169,6 +169,66 @@ public class commentsController {
         
     }
 
+    @PostMapping("/edit/user")
+    public ResponseEntity<?> editThich(@RequestBody DTOBinhluan entity) {
+        try {
+            if (entity.getToken() == null) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi token", null));
+            }
+            if (entity.getBaibaoId() == null) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi baibaoId", null));
+            }
+            if (jwtUtil.getTaikhoanFromToken(entity.getToken()) == null) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Không được phép", null));
+            }
+            if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getCUSTOMERRole())) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Không được phép can CUSTOMER", null));
+            }
+
+            if(entity.getNoidung() == null){
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "ko duoc de trong noi dung", null));
+            }
+            if(entity.getNoidung().isEmpty()){
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "ko duoc de trong noi dung", null));
+            }
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi khi cap nhat cm", e.getMessage()));
+        }
+        try {
+            Baibao bb = baiBaoRepository.findById(Integer.valueOf(entity.getBaibaoId())).orElse(null);
+            if (bb == null) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi không tìm thấy bài báo", null));
+            }
+            Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
+            if (tk == null) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi không tìm thấy tai khoan", null));
+            }
+
+            //cap nhat like
+            Binhluan ubBinhluan = binhluanRepository.findByBaibaoidAndTaikhoanid(Long.valueOf(entity.getBaibaoId()), Long.valueOf(tk.getTaikhoan_id())).orElse(null);
+            if(ubBinhluan == null){
+                
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Lỗi không tìm thấy bình luận", null));
+            }
+
+            if(!tk.getTaikhoan_id().equals(ubBinhluan.getTaikhoan().getTaikhoan_id())){
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Tài khoản cap nhat bl ko phù hợp", null));
+            }
+            
+           
+            ubBinhluan.setNoidung(entity.getNoidung()+"".trim());
+            binhluanRepository.save(ubBinhluan);
+            
+            return ResponseEntity.ok().body(new ApiResponse<>(true, "Cap nhat binh luan thanh cong", null));
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Loi khi tao binh luan", e.getMessage()));
+        }
+        
+    }
+
     @PostMapping("/remove/binhluan")
     public ResponseEntity<?> deleThichAdmin(@RequestBody DTOBinhluan entity) {
         try {

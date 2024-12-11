@@ -589,11 +589,26 @@ public class baibaoController {
                             // bl
                             List<DTOBinhluan> list = new ArrayList<>();
                             for (Binhluan bl : dmbb.getBaibao().getBinhluans()) {
-                                DTOBinhluan dtoBinhluan = new DTOBinhluan();
-                                dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
-                                dtoBinhluan.setNoidung(bl.getNoidung());
-                                dtoBinhluan.setThoigian(DanhMucController.formatDateTime(bl.getThoigianbl() + ""));
-                                list.add(dtoBinhluan);
+                                if (tk != null) {
+                                    DTOBinhluan dtoBinhluan = new DTOBinhluan();
+                                    dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
+                                    dtoBinhluan.setNoidung(bl.getNoidung());
+                                    dtoBinhluan.setThoigian(DanhMucController.formatDateTime(bl.getThoigianbl() + ""));
+                                    if (bl.getTaikhoan().getTaikhoan_id() == tk.getTaikhoan_id()) {
+                                        dtoBinhluan.setDabinhluan(true);
+                                    } else {
+                                        dtoBinhluan.setDabinhluan(false);
+                                    }
+                                    list.add(dtoBinhluan);
+                                } else {
+                                    DTOBinhluan dtoBinhluan = new DTOBinhluan();
+                                    dtoBinhluan.setHovaten(bl.getTaikhoan().getHovaten());
+                                    dtoBinhluan.setNoidung(bl.getNoidung());
+                                    dtoBinhluan.setThoigian(DanhMucController.formatDateTime(bl.getThoigianbl() + ""));
+                                    dtoBinhluan.setDabinhluan(false);
+                                    list.add(dtoBinhluan);
+                                }
+
                             }
 
                             bb1.setBinhluans(list);

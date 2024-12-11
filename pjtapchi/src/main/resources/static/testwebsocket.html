@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with WebSocket</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <style>
+        #messages {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        #input {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Chat</h1>
+    <div id="messages"></div>
+    <input type="text" id="input" placeholder="Enter message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        // Kết nối WebSocket
+        var socket = new SockJS("http://127.0.0.1:5555/chat");
+        var stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log("Connected: " + frame);
+
+            // Subscribe tới "/topic/chat" để nhận tin nhắn từ server
+            stompClient.subscribe("/topic/chat", function (message) {
+                var messagesDiv = document.getElementById("messages");
+                var newMessage = document.createElement("div");
+                newMessage.textContent = message.body;
+                messagesDiv.appendChild(newMessage);
+            });
+        });
+
+        // Gửi tin nhắn tới server
+        function sendMessage() {
+            var message = document.getElementById("input").value;
+            stompClient.send("/app/sendMessage", {}, message);
+            document.getElementById("input").value = ''; // Xóa input sau khi gửi
+        }
+    </script>
+</body>
+</html>
