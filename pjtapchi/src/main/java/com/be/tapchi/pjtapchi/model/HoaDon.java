@@ -29,13 +29,6 @@ public class HoaDon {
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
-    @Column(name = "paymentid")
-    private String paymentId;
-
-    @Column(name = "payerid")
-    private String payerId;
-
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hopdongId")
     private HopDong hopDong;
