@@ -7,25 +7,10 @@
     <option name="diagramMode" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="Update baibao add DTO class">
-      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hopdong/DTO/QC_id_DTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/ordercontext/OrderContext.java" afterDir="false" />
+    <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="before update use localthread">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/admin/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/admin/AdminUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hopdong/hopdongController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hopdong/hopdongController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/payos/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/payos/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HoaDon.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HoaDon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HopDong.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HopDong.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/QuangCao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/QuangCao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Taikhoan.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Taikhoan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/BangGiaQCRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/BangGiaQCRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/HoaDonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/HoaDonRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/HopDongRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/HopDongRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/BangGiaQCService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/BangGiaQCService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/HoaDonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/HoaDonService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/HopDongService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/HopDongService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/type/CreatePaymentLinkRequestBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/type/CreatePaymentLinkRequestBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/ordercontext/OrderContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/ordercontext/OrderContext.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -284,7 +269,7 @@
       <workItem from="1733741504205" duration="13451000" />
       <workItem from="1733798698510" duration="1689000" />
       <workItem from="1733885102907" duration="24178000" />
-      <workItem from="1733925943769" duration="5417000" />
+      <workItem from="1733925943769" duration="5516000" />
     </task>
     <task id="LOCAL-00001" summary="Update baibao add DTO class">
       <option name="closed" value="true" />
@@ -294,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731897871160</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="before update use localthread">
+      <option name="closed" value="true" />
+      <created>1733931437547</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733931437547</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -349,7 +342,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="ko chinh modelllllllllllllllllllllllllllllllllllllllllll" />
     <MESSAGE value="Update baibao add DTO class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update baibao add DTO class" />
+    <MESSAGE value="before update use localthread" />
+    <option name="LAST_COMMIT_MESSAGE" value="before update use localthread" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
