@@ -108,6 +108,57 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping("update/user/status")
+    public ResponseEntity<?> postMethodName(@RequestBody(required = false) DTOAdmin entity) {
+        //TODO: process POST request
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getADMINRole())) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if(entity.getStatus() == null){
+            ApiResponse<?> response = new ApiResponse<>(false, "Status trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if(entity.getStatus().isEmpty()){
+            ApiResponse<?> response = new ApiResponse<>(false, "Status trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        int status = Integer.valueOf((entity.getStatus()+"").trim());
+        if(status < -1 || status > 1){
+            ApiResponse<?> response = new ApiResponse<>(false, "Status khong hop le", "-1: khoa tk, 0: chua kich hoat, 1: hoat dong");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        Taikhoan tk = null;
+        tk = taiKhoanRepository.findById(Long.valueOf((entity.getTaikhoanId()+"").trim())).orElse(null);
+        if(tk == null){
+            ApiResponse<?> response = new ApiResponse<>(false, "Khong tim thay tk", "");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if(tk.getStatus() == status){
+            ApiResponse<?> response = new ApiResponse<>(true, "Status ko doi :>>", status);
+            return ResponseEntity.ok().body(response);
+        }else{
+            tk.setStatus(status);
+            taiKhoanRepository.save(tk);
+            ApiResponse<?> response = new ApiResponse<>(true, "Cap nhat thanh cong", status);
+            return ResponseEntity.ok().body(response);
+        }
+
+ 
+    }
+    
+
+
+
     @PostMapping("get/thongke")
     public ResponseEntity<?> getThongKe(@RequestBody(required = false) DTOAdmin entity) {
         //TODO: process POST request
