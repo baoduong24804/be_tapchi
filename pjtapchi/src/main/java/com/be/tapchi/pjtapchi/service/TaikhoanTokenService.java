@@ -46,13 +46,8 @@ public class TaikhoanTokenService {
                 return false;
             }
 
-<<<<<<< Updated upstream
-          
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-=======
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
->>>>>>> Stashed changes
 
 
             LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(defaultTokenExpiration);
@@ -75,7 +70,7 @@ public class TaikhoanTokenService {
             tokenRepository.save(myToken);
 
             sendResetPasswordEmail(user.getEmail(), token, "Đặt lại mật khẩu",
-                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn "+defaultTokenExpiration+" phút. Thời gian hiệu lực đến hết: "+formattedExpiryDate);
+                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn " + defaultTokenExpiration + " phút. Thời gian hiệu lực đến hết: " + formattedExpiryDate);
         } catch (Exception e) {
             // TODO: handle exception
             return false;

@@ -8,13 +8,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="Update baibao add DTO class">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480/storage_v2/_src_/database/ahihi.o8WHBQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8deffbcb-8f0f-42b1-80b3-4be1ff9e4480/storage_v2/_src_/database/ahihi.o8WHBQ/schema/public.abK9xQ.meta" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/config/PayOSConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/payos/CheckoutController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/payos/OrderController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/payos/payoscontroller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/type/ConfirmWebhookRequestBody.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/type/CreatePaymentLinkRequestBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HoaDon.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HoaDon.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/EmailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/TaikhoanTokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/TaikhoanTokenService.java" afterDir="false" />
     </list>
@@ -76,48 +80,51 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;HTTP Request.PjtapchiApplication | #1.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.PjtapchiApplication | #2.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.PjtapchiApplication | #3.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.PjtapchiApplication | #4.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.PjtapchiApplication | #6.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.PjtapchiApplication | #7.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.PjtapchiApplication | #8.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.PjtapchiApplication | #9.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestBaiBaoTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestBaiBaoTest.testGetExampleReturnsEmptyList.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.PjtapchiApplication.executor&quot;: &quot;Run&quot;,
-    &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;HaiDepChieu&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/numpa/Downloads&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.44367817&quot;,
-    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "HTTP Request.PjtapchiApplication | #1.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #10.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #11.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #2.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #3.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #4.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #6.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #7.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #8.executor": "Run",
+    "HTTP Request.PjtapchiApplication | #9.executor": "Run",
+    "HTTP Request.generated-requests | #7.executor": "Run",
+    "JUnit.TestBaiBaoTest.executor": "Run",
+    "JUnit.TestBaiBaoTest.testGetExampleReturnsEmptyList.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.PjtapchiApplication.executor": "Run",
+    "code.cleanup.on.save": "true",
+    "git-widget-placeholder": "#33 on HaiDepChieu",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/numpa/Downloads",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Global Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.44367817",
+    "rearrange.code.on.save": "true",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\DATN\be_tapchi\pjtapchi\src\main\resources" />
@@ -131,16 +138,16 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.PjtapchiApplication">
-    <configuration name="PjtapchiApplication | #6" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="6" requestIdentifier="#6" runType="Run single request">
+    <configuration name="PjtapchiApplication | #10" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="10" requestIdentifier="#10" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="PjtapchiApplication | #7" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="7" requestIdentifier="#7" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="PjtapchiApplication | #8" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="8" requestIdentifier="#8" runType="Run single request">
+    <configuration name="PjtapchiApplication | #11" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="11" requestIdentifier="#11" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="PjtapchiApplication | #9" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="9" requestIdentifier="#9" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #7" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="7" requestIdentifier="#7" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="TestBaiBaoTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -168,11 +175,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="HTTP Request.PjtapchiApplication | #11" />
+        <item itemvalue="HTTP Request.generated-requests | #7" />
+        <item itemvalue="HTTP Request.PjtapchiApplication | #10" />
         <item itemvalue="JUnit.TestBaiBaoTest" />
         <item itemvalue="HTTP Request.PjtapchiApplication | #9" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #8" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #7" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #6" />
       </list>
     </recent_temporary>
   </component>
@@ -266,6 +273,10 @@
       <workItem from="1732591242044" duration="167000" />
       <workItem from="1732595392269" duration="634000" />
       <workItem from="1732721378109" duration="1945000" />
+      <workItem from="1733721095689" duration="2819000" />
+      <workItem from="1733729658622" duration="6395000" />
+      <workItem from="1733741504205" duration="13451000" />
+      <workItem from="1733798698510" duration="1689000" />
     </task>
     <task id="LOCAL-00001" summary="Update baibao add DTO class">
       <option name="closed" value="true" />
@@ -308,7 +319,19 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HaiDepChieu" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

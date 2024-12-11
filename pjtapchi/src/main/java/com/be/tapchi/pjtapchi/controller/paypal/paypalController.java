@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -26,28 +23,23 @@ import org.springframework.web.servlet.view.RedirectView;
 public class paypalController {
 
     private final PaypalService paypalService;
-
+    String baseURL = "http://localhost:9000";
     @Autowired
     HoaDonService hoaDonService;
 
     @PostMapping("/create")
-//    public RedirectView createPayment(@RequestBody com.be.tapchi.pjtapchi.model.Payment paymentReq) {
-    public RedirectView createPayment() {
+    public RedirectView createPayment(@RequestBody com.be.tapchi.pjtapchi.model.Payment paymentReq) {
+//    public RedirectView createPayment() {
         try {
-            String cancelUrl = "http://localhost:9000/pay/cancel";
-            String successUrl = "http://localhost:9000/pay/success";
+            String cancelUrl = baseURL + "/cancel";
+            String successUrl = baseURL + "/success";
 
             Payment payment = paypalService.createPayment(
-////                    paymentReq.getTotal(),
-//                    "USD",
-//                    "paypal",
-//                    "sale",
-////                    paymentReq.getDescription(),
-                    100.0,
+                    paymentReq.getTotal(),
                     "USD",
                     "paypal",
                     "sale",
-                    "Thanh toan don hang",
+                    paymentReq.getDescription(),
                     cancelUrl,
                     successUrl
             );
@@ -73,9 +65,7 @@ public class paypalController {
             if (payment.getState().equals("approved")) {
                 HoaDon hoaDon = new HoaDon();
                 hoaDon.setTongTien(Float.parseFloat(payment.getTransactions().get(0).getAmount().getTotal()));
-                hoaDon.setPaymentId(paymentId);
-                hoaDon.setPayerId(payerId);
-                hoaDon.setStatus("approved");
+                hoaDon.setStatus("PAID");
                 hoaDon.setNgayTao(new java.sql.Date(System.currentTimeMillis()));
                 hoaDonService.save(hoaDon);
 

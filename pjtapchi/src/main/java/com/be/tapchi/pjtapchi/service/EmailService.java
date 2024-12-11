@@ -140,10 +140,7 @@ public class EmailService {
                 // TODO: handle exception
                 System.out.println("Loi xoa tat ca email verify: " + ex.getMessage());
             }
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 
         }
 
