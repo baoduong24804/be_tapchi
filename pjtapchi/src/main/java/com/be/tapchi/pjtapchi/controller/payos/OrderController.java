@@ -6,6 +6,7 @@ import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.model.HopDong;
 import com.be.tapchi.pjtapchi.model.QuangCao;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.ordercontext.OrderContext;
 import com.be.tapchi.pjtapchi.service.HoaDonService;
 import com.be.tapchi.pjtapchi.service.HopDongService;
 import com.be.tapchi.pjtapchi.service.QuangCaoService;
@@ -35,8 +36,6 @@ public class OrderController {
     String baseURL = "http://localhost:9000";
     @Autowired
     private JwtUtil jwtUtil;
-    private Long tk_id;
-    private Integer hopdong_id;
 
     @Autowired
     public OrderController(PayOS payOS, HoaDonService hoaDonService, HopDongService hopDongService,
@@ -48,12 +47,6 @@ public class OrderController {
         this.quangCaoService = quangCaoService;
     }
 
-    /**
-     * Tạo liên kết thanh toán.
-     *
-     * @param requestBody Thông tin yêu cầu tạo liên kết thanh toán.
-     * @return ObjectNode chứa thông tin phản hồi từ PayOS.
-     */
     @PostMapping(path = "/create")
     public ObjectNode createPaymentLink(@RequestBody CreatePaymentLinkRequestBody requestBody) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -65,20 +58,34 @@ public class OrderController {
             final String cancelUrl = baseURL + "/order/cancel";
             final int price = requestBody.getPrice();
             final String token = requestBody.getToken();
-            hopdong_id = requestBody.getHopdong_id();
+            Integer hopdongId = requestBody.getHopdong_id();
 
-            // Get taikhoan_id from token
-            Taikhoan tk = null;
-            if (requestBody.getToken() != null) {
-                if (!requestBody.getToken().trim().isEmpty()) {
-                    tk = jwtUtil.getTaikhoanFromToken(requestBody.getToken() + "".trim());
-                    tk_id = tk.getTaikhoan_id();
-                    hopdong_id = hopdong_id;
-                    System.out.println(tk_id);
-                    System.out.println(hopdong_id);
-                }
+            if (hopdongId == null) {
+                response.put("error", -1);
+                response.put("message", "Hopdong ID is required");
+                response.set("data", null);
+                return response;
             }
-            // Tạo mã đơn hàng
+            OrderContext.setHopdongId(hopdongId);
+
+            Taikhoan tk = null;
+            if (token != null && !token.trim().isEmpty()) {
+                tk = jwtUtil.getTaikhoanFromToken(token.trim());
+                if (tk != null) {
+                    OrderContext.setTaikhoanId(tk.getTaikhoan_id());
+                } else {
+                    response.put("error", -1);
+                    response.put("message", "Invalid token");
+                    response.set("data", null);
+                    return response;
+                }
+            } else {
+                response.put("error", -1);
+                response.put("message", "Token is required");
+                response.set("data", null);
+                return response;
+            }
+
             String currentTimeString = String.valueOf(new Date().getTime());
             Long orderCode = Long.parseLong(currentTimeString.substring(currentTimeString.length() - 6));
 
@@ -95,24 +102,18 @@ public class OrderController {
 
             CheckoutResponseData data = payOS.createPaymentLink(paymentData);
 
-            //Create hoadon
-            // Query order details using orderCode
             PaymentLinkData order = payOS.getPaymentLinkInformation(orderCode);
-
-            // Retrieve total amount and payment date
             float totalAmount = order.getAmount();
             Date paymentDate = new Date();
 
-            // Save to HoaDon
             HoaDon hoaDon = new HoaDon();
             hoaDon.setTongTien(totalAmount);
             hoaDon.setStatus(0);
             hoaDon.setNgayTao(new java.sql.Date(paymentDate.getTime()));
-            hoaDon.setTaikhoan(new Taikhoan(tk_id));
-            hoaDon.setHopDong(new HopDong(hopdong_id));
+            hoaDon.setTaikhoan(new Taikhoan(OrderContext.getTaikhoanId()));
+            hoaDon.setHopDong(new HopDong(OrderContext.getHopdongId()));
             hoaDonService.save(hoaDon);
-            Long hoadon_id = hoaDon.getHoadonId();
-
+            OrderContext.setHoadonId(hoaDon.getHoadonId());
 
             response.put("error", 0);
             response.put("message", "thành công");
@@ -126,7 +127,6 @@ public class OrderController {
             response.put("message", "thất bại");
             response.set("data", null);
             return response;
-
         }
     }
 
@@ -142,36 +142,27 @@ public class OrderController {
         ObjectNode response = objectMapper.createObjectNode();
 
         try {
-            // Query order details using orderCode
             PaymentLinkData order = payOS.getPaymentLinkInformation(orderCode);
-
-            // Retrieve total amount and payment date
             float totalAmount = order.getAmount();
             Date paymentDate = new Date();
 
-            // Update to HoaDon status = 1
-            HoaDon hoaDon = new HoaDon();
+            HoaDon hoaDon = hoaDonService.findById(OrderContext.getHoadonId()).orElseThrow(() -> new Exception("HoaDon not found"));
             hoaDon.setTongTien(totalAmount);
             hoaDon.setStatus(1);
             hoaDon.setNgayTao(new java.sql.Date(paymentDate.getTime()));
-            hoaDon.setTaikhoan(new Taikhoan(tk_id));
-            hoaDon.setHopDong(new HopDong(hopdong_id));
             hoaDonService.save(hoaDon);
-            Long hoadon_id = hoaDon.getHoadonId();
-            // Create new QuangCao
+
             QuangCao quangCao = new QuangCao();
-            quangCao.setTaikhoan(new Taikhoan(tk_id));
+            quangCao.setTaikhoan(new Taikhoan(OrderContext.getTaikhoanId()));
             quangCao.setStatus(1);
             quangCaoService.saveQuangCao(quangCao);
             Long qc_id = quangCao.getQuangcaoId();
 
-            // Update HopDong status = 1, HoaDon, quangcao_id by id
-            hopDongService.updateStatusAndHoaDonAndQuangCaoById(Long.valueOf(hopdong_id), 1, hoadon_id, qc_id);
+            hopDongService.updateStatusAndHoaDonAndQuangCaoById(Long.valueOf(OrderContext.getHopdongId()), 1, hoaDon.getHoadonId(), qc_id);
             return ResponseEntity.ok().body(new ApiResponse<>(true, "Payment success", hoaDon));
 
         } catch (Exception e) {
             e.printStackTrace();
-
             response.put("error", -1);
             response.put("message", e.getMessage());
             response.set("data", null);
@@ -192,19 +183,16 @@ public class OrderController {
             }
             PaymentLinkData order = payOS.getPaymentLinkInformation(orderCode);
 
-            // Save canceled order to HoaDon
             HoaDon hoaDon = new HoaDon();
             hoaDon.setTongTien(Float.valueOf(order.getAmount()));
             hoaDon.setStatus(2);
             hoaDon.setNgayTao(new java.sql.Date(System.currentTimeMillis()));
-            hoaDon.setTaikhoan(new Taikhoan(tk_id));
-            hoaDon.setHopDong(new HopDong(hopdong_id));
+            hoaDon.setTaikhoan(new Taikhoan(OrderContext.getTaikhoanId()));
+            hoaDon.setHopDong(new HopDong(OrderContext.getHopdongId()));
             hoaDonService.save(hoaDon);
 
-            // Update HopDong status = 3 and HoaDon by id
-            hopDongService.updateStatusAndHoaDonById(Long.valueOf(hopdong_id), 3, hoaDon);
+            hopDongService.updateStatusAndHoaDonById(Long.valueOf(OrderContext.getHopdongId()), 3, hoaDon);
 
-            // Return response
             ObjectNode dataNode = objectMapper.createObjectNode();
             dataNode.set("order", objectMapper.valueToTree(order));
             dataNode.set("hoaDon", objectMapper.valueToTree(hoaDon));
@@ -278,5 +266,4 @@ public class OrderController {
             return response;
         }
     }
-
 }
