@@ -16,13 +16,13 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="ahihi@dpg-csee50btq21c7389sm90-a.singapore-postgres.render.com" uuid="8deffbcb-8f0f-42b1-80b3-4be1ff9e4480">
-      <database-info product="PostgreSQL" version="16.4 (Debian 16.4-1.pgdg120+2)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.6.0" dbms="POSTGRES" exact-version="16.4" exact-driver-version="42.6">
+    <data-source name="adminfake@dpg-ct20qotsvqrc73e401n0-a.oregon-postgres.render.com" uuid="f3b7fc8d-2ce3-4d7c-a996-9b616744a909">
+      <database-info product="PostgreSQL" version="16.4 (Debian 16.4-1.pgdg120+2)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="16.4" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
-      <user-name>ahihi_user</user-name>
+      <user-name>adminfake_user</user-name>
       <schema-mapping>
         <introspection-scope>
           <node kind="database" qname="@">

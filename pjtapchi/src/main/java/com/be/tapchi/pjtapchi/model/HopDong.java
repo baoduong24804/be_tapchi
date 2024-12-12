@@ -1,11 +1,9 @@
 package com.be.tapchi.pjtapchi.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +11,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "hopdong")
 public class HopDong {
 
@@ -22,10 +22,10 @@ public class HopDong {
     private Long hopdong_id; // Chỉnh sửa tên biến cho nhất quán
 
     @Column(name = "ngaybatdauhd")
-    private LocalDate ngayBatDauHD;
+    private Date ngayBatDauHD;
 
     @Column(name = "ngayketthuchd")
-    private LocalDate ngayKetThucHD;
+    private Date ngayKetThucHD;
 
     @Column(name = "status")
     private int status;
