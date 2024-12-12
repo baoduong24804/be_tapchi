@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/contract")
@@ -37,10 +39,10 @@ public class hopdongController {
 
         // Set new Contract
         HopDong contract = new HopDong();
-        contract.setNgayBatDauHD(LocalDate.now());
-        contract.setNgayKetThucHD(LocalDate.now().plusDays(songay));
+        contract.setNgayBatDauHD(Date.valueOf(LocalDate.now()));
+        contract.setNgayKetThucHD(Date.valueOf(LocalDate.now().plusDays(songay)));
         contract.setStatus(0);
-        contract.setBangGiaQC(bangGiaQC);
+        contract.setBgqc(Set.of(bangGiaQC));
         contract.setHoaDon(null);
 
         // Save contract
@@ -68,7 +70,7 @@ public class hopdongController {
 
     @PutMapping("/updateStatus/{id}")
     public ResponseEntity<ApiResponse<Void>> updateStatus(@PathVariable("id") Long id,
-            @RequestParam("status") int status) {
+                                                          @RequestParam("status") int status) {
         int updated = hopDongService.updateStatusById(id, status);
         ApiResponse<Void> response = new ApiResponse<>(updated > 0, "Update status successful", null);
         return ResponseEntity.ok().body(response);

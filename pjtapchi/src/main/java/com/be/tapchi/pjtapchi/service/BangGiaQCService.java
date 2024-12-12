@@ -21,8 +21,9 @@ public class BangGiaQCService {
     }
 
     public BangGiaQC findById(Long id) {
-        return bangGiaQCRepository.findBangGiaQCByBangGiaQCId(id);
+        return bangGiaQCRepository.findByBanggiaqc_id(id);
     }
+
 
     public BangGiaQC save(BangGiaQC bangGiaQC) {
         return bangGiaQCRepository.save(bangGiaQC);

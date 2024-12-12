@@ -1,10 +1,11 @@
 package com.be.tapchi.pjtapchi.controller.payos;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.controller.payos.dto.HoaDonDTO;
+import com.be.tapchi.pjtapchi.controller.payos.dto.HopDongDTO;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.model.HopDong;
-import com.be.tapchi.pjtapchi.model.QuangCao;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.ordercontext.OrderContext;
 import com.be.tapchi.pjtapchi.service.HoaDonService;
@@ -48,9 +49,7 @@ public class OrderController {
     }
 
     @PostMapping(path = "/create")
-    public ObjectNode createPaymentLink(@RequestBody CreatePaymentLinkRequestBody requestBody) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode response = objectMapper.createObjectNode();
+    public ResponseEntity<ApiResponse<Map<String, Object>>> createPaymentLink(@RequestBody CreatePaymentLinkRequestBody requestBody) {
         try {
             final String productName = requestBody.getProductName();
             final String description = requestBody.getDescription();
@@ -58,15 +57,11 @@ public class OrderController {
             final String cancelUrl = baseURL + "/order/cancel";
             final int price = requestBody.getPrice();
             final String token = requestBody.getToken();
-            Integer hopdongId = requestBody.getHopdong_id();
+            Long hopdongId = Long.valueOf(requestBody.getHopdong_id());
 
             if (hopdongId == null) {
-                response.put("error", -1);
-                response.put("message", "Hopdong ID is required");
-                response.set("data", null);
-                return response;
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Hopdong ID is required", null));
             }
-            OrderContext.setHopdongId(hopdongId);
 
             Taikhoan tk = null;
             if (token != null && !token.trim().isEmpty()) {
@@ -74,26 +69,17 @@ public class OrderController {
                 if (tk != null) {
                     OrderContext.setTaikhoanId(tk.getTaikhoan_id());
                 } else {
-                    response.put("error", -1);
-                    response.put("message", "Invalid token");
-                    response.set("data", null);
-                    return response;
+                    return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Invalid token", null));
                 }
             } else {
-                response.put("error", -1);
-                response.put("message", "Token is required");
-                response.set("data", null);
-                return response;
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Token is required", null));
             }
 
             String currentTimeString = String.valueOf(new Date().getTime());
             Long orderCode = Long.parseLong(currentTimeString.substring(currentTimeString.length() - 6));
 
             if (productName == null) {
-                response.put("error", -1);
-                response.put("message", "Tên sản phẩm không được để trống");
-                response.set("data", null);
-                return response;
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Tên sản phẩm không được để trống", null));
             }
             ItemData item = ItemData.builder().name(productName).price(price).quantity(1).build();
 
@@ -102,109 +88,131 @@ public class OrderController {
 
             CheckoutResponseData data = payOS.createPaymentLink(paymentData);
 
-            PaymentLinkData order = payOS.getPaymentLinkInformation(orderCode);
-            float totalAmount = order.getAmount();
-            Date paymentDate = new Date();
+            // Retrieve hopdong
+            HopDong hopDong = hopDongService.getHopDongById(hopdongId);
 
+            // Save hoadon to database
             HoaDon hoaDon = new HoaDon();
-            hoaDon.setTongTien(totalAmount);
+            hoaDon.setTongTien(Float.valueOf(price));
             hoaDon.setStatus(0);
-            hoaDon.setNgayTao(new java.sql.Date(paymentDate.getTime()));
-            hoaDon.setTaikhoan(new Taikhoan(OrderContext.getTaikhoanId()));
-            hoaDon.setHopDong(new HopDong(OrderContext.getHopdongId()));
+            hoaDon.setNgayTao(new java.sql.Date(System.currentTimeMillis()));
+            hoaDon.setTaikhoan(tk);
+            hoaDon.setHopDong(hopDong);
+            hoaDon.setOrderCode(orderCode.toString());
             hoaDonService.save(hoaDon);
-            OrderContext.setHoadonId(hoaDon.getHoadonId());
 
-            response.put("error", 0);
-            response.put("message", "thành công");
-            response.set("data", objectMapper.valueToTree(data));
-            response.set("hoadon", objectMapper.valueToTree(hoaDon));
-            return response;
+            // Update hopdong
+            hopDongService.updateStatusAndHoaDonById(hopdongId, 2, hoaDon);
+
+            // Create DTOs
+            HoaDonDTO hoaDonDTO = new HoaDonDTO();
+            hoaDonDTO.setHoadon_id(hoaDon.getHoadon_id());
+            hoaDonDTO.setTongTien(hoaDon.getTongTien());
+            hoaDonDTO.setStatus(hoaDon.getStatus());
+            hoaDonDTO.setNgayTao(hoaDon.getNgayTao());
+            hoaDonDTO.setOrderCode(hoaDon.getOrderCode());
+            hoaDonDTO.setHopdong_id(hopdongId);
+            hoaDonDTO.setTaikhoan_id(hoaDon.getTaikhoan().getTaikhoan_id());
+
+            HopDongDTO hopDongDTO = new HopDongDTO();
+            hopDongDTO.setHopdong_id(hopdongId);
+
+            Map<String, Object> responseData = Map.of(
+                    "checkoutData", data,
+                    "hoaDon", hoaDonDTO,
+                    "hopDong", hopDongDTO
+            );
+
+            return ResponseEntity.ok(new ApiResponse<>(true, "thành công", responseData));
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.put("error", -1);
-            response.put("message", "thất bại");
-            response.set("data", null);
-            return response;
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, "thất bại", null));
         }
     }
 
     @GetMapping("/success")
-    public ResponseEntity<ApiResponse<HoaDon>> PayOSSuccess(
+    public ResponseEntity<ApiResponse<HoaDonDTO>> PayOSSuccess(
             @RequestParam("code") Long code,
             @RequestParam("id") String id,
             @RequestParam("cancel") boolean cancel,
             @RequestParam("status") String status,
             @RequestParam("orderCode") Long orderCode) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode response = objectMapper.createObjectNode();
-
         try {
             PaymentLinkData order = payOS.getPaymentLinkInformation(orderCode);
             float totalAmount = order.getAmount();
             Date paymentDate = new Date();
 
-            HoaDon hoaDon = hoaDonService.findById(OrderContext.getHoadonId()).orElseThrow(() -> new Exception("HoaDon not found"));
-            hoaDon.setTongTien(totalAmount);
-            hoaDon.setStatus(1);
-            hoaDon.setNgayTao(new java.sql.Date(paymentDate.getTime()));
-            hoaDonService.save(hoaDon);
+            // update hoa status = 1 (đã thanh toán) by orderCode
+            hoaDonService.updateStatusByOrderCode(orderCode.toString(), 1);
+            HoaDon hoaDon = hoaDonService.findHoaDonByOrderCode(orderCode.toString());
 
-            QuangCao quangCao = new QuangCao();
-            quangCao.setTaikhoan(new Taikhoan(OrderContext.getTaikhoanId()));
-            quangCao.setStatus(1);
-            quangCaoService.saveQuangCao(quangCao);
-            Long qc_id = quangCao.getQuangcaoId();
+            // Find hopdong by orderCode
+            Long hopdongId = hoaDonService.findHopDongByOrderCode(orderCode.toString());
 
-            hopDongService.updateStatusAndHoaDonAndQuangCaoById(Long.valueOf(OrderContext.getHopdongId()), 1, hoaDon.getHoadonId(), qc_id);
-            return ResponseEntity.ok().body(new ApiResponse<>(true, "Payment success", hoaDon));
+            // update hopdong status = 1 (đã thanh toán) by hopdongId
+            hopDongService.updateStatusById(hopdongId, 1);
+
+            // Create DTO
+            HoaDonDTO hoaDonDTO = new HoaDonDTO();
+            hoaDonDTO.setHoadon_id(hoaDon.getHoadon_id());
+            hoaDonDTO.setTongTien(hoaDon.getTongTien());
+            hoaDonDTO.setStatus(hoaDon.getStatus());
+            hoaDonDTO.setNgayTao(hoaDon.getNgayTao());
+            hoaDonDTO.setOrderCode(hoaDon.getOrderCode());
+            hoaDonDTO.setHopdong_id(hopdongId);
+            hoaDonDTO.setTaikhoan_id(hoaDon.getTaikhoan().getTaikhoan_id());
+
+            return ResponseEntity.ok().body(new ApiResponse<>(true, "Payment success", hoaDonDTO));
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.put("error", -1);
-            response.put("message", e.getMessage());
-            response.set("data", null);
-            return ResponseEntity.ok().body(new ApiResponse<>(false, "Payment failed", null));
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, "Payment failed", null));
         }
     }
 
     @GetMapping("/cancel")
-    public ObjectNode getCanceledById(@RequestParam(value = "orderCode", required = false) Long orderCode) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode response = objectMapper.createObjectNode();
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getCanceledById(@RequestParam(value = "orderCode", required = false) Long orderCode) {
         try {
             if (orderCode == null) {
-                response.put("error", -1);
-                response.put("message", "Order code is required");
-                response.set("data", null);
-                return response;
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Order code is required", null));
             }
             PaymentLinkData order = payOS.getPaymentLinkInformation(orderCode);
 
-            HoaDon hoaDon = new HoaDon();
-            hoaDon.setTongTien(Float.valueOf(order.getAmount()));
-            hoaDon.setStatus(2);
-            hoaDon.setNgayTao(new java.sql.Date(System.currentTimeMillis()));
-            hoaDon.setTaikhoan(new Taikhoan(OrderContext.getTaikhoanId()));
-            hoaDon.setHopDong(new HopDong(OrderContext.getHopdongId()));
-            hoaDonService.save(hoaDon);
+            // Update hoadon status = 2 (đã hủy) by orderCode
+            hoaDonService.updateStatusByOrderCode(orderCode.toString(), 2);
+            HoaDon hoaDon = hoaDonService.findHoaDonByOrderCode(orderCode.toString());
 
-            hopDongService.updateStatusAndHoaDonById(Long.valueOf(OrderContext.getHopdongId()), 3, hoaDon);
+            // Find hopdong by orderCode
+            Long hopdongId = hoaDonService.findHopDongByOrderCode(orderCode.toString());
 
-            ObjectNode dataNode = objectMapper.createObjectNode();
-            dataNode.set("order", objectMapper.valueToTree(order));
-            dataNode.set("hoaDon", objectMapper.valueToTree(hoaDon));
-            response.set("data", dataNode);
-            response.put("message", "Canceled Thành Công");
-            return response;
+            // Update hopdong status = 0 (chưa thanh toán) by hopdongId
+            hopDongService.updateStatusById(hopdongId, 0);
+
+            // Create DTOs
+            HoaDonDTO hoaDonDTO = new HoaDonDTO();
+            hoaDonDTO.setHoadon_id(hoaDon.getHoadon_id());
+            hoaDonDTO.setTongTien(hoaDon.getTongTien());
+            hoaDonDTO.setStatus(hoaDon.getStatus());
+            hoaDonDTO.setNgayTao(hoaDon.getNgayTao());
+            hoaDonDTO.setOrderCode(hoaDon.getOrderCode());
+            hoaDonDTO.setHopdong_id(hopdongId);
+            hoaDonDTO.setTaikhoan_id(hoaDon.getTaikhoan().getTaikhoan_id());
+
+            HopDongDTO hopDongDTO = new HopDongDTO();
+            hopDongDTO.setHopdong_id(hopdongId);
+
+            Map<String, Object> data = Map.of(
+                    "order", order,
+                    "hoaDon", hoaDonDTO,
+                    "hopDong", hopDongDTO
+            );
+
+            return ResponseEntity.ok(new ApiResponse<>(true, "Canceled Thành Công", data));
         } catch (Exception e) {
             e.printStackTrace();
-            response.put("error", -1);
-            response.put("message", e.getMessage());
-            response.set("data", null);
-            return response;
+            return ResponseEntity.status(500).body(new ApiResponse<>(false, e.getMessage(), null));
         }
     }
 

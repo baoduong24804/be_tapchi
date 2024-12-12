@@ -34,6 +34,19 @@ public class HoaDonService {
         return hoaDonRepository.updateStatusById(id, status);
     }
 
+    public HoaDon findHoaDonByOrderCode(String orderCode) {
+        return hoaDonRepository.findHoaDonByOrderCode(orderCode);
+    }
+
+    public int updateStatusByOrderCode(String orderCode, int status) {
+        return hoaDonRepository.updateStatusByOrderCode(orderCode, status);
+    }
+
+    public Long findHopDongByOrderCode(String orderCode) {
+        return hoaDonRepository.findHopDongByOrderCode(orderCode);
+    }
+    
+
     public void deleteById(Long id) {
         hoaDonRepository.deleteById(id);
     }

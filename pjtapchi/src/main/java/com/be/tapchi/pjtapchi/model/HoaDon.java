@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -33,14 +32,8 @@ public class HoaDon {
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
-    @Column(name = "paymentid")
-    private String paymentId;
-
-    @Column(name = "payerid")
-    private String payerId;
-
-    @Column(name = "ngaythanhtoan")
-    private LocalDateTime ngaythanhtoan;
+    @Column(name = "ordercode")
+    private String orderCode;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hopdong_id")

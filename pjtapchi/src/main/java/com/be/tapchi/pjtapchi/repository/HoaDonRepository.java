@@ -13,7 +13,18 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE HoaDon h SET h.status = :status WHERE h.hoadonId = :id")
+    @Query("UPDATE HoaDon h SET h.status = :status WHERE h.hoadon_id = :id")
     int updateStatusById(@Param("id") Long id, @Param("status") int status);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE HoaDon h SET h.status = :status where h.orderCode = :orderCode")
+    int updateStatusByOrderCode(@Param("orderCode") String orderCode, @Param("status") int status);
+
+    @Transactional
+    @Query("SELECT h.hopDong.hopdong_id FROM HoaDon h WHERE h.orderCode = :orderCode")
+    Long findHopDongByOrderCode(@Param("orderCode") String orderCode);
+
+
+    HoaDon findHoaDonByOrderCode(String orderCode);
 }
