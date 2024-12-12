@@ -1,6 +1,5 @@
 package com.be.tapchi.pjtapchi.controller.paypal;
 
-
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.service.HoaDonService;
@@ -29,7 +28,7 @@ public class paypalController {
 
     @PostMapping("/create")
     public RedirectView createPayment(@RequestBody com.be.tapchi.pjtapchi.model.Payment paymentReq) {
-//    public RedirectView createPayment() {
+        // public RedirectView createPayment() {
         try {
             String cancelUrl = baseURL + "/cancel";
             String successUrl = baseURL + "/success";
@@ -41,8 +40,7 @@ public class paypalController {
                     "sale",
                     paymentReq.getDescription(),
                     cancelUrl,
-                    successUrl
-            );
+                    successUrl);
             for (Links links : payment.getLinks()) {
                 if (links.getRel().equals("approval_url")) {
                     return new RedirectView(links.getHref());
@@ -57,8 +55,7 @@ public class paypalController {
     @GetMapping("/success")
     public ResponseEntity<ApiResponse<HoaDon>> paymentSuccess(
             @RequestParam("paymentId") String paymentId,
-            @RequestParam("PayerID") String payerId
-    ) {
+            @RequestParam("PayerID") String payerId) {
         try {
             Payment payment = paypalService.excutePayment(paymentId, payerId);
             String des = payment.getTransactions().get(0).getDescription();
@@ -83,7 +80,6 @@ public class paypalController {
     public String paymentCancel() {
         return "cancel";
     }
-
 
     @GetMapping("/error")
     public String error() {

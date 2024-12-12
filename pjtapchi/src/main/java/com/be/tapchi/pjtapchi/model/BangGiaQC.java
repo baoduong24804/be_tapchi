@@ -29,20 +29,20 @@ public class BangGiaQC {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "banggiaqc_id")
-    private Long bangGiaQCId;
+    private Long banggiaqc_id;
 
     @Column(name = "songay")
-    private Integer soNgay;
+    private Integer songay;
 
     @Column(name = "giatien")
-    private Float giaTien;
+    private Float giatien;
 
     @Column(name = "tengoi")
-    private String tenGoi;
+    private String tengoi;
 
-    // @OneToMany(mappedBy = "bangGiaQC", fetch = FetchType.LAZY)
-    // @JsonIgnore
-    // private List<HopDong> HopDongs;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Taikhoan_id")
+    private Taikhoan taikhoan;
 
 
 }

@@ -119,19 +119,19 @@ public class baibaoController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         try {
-            if (entity.getToken().isBlank() || entity.getToken() == null) {
-                ApiResponse<?> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
+            if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) ==  false) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
                 return ResponseEntity.badRequest().body(response);
             }
-            Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
+            // Taikhoan tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
             if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getEDITORRole())) {
                 ApiResponse<?> response = new ApiResponse<>(false, "Không được phép truy cập", null);
                 return ResponseEntity.badRequest().body(response);
             }
-            if (tk == null) {
-                ApiResponse<?> response = new ApiResponse<>(false, "Lỗi tài khoản không hợp lệ", null);
-                return ResponseEntity.badRequest().body(response);
-            }
+            // if (tk == null) {
+            //     ApiResponse<?> response = new ApiResponse<>(false, "Lỗi tài khoản không hợp lệ", null);
+            //     return ResponseEntity.badRequest().body(response);
+            // }
             Pageable pageable = PageRequest.of(page, size);
             Page<Baibao> pageResult = bbService.findAllBaibao(pageable);
             Map<String, Object> data = new HashMap<>();
@@ -246,8 +246,8 @@ public class baibaoController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
         try {
-            if (entity.getToken().isBlank() || entity.getToken() == null) {
-                ApiResponse<Page<?>> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
+            if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) ==  false) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
                 return ResponseEntity.badRequest().body(response);
             }
         } catch (Exception e) {
@@ -389,10 +389,9 @@ public class baibaoController {
         try {
             // check token va quyen han
             try {
-                if (entity.getToken() == null) {
-
-                    ApiResponse<?> response = new ApiResponse<>(false, "Lỗi token không hợp lệ", null);
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) ==  false) {
+                    ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+                    return ResponseEntity.badRequest().body(response);
                 }
 
                 if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getAUTHORRole())) {

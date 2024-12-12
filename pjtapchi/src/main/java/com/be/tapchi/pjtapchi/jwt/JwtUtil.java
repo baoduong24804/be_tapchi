@@ -43,6 +43,33 @@ public class JwtUtil {
         }
     }
 
+    public boolean checkTokenAndTaiKhoan(String token) {
+        if (token == null) {
+            return false;
+        }
+        if ((token + "".trim()).isEmpty()) {
+            return false;
+        }
+        Taikhoan tk = null;
+        try {
+            tk = getTaikhoanFromToken(token);
+            if (tk == null) {
+                return false;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            return false;
+        }
+
+        if(tk.getStatus() == 0 || tk.getStatus() == -1){
+            // tk chua kich hoat or bi khoa
+            return false;
+        }
+
+        return true;
+
+    }
+
     public String refeshToken(Claims claims) {
         try {
             Date expiration = claims.getExpiration();
@@ -69,7 +96,7 @@ public class JwtUtil {
 
             // Lấy thời gian hiện tại
             Date currentDate = new Date();
-            
+
             // Tính thời gian còn lại của token
             long remainingTimeMillis = expirationDate.getTime() - currentDate.getTime();
 
@@ -151,14 +178,14 @@ public class JwtUtil {
             Set<String> userRoles = new HashSet<>();
 
             for (Vaitro vt : tk.getVaitro()) {
-                //System.out.println("add: "+vt.getTenrole());
+                // System.out.println("add: "+vt.getTenrole());
                 userRoles.add(vt.getTenrole());
             }
 
             // Kiểm tra nếu bất kỳ vai trò nào của user trùng khớp với danh sách roles yêu
             // cầu
             for (String role : roles) {
-                //System.out.println("check: "+role);
+                // System.out.println("check: "+role);
                 if (userRoles.contains(role)) {
                     return true;
                 }
@@ -198,9 +225,10 @@ public class JwtUtil {
             return claims;
         } catch (Exception e) {
             // TODO: handle exception
-            e.getMessage();
+            return null;
+            
         }
-        return null;
+       
     }
 
     public String extractUsername(String token) {

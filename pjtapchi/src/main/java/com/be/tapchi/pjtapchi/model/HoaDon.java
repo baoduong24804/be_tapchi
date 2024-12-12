@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -17,7 +18,7 @@ public class HoaDon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hoadon_id")
-    private Long hoadonId;
+    private Long hoadon_id;
 
     @Column(name = "tongtien")
     private Float tongTien;
@@ -32,12 +33,21 @@ public class HoaDon {
     @Temporal(TemporalType.DATE)
     private Date ngayTao;
 
+    @Column(name = "paymentid")
+    private String paymentId;
+
+    @Column(name = "payerid")
+    private String payerId;
+
+    @Column(name = "ngaythanhtoan")
+    private LocalDateTime ngaythanhtoan;
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hopdongId")
+    @JoinColumn(name = "hopdong_id")
     private HopDong hopDong;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "taikhoan_id")
+    @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
 }

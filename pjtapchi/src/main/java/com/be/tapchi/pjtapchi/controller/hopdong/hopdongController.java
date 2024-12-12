@@ -1,6 +1,5 @@
 package com.be.tapchi.pjtapchi.controller.hopdong;
 
-
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.model.BangGiaQC;
 import com.be.tapchi.pjtapchi.model.HopDong;
@@ -48,7 +47,8 @@ public class hopdongController {
         hopDongService.saveHopDong(contract);
 
         // Response
-        ApiResponse<HopDong> response = new ApiResponse<>(true, "Create contract successful, waiting for Payment", contract);
+        ApiResponse<HopDong> response = new ApiResponse<>(true, "Create contract successful, waiting for Payment",
+                contract);
         return ResponseEntity.ok().body(response);
     }
 
@@ -67,7 +67,8 @@ public class hopdongController {
     }
 
     @PutMapping("/updateStatus/{id}")
-    public ResponseEntity<ApiResponse<Void>> updateStatus(@PathVariable("id") Long id, @RequestParam("status") int status) {
+    public ResponseEntity<ApiResponse<Void>> updateStatus(@PathVariable("id") Long id,
+            @RequestParam("status") int status) {
         int updated = hopDongService.updateStatusById(id, status);
         ApiResponse<Void> response = new ApiResponse<>(updated > 0, "Update status successful", null);
         return ResponseEntity.ok().body(response);

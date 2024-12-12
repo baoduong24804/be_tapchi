@@ -48,4 +48,7 @@ public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
     @Query("SELECT b FROM Baibao b WHERE LOWER(b.keyword) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Baibao> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
+    @Query("SELECT COUNT(b) FROM Baibao b")
+    long countBaibao();
+
 }

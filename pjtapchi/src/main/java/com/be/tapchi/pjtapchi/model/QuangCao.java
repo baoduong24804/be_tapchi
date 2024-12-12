@@ -17,7 +17,7 @@ public class QuangCao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quangcao_id")
-    private Long quangcaoId;
+    private Long quangcao_id;
 
     @Column(name = "tieude")
     private String tieude;
