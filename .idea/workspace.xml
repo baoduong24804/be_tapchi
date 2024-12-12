@@ -7,11 +7,7 @@
     <option name="diagramMode" value="true" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="Update baibao add DTO class">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/paypal/paypalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/Payment.java" afterDir="false" />
-    </list>
+    <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="Update baibao add DTO class" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,6 +32,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -76,6 +73,8 @@
     &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;HTTP Request.PjtapchiApplication | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #10.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.PjtapchiApplication | #11.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.PjtapchiApplication | #2.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.PjtapchiApplication | #3.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.PjtapchiApplication | #4.executor&quot;: &quot;Run&quot;,
@@ -83,6 +82,7 @@
     &quot;HTTP Request.PjtapchiApplication | #7.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.PjtapchiApplication | #8.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.PjtapchiApplication | #9.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #7.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.TestBaiBaoTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.TestBaiBaoTest.testGetExampleReturnsEmptyList.executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
@@ -93,9 +93,10 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.PjtapchiApplication.executor&quot;: &quot;Run&quot;,
     &quot;code.cleanup.on.save&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;HaiDepChieu&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#33 on HaiDepChieu&quot;,
+    &quot;idea.background.editor&quot;: &quot;C:\\Users\\numpa\\Downloads\\Red and Brown Aesthetic Vision Board Photo Collage Christmas Desktop Wallpaper.png,10,scale,center&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/DATN/be_tapchi/pjtapchi/src/main/resources&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/numpa/Downloads&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -125,16 +126,16 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.PjtapchiApplication">
-    <configuration name="PjtapchiApplication | #6" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="6" requestIdentifier="#6" runType="Run single request">
+    <configuration name="PjtapchiApplication | #10" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="10" requestIdentifier="#10" runType="Run single request">
       <method v="2" />
     </configuration>
-    <configuration name="PjtapchiApplication | #7" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="7" requestIdentifier="#7" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="PjtapchiApplication | #8" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="8" requestIdentifier="#8" runType="Run single request">
+    <configuration name="PjtapchiApplication | #11" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="11" requestIdentifier="#11" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="PjtapchiApplication | #9" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/PjtapchiApplication.http" index="9" requestIdentifier="#9" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests | #7" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="7" requestIdentifier="#7" runType="Run single request">
       <method v="2" />
     </configuration>
     <configuration name="TestBaiBaoTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
@@ -163,10 +164,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.TestBaiBaoTest" />
+        <item itemvalue="HTTP Request.generated-requests | #7" />
         <item itemvalue="HTTP Request.PjtapchiApplication | #9" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #8" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #7" />
-        <item itemvalue="HTTP Request.PjtapchiApplication | #6" />
+        <item itemvalue="HTTP Request.PjtapchiApplication | #11" />
+        <item itemvalue="HTTP Request.PjtapchiApplication | #10" />
       </list>
     </recent_temporary>
   </component>
@@ -245,6 +246,27 @@
       <workItem from="1731942740204" duration="256000" />
       <workItem from="1732002120479" duration="1000" />
       <workItem from="1732009839867" duration="2401000" />
+      <workItem from="1732166143116" duration="637000" />
+      <workItem from="1732177883973" duration="199000" />
+      <workItem from="1732194450124" duration="1048000" />
+      <workItem from="1732195512310" duration="712000" />
+      <workItem from="1732341121526" duration="2195000" />
+      <workItem from="1732362671853" duration="1204000" />
+      <workItem from="1732450418615" duration="4617000" />
+      <workItem from="1732514566101" duration="36000" />
+      <workItem from="1732515849358" duration="1158000" />
+      <workItem from="1732543486372" duration="1276000" />
+      <workItem from="1732554010954" duration="160000" />
+      <workItem from="1732562115008" duration="746000" />
+      <workItem from="1732591242044" duration="167000" />
+      <workItem from="1732595392269" duration="634000" />
+      <workItem from="1732721378109" duration="1945000" />
+      <workItem from="1733721095689" duration="2819000" />
+      <workItem from="1733729658622" duration="6395000" />
+      <workItem from="1733741504205" duration="13451000" />
+      <workItem from="1733798698510" duration="1689000" />
+      <workItem from="1733885102907" duration="24178000" />
+      <workItem from="1733925943769" duration="5417000" />
     </task>
     <task id="LOCAL-00001" summary="Update baibao add DTO class">
       <option name="closed" value="true" />
@@ -287,7 +309,19 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HaiDepChieu" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -309,6 +343,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.hibernate.query.SemanticException" package="org.hibernate.query" />
           <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IllegalArgumentException" package="java.lang" />
+          <option name="timeStamp" value="5" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,6 +1,5 @@
 package com.be.tapchi.pjtapchi.controller.paypal;
 
-
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.service.HoaDonService;
@@ -23,16 +22,16 @@ import org.springframework.web.servlet.view.RedirectView;
 public class paypalController {
 
     private final PaypalService paypalService;
-
+    String baseURL = "http://localhost:9000";
     @Autowired
     HoaDonService hoaDonService;
 
     @PostMapping("/create")
     public RedirectView createPayment(@RequestBody com.be.tapchi.pjtapchi.model.Payment paymentReq) {
-//    public RedirectView createPayment() {
+        // public RedirectView createPayment() {
         try {
-            String cancelUrl = "http://localhost:9000/pay/cancel";
-            String successUrl = "http://localhost:9000/pay/success";
+            String cancelUrl = baseURL + "/cancel";
+            String successUrl = baseURL + "/success";
 
             Payment payment = paypalService.createPayment(
                     paymentReq.getTotal(),
@@ -40,14 +39,8 @@ public class paypalController {
                     "paypal",
                     "sale",
                     paymentReq.getDescription(),
-//                    100.0,
-//                    "USD",
-//                    "paypal",
-//                    "sale",
-//                    "Thanh toan don hang",
                     cancelUrl,
-                    successUrl
-            );
+                    successUrl);
             for (Links links : payment.getLinks()) {
                 if (links.getRel().equals("approval_url")) {
                     return new RedirectView(links.getHref());
@@ -62,16 +55,13 @@ public class paypalController {
     @GetMapping("/success")
     public ResponseEntity<ApiResponse<HoaDon>> paymentSuccess(
             @RequestParam("paymentId") String paymentId,
-            @RequestParam("PayerID") String payerId
-    ) {
+            @RequestParam("PayerID") String payerId) {
         try {
             Payment payment = paypalService.excutePayment(paymentId, payerId);
+            String des = payment.getTransactions().get(0).getDescription();
             if (payment.getState().equals("approved")) {
                 HoaDon hoaDon = new HoaDon();
                 hoaDon.setTongTien(Float.parseFloat(payment.getTransactions().get(0).getAmount().getTotal()));
-                hoaDon.setPaymentId(paymentId);
-                hoaDon.setPayerId(payerId);
-                // approved = 1;
                 hoaDon.setStatus(1);
                 hoaDon.setNgayTao(new java.sql.Date(System.currentTimeMillis()));
                 hoaDonService.save(hoaDon);
@@ -90,7 +80,6 @@ public class paypalController {
     public String paymentCancel() {
         return "cancel";
     }
-
 
     @GetMapping("/error")
     public String error() {

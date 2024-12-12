@@ -1,28 +1,20 @@
 package com.be.tapchi.pjtapchi.service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
+import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.model.TaikhoanToken;
+import com.be.tapchi.pjtapchi.repository.TaikhoanTKRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
-import com.be.tapchi.pjtapchi.model.EmailVerification;
-import com.be.tapchi.pjtapchi.model.Taikhoan;
-import com.be.tapchi.pjtapchi.model.TaikhoanToken;
-import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
-import com.be.tapchi.pjtapchi.repository.TaikhoanTKRepository;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -54,13 +46,13 @@ public class TaikhoanTokenService {
                 return false;
             }
 
-          
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+
+
             LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(defaultTokenExpiration);
 
-           
+
             String formattedExpiryDate = expiryDate.format(formatter);
             System.out.println("Đã thêm token có thời hạn đến: " + formattedExpiryDate);
 
@@ -78,12 +70,11 @@ public class TaikhoanTokenService {
             tokenRepository.save(myToken);
 
             sendResetPasswordEmail(user.getEmail(), token, "Đặt lại mật khẩu",
-                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn "+defaultTokenExpiration+" phút. Thời gian hiệu lực đến hết: "+formattedExpiryDate);
+                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn " + defaultTokenExpiration + " phút. Thời gian hiệu lực đến hết: " + formattedExpiryDate);
         } catch (Exception e) {
             // TODO: handle exception
             return false;
         }
-
         return true;
     }
 
@@ -94,14 +85,15 @@ public class TaikhoanTokenService {
     private void sendResetPasswordEmail(String userEmail, String token, String title, String content) {
         String resetUrl = baseUrl + "/reset-password?token=" + token;
 
-        // SimpleMailMessage email = new SimpleMailMessage();
-        // email.setTo(userEmail);
-        // email.setSubject("Reset Password");
-        // email.setText("To reset your password, click the link below:\n" + resetUrl +
-        // "\nThis link will expire in 15 minutes.");
+//        SimpleMailMessage email = new SimpleMailMessage();
+//        email.setTo(userEmail);
+//        email.setSubject("Reset Password");
+//        email.setText("To reset your password, click the link below:\n" + resetUrl +
+//                "\nThis link will expire in 15 minutes.");
 
         emailService.sendActivationEmail(userEmail, resetUrl, title, content);
     }
+
 
     public boolean validatePasswordResetToken(String token) {
         TaikhoanToken passToken = tokenRepository.findByToken(token);
@@ -166,7 +158,7 @@ public class TaikhoanTokenService {
 
             //List<Taikhoan> listTK = new ArrayList<>();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-      
+
 
             for (TaikhoanToken tktoken : list) {
                 // System.out.println(tktoken.getExpiryDate());
@@ -177,13 +169,11 @@ public class TaikhoanTokenService {
                 System.out.println("Đã xóa token hết hạn");
             }
 
-            return;
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println("err get taikhantoken expriryDate: " + e.getMessage());
         }
-        
-        return;
+
     }
 
     // Scheduled task để xóa token hết hạn
@@ -196,7 +186,7 @@ public class TaikhoanTokenService {
             System.out.println("Checkkkk token");
 
             deleteTokenExpiryDate();
-            
+
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println("Err function checkExpriryDate");

@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,7 +55,7 @@ public class Taikhoan {
     @Column(name = "ngaytao")
     private LocalDate ngaytao;
 
-    
+
     @Column(name = "status")
     private Integer status;
 
@@ -93,6 +92,10 @@ public class Taikhoan {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "taikhoan")
     @JsonIgnore
     private List<Thich> thichs;
+
+    public Taikhoan(Long tkId) {
+        this.taikhoan_id = tkId;
+    }
 
 
     // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
