@@ -14,8 +14,8 @@ public interface BangGiaQCRepository extends JpaRepository<BangGiaQC, Long> {
     @Query("SELECT b.songay FROM BangGiaQC b WHERE b.banggiaqc_id = :id")
     Integer findSoNgayByID(@Param("id") Long id);
 
-    @Transactional
-    @Query("SELECT BangGiaQC FROM BangGiaQC b WHERE b.banggiaqc_id = :id")
-    BangGiaQC findByBanggiaqc_id(@Param("id") Long id);
+    @Query("SELECT b FROM BangGiaQC b WHERE b.banggiaqc_id = :id")
+    BangGiaQC findBybanggiaqc_id(@Param("id") Long id);
+
 
 }

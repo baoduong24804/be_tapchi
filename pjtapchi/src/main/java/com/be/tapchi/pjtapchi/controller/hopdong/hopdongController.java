@@ -1,6 +1,7 @@
 package com.be.tapchi.pjtapchi.controller.hopdong;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.controller.hopdong.DTO.ContractRequest;
 import com.be.tapchi.pjtapchi.model.BangGiaQC;
 import com.be.tapchi.pjtapchi.model.HopDong;
 import com.be.tapchi.pjtapchi.service.BangGiaQCService;
@@ -30,12 +31,12 @@ public class hopdongController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<HopDong>> createContract(@RequestParam Long bgqcid) {
+    public ResponseEntity<ApiResponse<HopDong>> createContract(@RequestBody ContractRequest request) {
         // Retrieve BangGiaQC entity
-        BangGiaQC bangGiaQC = bangGiaQCService.findById(bgqcid);
+        BangGiaQC bangGiaQC = bangGiaQCService.findBangGiaQCByBanggiaqc_id(request.getbgqcid());
 
         // Retrieve the number of days
-        Integer songay = bangGiaQCService.findSoNgayByID(bgqcid);
+        Integer songay = bangGiaQCService.findSoNgayByID(request.getbgqcid());
 
         // Set new Contract
         HopDong contract = new HopDong();
@@ -49,8 +50,7 @@ public class hopdongController {
         hopDongService.saveHopDong(contract);
 
         // Response
-        ApiResponse<HopDong> response = new ApiResponse<>(true, "Create contract successful, waiting for Payment",
-                contract);
+        ApiResponse<HopDong> response = new ApiResponse<>(true, "Create contract successful, waiting for Payment", contract);
         return ResponseEntity.ok().body(response);
     }
 

@@ -132,7 +132,7 @@ public class OrderController {
     }
 
     @GetMapping("/success")
-    public ResponseEntity<ApiResponse<HoaDonDTO>> PayOSSuccess(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> PayOSSuccess(
             @RequestParam("code") Long code,
             @RequestParam("id") String id,
             @RequestParam("cancel") boolean cancel,
@@ -164,7 +164,16 @@ public class OrderController {
             hoaDonDTO.setHopdong_id(hopdongId);
             hoaDonDTO.setTaikhoan_id(hoaDon.getTaikhoan().getTaikhoan_id());
 
-            return ResponseEntity.ok().body(new ApiResponse<>(true, "Payment success", hoaDonDTO));
+            HopDongDTO hopDongDTO = new HopDongDTO();
+            hopDongDTO.setHopdong_id(hopdongId);
+
+            Map<String, Object> data = Map.of(
+                    "order", order,
+                    "hoaDon", hoaDonDTO,
+                    "hopDong", hopDongDTO
+            );
+
+            return ResponseEntity.ok(new ApiResponse<>(true, "Payment success", data));
 
         } catch (Exception e) {
             e.printStackTrace();

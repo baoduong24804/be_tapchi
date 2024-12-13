@@ -20,8 +20,8 @@ public class BangGiaQCService {
         return bangGiaQCRepository.findAll();
     }
 
-    public BangGiaQC findById(Long id) {
-        return bangGiaQCRepository.findByBanggiaqc_id(id);
+    public BangGiaQC findBangGiaQCByBanggiaqc_id(Long ids) {
+        return bangGiaQCRepository.findBybanggiaqc_id(ids);
     }
 
 
