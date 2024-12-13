@@ -287,18 +287,43 @@ public class AdminController {
         Set<Vaitro> newvaitro = new HashSet<>();
 
         for (Vaitro vaitro : svaitro) {
-            if(vaitro.getTenrole().equalsIgnoreCase(addvt.getTenrole()) || vaitro.getVaitroId() == addvt.getVaitroId()){
+            if (vaitro.getTenrole().equalsIgnoreCase(addvt.getTenrole())
+                    || vaitro.getVaitroId() == addvt.getVaitroId()) {
                 continue;
             }
             newvaitro.add(vaitro);
         }
 
-     
         tk.setVaitro(newvaitro);
         taiKhoanRepository.save(tk);
         ApiResponse<?> response = new ApiResponse<>(true, "Xoa vai tro thanh cong", null);
         return ResponseEntity.ok().body(response);
 
+    }
+
+    @PostMapping("get/role")
+    public ResponseEntity<?> getRole(@RequestBody(required = false) DTOAdmin entity) {
+        // TODO: process POST request
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getADMINRole())) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        List<Vaitro> list = vaiTroRepository.findAll();
+        if (list.size() <= 0) {
+
+            ApiResponse<?> response = new ApiResponse<>(false, "Ko co role nao", null);
+            return ResponseEntity.badRequest().body(response);
+
+        }
+
+        ApiResponse<?> response = new ApiResponse<>(true, "Lay data thanh cong", list);
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("get/thongke")
