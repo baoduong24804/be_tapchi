@@ -8,18 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="before update use localthread">
-      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hoadon/DTO/BgqcDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hoadon/DTO/HoaDonDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hopdong/DTO/BangGiaQCDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hoadon/hoadonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hoadon/hoadonController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hopdong/hopdongController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hopdong/hopdongController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/jwt/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/jwt/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/BangGiaQC.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/BangGiaQC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HopDong.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HopDong.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/BangGiaQCRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/BangGiaQCRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/HoaDonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/repository/HoaDonRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/BangGiaQCService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/BangGiaQCService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/HoaDonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/service/HoaDonService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -284,7 +276,7 @@
       <workItem from="1734085524495" duration="5899000" />
       <workItem from="1734099315761" duration="11772000" />
       <workItem from="1734164863495" duration="271000" />
-      <workItem from="1734170276259" duration="7014000" />
+      <workItem from="1734170276259" duration="7612000" />
     </task>
     <task id="LOCAL-00001" summary="Update baibao add DTO class">
       <option name="closed" value="true" />

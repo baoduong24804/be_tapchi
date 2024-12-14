@@ -50,5 +50,9 @@ public class HoaDonService {
         hoaDonRepository.deleteById(id);
     }
 
+    public List<HoaDon> findHoaDonByTaikhoanTaikhoan_id(Long id) {
+        return hoaDonRepository.findHoaDonByTaikhoanTaikhoan_id(id);
+    }
+
     // Thêm các phương thức khác nếu cần
 }
