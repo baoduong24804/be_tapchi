@@ -36,5 +36,8 @@ public class BangGiaQCService {
     public Integer findSoNgayByID(Long id) {
         return bangGiaQCRepository.findSoNgayByID(id);
     }
-    // Thêm các phương thức khác nếu cần
+
+    public BangGiaQC findBybanggiaqc_id(Long id) {
+        return bangGiaQCRepository.findBybanggiaqc_id(id);
+    }
 }

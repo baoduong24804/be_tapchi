@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HoaDonService {
@@ -22,8 +21,8 @@ public class HoaDonService {
         return hoaDonRepository.findAll();
     }
 
-    public Optional<HoaDon> findById(Long id) {
-        return hoaDonRepository.findById(id);
+    public HoaDon findById(Long id) {
+        return hoaDonRepository.findHoaDonByHoadon_id(id);
     }
 
     public HoaDon save(HoaDon hoaDon) {
@@ -45,7 +44,7 @@ public class HoaDonService {
     public Long findHopDongByOrderCode(String orderCode) {
         return hoaDonRepository.findHopDongByOrderCode(orderCode);
     }
-    
+
 
     public void deleteById(Long id) {
         hoaDonRepository.deleteById(id);

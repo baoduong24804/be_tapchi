@@ -8,17 +8,19 @@ import com.be.tapchi.pjtapchi.model.HopDong;
 import com.be.tapchi.pjtapchi.service.BangGiaQCService;
 import com.be.tapchi.pjtapchi.service.HopDongService;
 import com.be.tapchi.pjtapchi.userRole.ManageRoles;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/contract")
 public class hopdongController {
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -37,6 +39,7 @@ public class hopdongController {
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<HopDong>> createContract(@RequestBody ContractRequest request) {
+
         if (!jwtUtil.checkTokenAndTaiKhoan(request.getToken())) {
             ApiResponse<HopDong> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
             return ResponseEntity.badRequest().body(response);
@@ -46,9 +49,9 @@ public class hopdongController {
             ApiResponse<HopDong> response = new ApiResponse<>(false, "Bạn Không Có Quyền Tạo Hợp Đồng", null);
             return ResponseEntity.badRequest().body(response);
         }
-
         // Retrieve BangGiaQC entity
         BangGiaQC bangGiaQC = bangGiaQCService.findBangGiaQCByBanggiaqc_id(request.getBgqcid());
+
 
         // Retrieve the number of days
         Integer songay = bangGiaQCService.findSoNgayByID(request.getBgqcid());
@@ -58,8 +61,11 @@ public class hopdongController {
         contract.setNgayBatDauHD(Date.valueOf(LocalDate.now()));
         contract.setNgayKetThucHD(Date.valueOf(LocalDate.now().plusDays(songay)));
         contract.setStatus(0);
-        contract.setBgqc(Set.of(bangGiaQC));
+        contract.setBgqc(bangGiaQC);
         contract.setHoaDon(null);
+
+//        // Debugging statement to check bgqc data
+//        System.out.println("bgqc data: " + contract.getBgqc());
 
         // Save contract
         hopDongService.saveHopDong(contract);
