@@ -3,6 +3,9 @@ package com.be.tapchi.pjtapchi.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,6 +28,10 @@ public class BangGiaQC {
 
     @Column(name = "tengoi")
     private String tengoi;
+
+    @OneToMany(mappedBy = "bgqc", fetch = FetchType.LAZY)
+    private Set<HopDong> hopDongs = new HashSet<>();
+
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "Taikhoan_id")

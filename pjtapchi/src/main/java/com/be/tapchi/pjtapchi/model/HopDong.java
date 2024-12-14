@@ -33,9 +33,9 @@ public class HopDong {
     @OneToMany(mappedBy = "quangcao_id", fetch = FetchType.LAZY)
     private Set<QuangCao> QuangCao = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "banggiaqc_id")
-    private Set<BangGiaQC> bgqc = new HashSet<>();
+    private BangGiaQC bgqc;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hoadon_id", nullable = false)

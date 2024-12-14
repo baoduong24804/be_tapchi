@@ -51,7 +51,6 @@ public class JwtUtil {
 
         // tk chua kich hoat or bi khoa
         return tk.getStatus() != 0 && tk.getStatus() != -1;
-
     }
 
     public String refeshToken(Claims claims) {

@@ -25,6 +25,9 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Query("SELECT h.hopDong.hopdong_id FROM HoaDon h WHERE h.orderCode = :orderCode")
     Long findHopDongByOrderCode(@Param("orderCode") String orderCode);
 
+    @Transactional
+    @Query("SELECT h FROM HoaDon h WHERE h.hoadon_id = :id")
+    HoaDon findHoaDonByHoadon_id(Long id);
 
     HoaDon findHoaDonByOrderCode(String orderCode);
 }
