@@ -52,14 +52,10 @@ public class hopdongController {
         // Retrieve BangGiaQC entity
         BangGiaQC bangGiaQC = bangGiaQCService.findBangGiaQCByBanggiaqc_id(request.getBgqcid());
 
-
-        // Retrieve the number of days
-        Integer songay = bangGiaQCService.findSoNgayByID(request.getBgqcid());
-
         // Set new Contract
         HopDong contract = new HopDong();
         contract.setNgayBatDauHD(Date.valueOf(LocalDate.now()));
-        contract.setNgayKetThucHD(Date.valueOf(LocalDate.now().plusDays(songay)));
+        contract.setNgayKetThucHD(Date.valueOf(LocalDate.now().plusDays(bangGiaQC.getSongay())));
         contract.setStatus(0);
         contract.setBgqc(bangGiaQC);
         contract.setHoaDon(null);

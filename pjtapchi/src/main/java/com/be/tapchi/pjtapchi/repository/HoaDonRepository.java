@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
@@ -30,4 +32,8 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     HoaDon findHoaDonByHoadon_id(Long id);
 
     HoaDon findHoaDonByOrderCode(String orderCode);
+
+    List<HoaDon> findAll();
+
+    List<HoaDon> findHoaDonByTaikhoanTaikhoan_id(Long id);
 }
