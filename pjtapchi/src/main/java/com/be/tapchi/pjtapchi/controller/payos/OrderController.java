@@ -7,11 +7,11 @@ import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.model.HopDong;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
-import com.be.tapchi.pjtapchi.ordercontext.OrderContext;
 import com.be.tapchi.pjtapchi.service.HoaDonService;
 import com.be.tapchi.pjtapchi.service.HopDongService;
 import com.be.tapchi.pjtapchi.service.QuangCaoService;
 import com.be.tapchi.pjtapchi.type.CreatePaymentLinkRequestBody;
+import com.be.tapchi.pjtapchi.userRole.ManageRoles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +59,16 @@ public class OrderController {
             final String token = requestBody.getToken();
             Long hopdongId = Long.valueOf(requestBody.getHopdong_id());
 
+            if (!jwtUtil.checkTokenAndTaiKhoan(requestBody.getToken())) {
+                ApiResponse<Map<String, Object>> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            if (!jwtUtil.checkRolesFromToken(requestBody.getToken(), ManageRoles.getPARTNERRole())) {
+                ApiResponse<Map<String, Object>> response = new ApiResponse<>(false, "Bạn Không Có Quyền Tạo QR Thanh Toán", null);
+                return ResponseEntity.badRequest().body(response);
+            }
+
             if (hopdongId == null) {
                 return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Hopdong ID is required", null));
             }
@@ -67,7 +77,7 @@ public class OrderController {
             if (token != null && !token.trim().isEmpty()) {
                 tk = jwtUtil.getTaikhoanFromToken(token.trim());
                 if (tk != null) {
-                    OrderContext.setTaikhoanId(tk.getTaikhoan_id());
+                    System.out.println("Userid is : " + tk.getTaikhoan_id());
                 } else {
                     return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Invalid token", null));
                 }

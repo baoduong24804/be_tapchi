@@ -2,10 +2,12 @@ package com.be.tapchi.pjtapchi.controller.hopdong;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.hopdong.DTO.ContractRequest;
+import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.BangGiaQC;
 import com.be.tapchi.pjtapchi.model.HopDong;
 import com.be.tapchi.pjtapchi.service.BangGiaQCService;
 import com.be.tapchi.pjtapchi.service.HopDongService;
+import com.be.tapchi.pjtapchi.userRole.ManageRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ import java.util.Set;
 @RestController
 @RequestMapping("/contract")
 public class hopdongController {
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Autowired
     private HopDongService hopDongService;
@@ -32,11 +37,21 @@ public class hopdongController {
 
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<HopDong>> createContract(@RequestBody ContractRequest request) {
+        if (!jwtUtil.checkTokenAndTaiKhoan(request.getToken())) {
+            ApiResponse<HopDong> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(request.getToken(), ManageRoles.getPARTNERRole())) {
+            ApiResponse<HopDong> response = new ApiResponse<>(false, "Bạn Không Có Quyền Tạo Hợp Đồng", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
         // Retrieve BangGiaQC entity
-        BangGiaQC bangGiaQC = bangGiaQCService.findBangGiaQCByBanggiaqc_id(request.getbgqcid());
+        BangGiaQC bangGiaQC = bangGiaQCService.findBangGiaQCByBanggiaqc_id(request.getBgqcid());
 
         // Retrieve the number of days
-        Integer songay = bangGiaQCService.findSoNgayByID(request.getbgqcid());
+        Integer songay = bangGiaQCService.findSoNgayByID(request.getBgqcid());
 
         // Set new Contract
         HopDong contract = new HopDong();

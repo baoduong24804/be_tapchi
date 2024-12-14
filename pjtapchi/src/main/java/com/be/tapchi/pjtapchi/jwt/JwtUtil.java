@@ -1,26 +1,14 @@
 package com.be.tapchi.pjtapchi.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-
+import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.model.Vaitro;
+import com.be.tapchi.pjtapchi.service.TaiKhoanService;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.be.tapchi.pjtapchi.model.Taikhoan;
-import com.be.tapchi.pjtapchi.model.Vaitro;
-import com.be.tapchi.pjtapchi.service.TaiKhoanService;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class JwtUtil {
@@ -61,12 +49,8 @@ public class JwtUtil {
             return false;
         }
 
-        if(tk.getStatus() == 0 || tk.getStatus() == -1){
-            // tk chua kich hoat or bi khoa
-            return false;
-        }
-
-        return true;
+        // tk chua kich hoat or bi khoa
+        return tk.getStatus() != 0 && tk.getStatus() != -1;
 
     }
 
@@ -140,9 +124,6 @@ public class JwtUtil {
                 return null;
             }
             Taikhoan tk = taiKhoanService.findByUsername(claims.getSubject());
-            if (tk == null) {
-                return null;
-            }
             // tim thay tk
             return tk;
 
@@ -178,7 +159,7 @@ public class JwtUtil {
             Set<String> userRoles = new HashSet<>();
 
             for (Vaitro vt : tk.getVaitro()) {
-                // System.out.println("add: "+vt.getTenrole());
+//                System.out.println("add: " + vt.getTenrole());
                 userRoles.add(vt.getTenrole());
             }
 
@@ -226,9 +207,9 @@ public class JwtUtil {
         } catch (Exception e) {
             // TODO: handle exception
             return null;
-            
+
         }
-       
+
     }
 
     public String extractUsername(String token) {
