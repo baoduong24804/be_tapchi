@@ -314,6 +314,13 @@ public class baibaoController {
                 }
             }
 
+            int scmt = 0;
+            if(baibao.getBinhluans() != null){
+                if(baibao.getBinhluans().size() > 0){
+                    scmt = baibao.getBinhluans().size();
+                }
+            }
+            dBaoEditor.setLuotcmt(scmt+"");
             dBaoEditor.setLuotxem(sxem + "");
             dBaoEditor.setLichsu(baibao.getLichsu());
 
