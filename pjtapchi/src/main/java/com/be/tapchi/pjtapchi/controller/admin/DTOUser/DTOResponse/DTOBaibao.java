@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class DTOBaibao {
     // private String taikhoanId;
     // private String hovaten;
-    private String baibaoId;
+    private String id;
     private String tieude;
     private String noidung;
     private String ngaytao;

@@ -1,7 +1,11 @@
 package com.be.tapchi.pjtapchi.service;
 
+import com.be.tapchi.pjtapchi.model.HopDong;
+import com.be.tapchi.pjtapchi.model.QuangCao;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.TaikhoanToken;
+import com.be.tapchi.pjtapchi.repository.HopDongRepository;
+import com.be.tapchi.pjtapchi.repository.QuangCaoRepository;
 import com.be.tapchi.pjtapchi.repository.TaikhoanTKRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,12 +50,9 @@ public class TaikhoanTokenService {
                 return false;
             }
 
-
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
 
-
             LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(defaultTokenExpiration);
-
 
             String formattedExpiryDate = expiryDate.format(formatter);
             System.out.println("Đã thêm token có thời hạn đến: " + formattedExpiryDate);
@@ -70,7 +71,8 @@ public class TaikhoanTokenService {
             tokenRepository.save(myToken);
 
             sendResetPasswordEmail(user.getEmail(), token, "Đặt lại mật khẩu",
-                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn " + defaultTokenExpiration + " phút. Thời gian hiệu lực đến hết: " + formattedExpiryDate);
+                    "Để đặt lại mật khẩu của bạn hãy truy cập vào link bên dưới, lưu ý link có thời hạn "
+                            + defaultTokenExpiration + " phút. Thời gian hiệu lực đến hết: " + formattedExpiryDate);
         } catch (Exception e) {
             // TODO: handle exception
             return false;
@@ -85,15 +87,14 @@ public class TaikhoanTokenService {
     private void sendResetPasswordEmail(String userEmail, String token, String title, String content) {
         String resetUrl = baseUrl + "/reset-password?token=" + token;
 
-//        SimpleMailMessage email = new SimpleMailMessage();
-//        email.setTo(userEmail);
-//        email.setSubject("Reset Password");
-//        email.setText("To reset your password, click the link below:\n" + resetUrl +
-//                "\nThis link will expire in 15 minutes.");
+        // SimpleMailMessage email = new SimpleMailMessage();
+        // email.setTo(userEmail);
+        // email.setSubject("Reset Password");
+        // email.setText("To reset your password, click the link below:\n" + resetUrl +
+        // "\nThis link will expire in 15 minutes.");
 
         emailService.sendActivationEmail(userEmail, resetUrl, title, content);
     }
-
 
     public boolean validatePasswordResetToken(String token) {
         TaikhoanToken passToken = tokenRepository.findByToken(token);
@@ -156,13 +157,12 @@ public class TaikhoanTokenService {
                 return;
             }
 
-            //List<Taikhoan> listTK = new ArrayList<>();
+            // List<Taikhoan> listTK = new ArrayList<>();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-
 
             for (TaikhoanToken tktoken : list) {
                 // System.out.println(tktoken.getExpiryDate());
-                //listTK.add(tktoken.getTaikhoan());
+                // listTK.add(tktoken.getTaikhoan());
                 String formattedExpiryDate = tktoken.getExpiryDate().format(formatter);
                 System.out.println("Tìm thấy token có thời gian hết hạn là: " + formattedExpiryDate);
                 tokenRepository.delete(tktoken);
@@ -176,6 +176,64 @@ public class TaikhoanTokenService {
 
     }
 
+    @Autowired
+    private HopDongRepository hopDongRepository;
+
+    public static boolean isTimeOverdue(String targetDateStr) {
+        // Định dạng chuỗi thời gian
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+
+        // Lấy thời gian hiện tại
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        // Chuyển chuỗi thời gian đích thành LocalDateTime
+        LocalDateTime targetDateTime = LocalDateTime.parse(targetDateStr, formatter);
+
+        // So sánh thời gian hiện tại với thời gian đích
+        return currentDateTime.isAfter(targetDateTime); // Trả về true nếu đã quá thời gian
+    }
+
+    @Autowired
+    private QuangCaoRepository quangCaoRepository;
+
+    private void checkqchethan() {
+        try {
+            List<HopDong> list = hopDongRepository.findByStatus(1);
+            if (list == null) {
+                System.out.println("Ko co qc het han");
+                return;
+            }
+            for (HopDong hopDong : list) {
+                for (QuangCao qc : hopDong.getQuangCao()) {
+                    if (isTimeOverdue(qc.getHopDong().getNgayKetThucHD().toString())) {
+                        if(qc.getStatus() == 1){
+                            qc.setStatus(0);
+                            quangCaoRepository.save(qc);
+                            System.out.println("Da chinh status qc het han: " + qc.getQuangcao_id());
+                        }
+                        
+                    }
+                }
+
+            }
+            System.out.println("Da chinh staus qc het han");
+        } catch (Exception e) {
+            // TODO: handle exception
+            // System.out.println("Chinh status qc ko thanh cong");
+        }
+    }
+
+    @Scheduled(fixedRate = 86400000) // Chạy mỗi giờ
+    @Async
+    public void checkQuangcao() {
+        try {
+            checkqchethan();
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Chinh status qc ko thanh cong");
+        }
+    }
+
     // Scheduled task để xóa token hết hạn
     @Scheduled(fixedRate = 3600000) // Chạy mỗi giờ
     @Async
@@ -183,7 +241,7 @@ public class TaikhoanTokenService {
         // tokenRepository.deleteByExpiryDateLessThan(LocalDateTime.now());// xoa token
         // het han
         try {
-            System.out.println("Checkkkk token");
+            // System.out.println("Checkkkk token");
 
             deleteTokenExpiryDate();
 

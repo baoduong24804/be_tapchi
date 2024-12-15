@@ -44,4 +44,6 @@ public interface HopDongRepository extends JpaRepository<HopDong, Long> {
 
     Page<HopDong> findByStatus(int status, Pageable pageable);
 
+    List<HopDong> findByStatus(int status);
+
 }

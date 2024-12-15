@@ -137,6 +137,7 @@ public class likeController {
                 DTOLikeRep item = new DTOLikeRep();
                 item.setTenbaibao(thich.getBaibao().getTieude());
                 item.setThoigian(formatDate(thich.getThoigianthich() + ""));
+                item.setBaibaoId(thich.getBaibao().getId()+"");
                 if(thich.getBaibao().getDanhmucbaibaos() != null){
                     for (Danhmucbaibao  dmbb : thich.getBaibao().getDanhmucbaibaos()) {
                         item.setTendanhmuc(dmbb.getDanhmuc().getTieude());

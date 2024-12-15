@@ -450,7 +450,7 @@ public class AdminController {
 
             u.setTheloai(tl);
 
-            u.setBaibaoId(baibao.getId() + "");
+            u.setId(baibao.getId() + "");
             u.setTieude(baibao.getTieude());
             u.setNoidung(baibao.getNoidung());
             u.setNgaytao(baibao.getNgaytao() + "");
