@@ -42,5 +42,5 @@ public class HoaDon {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
-
+    
 }

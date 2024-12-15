@@ -4,9 +4,11 @@ import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.payos.dto.HoaDonDTO;
 import com.be.tapchi.pjtapchi.controller.payos.dto.HopDongDTO;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
+import com.be.tapchi.pjtapchi.model.BangGiaQC;
 import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.model.HopDong;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.service.BangGiaQCService;
 import com.be.tapchi.pjtapchi.service.HoaDonService;
 import com.be.tapchi.pjtapchi.service.HopDongService;
 import com.be.tapchi.pjtapchi.service.QuangCaoService;
@@ -34,18 +36,21 @@ public class OrderController {
     private final HoaDonService hoaDonService;
     private final HopDongService hopDongService;
     private final QuangCaoService quangCaoService;
+    private final BangGiaQCService bgqcService;
     String baseURL = "http://localhost:9000";
+
     @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
     public OrderController(PayOS payOS, HoaDonService hoaDonService, HopDongService hopDongService,
-                           QuangCaoService quangCaoService) {
+                           QuangCaoService quangCaoService, BangGiaQCService bgqcService) {
         super();
         this.payOS = payOS;
         this.hoaDonService = hoaDonService;
         this.hopDongService = hopDongService;
         this.quangCaoService = quangCaoService;
+        this.bgqcService = bgqcService;
     }
 
     @PostMapping(path = "/create")
@@ -57,6 +62,7 @@ public class OrderController {
             final String cancelUrl = baseURL + "/order/cancel";
             final int price = requestBody.getPrice();
             final String token = requestBody.getToken();
+            final Long banggiaqc_id = requestBody.getBanggiaqc_id();
             Long hopdongId = Long.valueOf(requestBody.getHopdong_id());
 
             if (!jwtUtil.checkTokenAndTaiKhoan(requestBody.getToken())) {
@@ -67,10 +73,6 @@ public class OrderController {
             if (!jwtUtil.checkRolesFromToken(requestBody.getToken(), ManageRoles.getPARTNERRole())) {
                 ApiResponse<Map<String, Object>> response = new ApiResponse<>(false, "Bạn Không Có Quyền Tạo QR Thanh Toán", null);
                 return ResponseEntity.badRequest().body(response);
-            }
-
-            if (hopdongId == null) {
-                return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Hopdong ID is required", null));
             }
 
             Taikhoan tk = null;
@@ -98,6 +100,9 @@ public class OrderController {
 
             CheckoutResponseData data = payOS.createPaymentLink(paymentData);
 
+            //retrieve BangGiaQC
+            BangGiaQC bangGiaQC = bgqcService.findBangGiaQCByBanggiaqc_id(banggiaqc_id);
+
             // Retrieve hopdong
             HopDong hopDong = hopDongService.getHopDongById(hopdongId);
 
@@ -107,12 +112,13 @@ public class OrderController {
             hoaDon.setStatus(0);
             hoaDon.setNgayTao(new java.sql.Date(System.currentTimeMillis()));
             hoaDon.setTaikhoan(tk);
+            hoaDon.setBanggiaqc(bangGiaQC);
             hoaDon.setHopDong(hopDong);
             hoaDon.setOrderCode(orderCode.toString());
             hoaDonService.save(hoaDon);
 
             // Update hopdong
-            hopDongService.updateStatusAndHoaDonById(hopdongId, 2, hoaDon);
+            hopDongService.updateStatusAndHoaDonById(hopdongId, 0, hoaDon);
 
             // Create DTOs
             HoaDonDTO hoaDonDTO = new HoaDonDTO();

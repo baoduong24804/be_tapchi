@@ -57,11 +57,8 @@ public class hopdongController {
         contract.setNgayBatDauHD(Date.valueOf(LocalDate.now()));
         contract.setNgayKetThucHD(Date.valueOf(LocalDate.now().plusDays(bangGiaQC.getSongay())));
         contract.setStatus(0);
-        //contract.setBgqc(bangGiaQC);
         contract.setHoaDon(null);
 
-//        // Debugging statement to check bgqc data
-//        System.out.println("bgqc data: " + contract.getBgqc());
 
         // Save contract
         hopDongService.saveHopDong(contract);
@@ -70,6 +67,7 @@ public class hopdongController {
         ApiResponse<HopDong> response = new ApiResponse<>(true, "Create contract successful, waiting for Payment", contract);
         return ResponseEntity.ok().body(response);
     }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteBaibao(@PathVariable("id") Long id) {
