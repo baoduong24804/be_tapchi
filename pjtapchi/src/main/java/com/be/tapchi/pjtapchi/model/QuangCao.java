@@ -1,7 +1,6 @@
 package com.be.tapchi.pjtapchi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +37,8 @@ public class QuangCao {
 
     @Column(name = "status")
     private int status;
+    //1 : đã duyệt
+    //2 : đã hủy
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Taikhoan_id")
@@ -49,6 +50,6 @@ public class QuangCao {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hopdong_id") 
+    @JoinColumn(name = "hopdong_id")
     private HopDong hopDong;
 }
