@@ -3,6 +3,7 @@ package com.be.tapchi.pjtapchi.controller.payos;
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.*;
+import com.be.tapchi.pjtapchi.repository.*;
 import com.be.tapchi.pjtapchi.service.BangGiaQCService;
 import com.be.tapchi.pjtapchi.service.HoaDonService;
 import com.be.tapchi.pjtapchi.service.HopDongService;
@@ -12,6 +13,8 @@ import com.be.tapchi.pjtapchi.userRole.ManageRoles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.payos.PayOS;
@@ -20,22 +23,34 @@ import vn.payos.type.ItemData;
 import vn.payos.type.PaymentData;
 import vn.payos.type.PaymentLinkData;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/order")
 public class OrderController {
 
     private final PayOS payOS;
-    private final HoaDonService hoaDonService;
     private final HopDongService hopDongService;
     private final QuangCaoService quangCaoService;
     private final BangGiaQCService bgqcService;
-    String baseURL = "http://localhost:9000";
-
+    String baseURL = "congnghetoday.click"; // URL của BE
+    @Autowired
+    HoaDonService hoaDonService;
+    @Autowired
+    VaiTroRepository vaiTroRepository;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private TaiKhoanRepository ta;
+    @Autowired
+    private HoaDonRepository hoaDonRepository;
+    @Autowired
+    private HopDongRepository hopDongRepository;
+    @Autowired
+    private QuangCaoRepository quangCaoRepository;
 
     @Autowired
     public OrderController(PayOS payOS, HoaDonService hoaDonService, HopDongService hopDongService,
@@ -49,7 +64,7 @@ public class OrderController {
     }
 
     @PostMapping(path = "/create")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> createPaymentLink(@RequestBody CreatePaymentLinkRequestBody requestBody) {
+    public ResponseEntity<?> createPaymentLink(@RequestBody CreatePaymentLinkRequestBody requestBody) {
         try {
             final String productName = requestBody.getProductName();
             final String description = requestBody.getDescription();
@@ -60,15 +75,16 @@ public class OrderController {
             final Long banggiaqc_id = requestBody.getBanggiaqc_id();
             Long hopdongId = Long.valueOf(requestBody.getHopdong_id());
 
-            if (!jwtUtil.checkTokenAndTaiKhoan(requestBody.getToken())) {
-                ApiResponse<Map<String, Object>> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            if (!jwtUtil.checkTokenAndTaiKhoan(token)) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
                 return ResponseEntity.badRequest().body(response);
             }
 
-            if (!jwtUtil.checkRolesFromToken(requestBody.getToken(), ManageRoles.getPARTNERRole())) {
-                ApiResponse<Map<String, Object>> response = new ApiResponse<>(false, "Bạn Không Có Quyền Tạo QR Thanh Toán", null);
+            if (!jwtUtil.checkRolesFromToken(token, ManageRoles.getCUSTOMERRole())) {
+                ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
                 return ResponseEntity.badRequest().body(response);
             }
+
 
             Taikhoan tk = null;
             if (token != null && !token.trim().isEmpty()) {
@@ -110,7 +126,7 @@ public class OrderController {
             hoaDon.setHopDong(hopDong);
             hoaDon.setOrderCode(orderCode.toString());
             hoaDon.setBanggiaqc_id(banggiaqc_id);
-            hoaDonService.save(hoaDon);
+            hoaDonRepository.save(hoaDon);
 
             // Update hopdong
             hopDongService.updateStatusAndHoaDonById(hopdongId, 0, hoaDon);
@@ -129,7 +145,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/success")
+    @PostMapping("/success")
     public ResponseEntity<ApiResponse<Map<String, Object>>> PayOSSuccess(
             @RequestParam("code") Long code,
             @RequestParam("id") String id,
@@ -149,12 +165,25 @@ public class OrderController {
             // Find hopdong by orderCode
             Long hopdongId = hoaDonService.findHopDongByOrderCode(orderCode.toString());
 
-            // update hopdong status = 1 (đã thanh toán) by hopdongId
-            hopDongService.updateStatusById(hopdongId, 1);
-            HopDong hopDong = hopDongService.getHopDongById(hopdongId);
-
             // Retrieve banggiaqc
             BangGiaQC bangGiaQC = bgqcService.findBangGiaQCByBanggiaqc_id(hoaDon.getBanggiaqc_id());
+
+            // set ROLE Partner to user after success payment
+            Set<Vaitro> vaitros = hoaDon.getTaikhoan().getVaitro();
+            Vaitro vt = vaiTroRepository.findById(4).orElse(null);
+            vaitros.add(vt);
+            for (Vaitro vaitro : vaitros) {
+                System.out.println(vaitro.getVaitroId());
+            }
+
+            // Update hopdong status = 1 (đã thanh toán) by hopdongId
+            HopDong hopDong = hopDongRepository.findById(hopdongId).orElse(null);
+            hopDongRepository.updateStatusById(hopdongId, 1);
+            //Rẻtrieve TK
+            Taikhoan tk = hoaDon.getTaikhoan();
+            tk.setVaitro(vaitros);
+            ta.save(tk);
+
 
             QuangCao qc = new QuangCao();
             qc.setTieude("Quảng cáo " + bangGiaQC.getSongay() + " ngày");
@@ -165,15 +194,29 @@ public class OrderController {
             qc.setLuotclick(0);
             qc.setHopDong(hopDong);
             qc.setTaikhoan(hoaDon.getTaikhoan());
-            quangCaoService.saveQuangCao(qc);
+            QuangCao quangCao = quangCaoRepository.save(qc);
 
+            System.out.println("Payment success" + order);
+            System.out.println("QC success" + quangCao);
+
+            assert hopDong != null;
             Map<String, Object> data = Map.of(
                     "order", order,
                     "hoaDon", hoaDon,
                     "hopDong", hopDong
             );
 
-            return ResponseEntity.ok(new ApiResponse<>(true, "Payment success", data));
+            String redirectURL = "http:/congnghetoday.com/order/success?" +
+                    "code=" + code +
+                    "&id=" + id +
+                    "&cancel=" + cancel +
+                    "&status=" + status +
+                    "&orderCode=" + orderCode;
+
+            // Redirect tới FE
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(redirectURL));
+            return new ResponseEntity<>(headers, HttpStatus.FOUND); // HTTP 302
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,7 +225,11 @@ public class OrderController {
     }
 
     @GetMapping("/cancel")
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getCanceledById(@RequestParam(value = "orderCode", required = false) Long orderCode) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getCanceledById(@RequestParam("code") Long code,
+                                                                            @RequestParam("id") String id,
+                                                                            @RequestParam("cancel") boolean cancel,
+                                                                            @RequestParam("status") String status,
+                                                                            @RequestParam("orderCode") Long orderCode) {
         try {
             if (orderCode == null) {
                 return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Order code is required", null));
@@ -205,7 +252,18 @@ public class OrderController {
                     "hopDong", hopDongService.getHopDongById(hopdongId)
             );
 
-            return ResponseEntity.ok(new ApiResponse<>(true, "Canceled Thành Công", data));
+            String redirectURL = "http://congnghetoday.com/order/cancel?" +
+                    "code=" + code +
+                    "&id=" + id +
+                    "&cancel=" + cancel +
+                    "&status=" + status +
+                    "&orderCode=" + orderCode;
+
+            // Redirect to FE
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(redirectURL));
+            return new ResponseEntity<>(headers, HttpStatus.FOUND); // HTTP 302
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(new ApiResponse<>(false, e.getMessage(), null));

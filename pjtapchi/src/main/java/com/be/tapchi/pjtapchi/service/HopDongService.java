@@ -40,9 +40,10 @@ public class HopDongService {
         return hopDongRepository.updateStatusById(id, status);
     }
 
-    public int updateHoaDonById(Long id, HoaDon hoaDon) {
-        return hopDongRepository.updateHoaDonById(id, hoaDon);
+    public int updateStatusAndQCById(Long id, int status) {
+        return hopDongRepository.updateStatusAndQCById(id, status);
     }
+
 
     public int updateStatusAndHoaDonById(Long id, int status, HoaDon hoaDon) {
         return hopDongRepository.updateStatusAndHoaDonById(id, status, hoaDon);
@@ -51,4 +52,6 @@ public class HopDongService {
     public int updateStatusAndHoaDonAndQuangCaoById(Long id, int status, Long hoaDon_id, Long quangcao_id) {
         return hopDongRepository.updateStatusAndHoaDonAndQuangCaoById(id, status, hoaDon_id, quangcao_id);
     }
+
+
 }

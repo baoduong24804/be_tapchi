@@ -9,10 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="819d8c01-cd9c-417f-8e85-99dca8d01119" name="Changes" comment="before update use localthread">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hoadon/hoadonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/hoadon/hoadonController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/payos/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/controller/payos/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HoaDon.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/HoaDon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/QuangCao.java" beforeDir="false" afterPath="$PROJECT_DIR$/pjtapchi/src/main/java/com/be/tapchi/pjtapchi/model/QuangCao.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -282,7 +279,9 @@
       <workItem from="1734170276259" duration="8629000" />
       <workItem from="1734192611214" duration="769000" />
       <workItem from="1734224477920" duration="3043000" />
-      <workItem from="1734248702642" duration="11374000" />
+      <workItem from="1734248702642" duration="11454000" />
+      <workItem from="1734274766876" duration="5256000" />
+      <workItem from="1734284032508" duration="14627000" />
     </task>
     <task id="LOCAL-00001" summary="Update baibao add DTO class">
       <option name="closed" value="true" />
@@ -363,6 +362,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.IllegalArgumentException" package="java.lang" />
           <option name="timeStamp" value="5" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.UnsupportedOperationException" package="java.lang" />
+          <option name="timeStamp" value="8" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

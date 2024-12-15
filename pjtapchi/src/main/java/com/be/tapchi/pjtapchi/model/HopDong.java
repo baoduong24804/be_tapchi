@@ -1,13 +1,11 @@
 package com.be.tapchi.pjtapchi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +29,7 @@ public class HopDong {
 
     @Column(name = "status")
     private int status;
+
 
     @OneToMany(mappedBy = "hopDong", fetch = FetchType.LAZY)
     private Set<QuangCao> QuangCao;
