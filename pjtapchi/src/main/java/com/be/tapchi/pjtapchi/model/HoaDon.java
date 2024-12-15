@@ -45,6 +45,6 @@ public class HoaDon {
 
     @Column(name = "banggiaqc_id")
     private Long banggiaqc_id;
-    
+
 
 }

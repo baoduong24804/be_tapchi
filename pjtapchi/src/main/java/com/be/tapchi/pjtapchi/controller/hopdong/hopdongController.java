@@ -2,6 +2,7 @@ package com.be.tapchi.pjtapchi.controller.hopdong;
 
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.hopdong.DTO.ContractRequest;
+import com.be.tapchi.pjtapchi.controller.hopdong.DTO.ContractResponseDTO;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.BangGiaQC;
 import com.be.tapchi.pjtapchi.model.HopDong;
@@ -38,15 +39,15 @@ public class hopdongController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<HopDong>> createContract(@RequestBody ContractRequest request) {
+    public ResponseEntity<ApiResponse<?>> createContract(@RequestBody ContractRequest request) {
 
         if (!jwtUtil.checkTokenAndTaiKhoan(request.getToken())) {
-            ApiResponse<HopDong> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            ApiResponse<ContractResponseDTO> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
             return ResponseEntity.badRequest().body(response);
         }
 
-        if (!jwtUtil.checkRolesFromToken(request.getToken(), ManageRoles.getPARTNERRole())) {
-            ApiResponse<HopDong> response = new ApiResponse<>(false, "Bạn Không Có Quyền Tạo Hợp Đồng", null);
+        if (!jwtUtil.checkRolesFromToken(request.getToken(), ManageRoles.getCUSTOMERRole())) {
+            ApiResponse<ContractResponseDTO> response = new ApiResponse<>(false, "Bạn Không Có Quyền Tạo Hợp Đồng", null);
             return ResponseEntity.badRequest().body(response);
         }
         // Retrieve BangGiaQC entity
@@ -59,12 +60,14 @@ public class hopdongController {
         contract.setStatus(0);
         contract.setHoaDon(null);
 
-
         // Save contract
         hopDongService.saveHopDong(contract);
 
+        // Create response DTO
+        ContractResponseDTO contractResponseDTO = new ContractResponseDTO(contract, bangGiaQC);
+
         // Response
-        ApiResponse<HopDong> response = new ApiResponse<>(true, "Create contract successful, waiting for Payment", contract);
+        ApiResponse<ContractResponseDTO> response = new ApiResponse<>(true, "Create contract successful, waiting for Payment", contractResponseDTO);
         return ResponseEntity.ok().body(response);
     }
 

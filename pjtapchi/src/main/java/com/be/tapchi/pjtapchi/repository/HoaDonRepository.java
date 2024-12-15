@@ -13,6 +13,7 @@ import java.util.List;
 @Repository
 public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
 
+
     @Modifying
     @Transactional
     @Query("UPDATE HoaDon h SET h.status = :status WHERE h.hoadon_id = :id")
@@ -39,5 +40,5 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Query("SELECT h FROM HoaDon h WHERE h.taikhoan.taikhoan_id = :id")
     List<HoaDon> findHoaDonByTaikhoanTaikhoan_id(Long id);
 
-    
+
 }
