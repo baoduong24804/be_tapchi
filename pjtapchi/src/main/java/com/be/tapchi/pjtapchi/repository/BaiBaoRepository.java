@@ -28,6 +28,9 @@ public interface BaiBaoRepository extends JpaRepository<Baibao, Integer> {
 
     Page<Baibao> findBaibaoByTieudeContaining(String tieude, Pageable pageable);
 
+   
+
+
     Page<Baibao> findBaibaoByNoidungContaining(String noidung, Pageable pageable);
 
     Page<Baibao> findBaibaoByStatus(Integer status, Pageable pageable);

@@ -5,12 +5,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOAdmin;
+import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOBaibao;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTORoles;
+import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOTaikhoan;
+import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOTheloai;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOUser;
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
+import com.be.tapchi.pjtapchi.controller.baibao.model.KiemduyetAT;
+import com.be.tapchi.pjtapchi.controller.baibao.model.KiemduyetED;
+import com.be.tapchi.pjtapchi.controller.baibao.model.TaikhoanED;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
+import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
+import com.be.tapchi.pjtapchi.model.Kiemduyet;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
+import com.be.tapchi.pjtapchi.model.Thich;
 import com.be.tapchi.pjtapchi.model.Vaitro;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
 import com.be.tapchi.pjtapchi.repository.QuangCaoRepository;
@@ -142,6 +151,15 @@ public class AdminController {
             return ResponseEntity.badRequest().body(response);
         }
 
+        if (entity.getTaikhoanId() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getTaikhoanId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getTaikhoanId().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getTaikhoanId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
         int status = Integer.valueOf((entity.getStatus() + "").trim());
         if (status < -1 || status > 1) {
             ApiResponse<?> response = new ApiResponse<>(false, "Status khong hop le",
@@ -200,6 +218,15 @@ public class AdminController {
             return ResponseEntity.badRequest().body(response);
         }
 
+        if (entity.getTaikhoanId() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getTaikhoanId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getTaikhoanId().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getTaikhoanId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
         int role = Integer.valueOf((entity.getRole() + "").trim());
         if (role < 1 || role > 6) {
             ApiResponse<?> response = new ApiResponse<>(false, "Role khong hop le",
@@ -254,6 +281,15 @@ public class AdminController {
         }
         if (entity.getRole().isEmpty()) {
             ApiResponse<?> response = new ApiResponse<>(false, "Role trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (entity.getTaikhoanId() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getTaikhoanId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getTaikhoanId().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getTaikhoanId trong", null);
             return ResponseEntity.badRequest().body(response);
         }
 
@@ -357,5 +393,165 @@ public class AdminController {
         ApiResponse<?> response = new ApiResponse<>(true, "Lay data thanh cong", result);
         return ResponseEntity.ok().body(response);
     }
+
+    @PostMapping("get/baibao")
+    public ResponseEntity<?> getBaibao(@RequestBody(required = false) DTOAdmin entity,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+        // TODO: process POST request
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getADMINRole())) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Baibao> list = baiBaoRepository.findAll(pageable);
+
+        Map<Object, Object> data = new HashMap<>();
+        if (list.getContent().size() <= 0) {
+            data.put("data", null);
+            ApiResponse<?> response = new ApiResponse<>(true, "Ko co du lieu", null);
+            return ResponseEntity.ok().body(response);
+        }
+
+        List<DTOBaibao> baibaos = new ArrayList<>();
+        for (Baibao baibao : list.getContent()) {
+            DTOBaibao u = new DTOBaibao();
+
+            DTOTaikhoan tk = new DTOTaikhoan();
+            tk.setTaikhoanId(baibao.getTaikhoan().getTaikhoan_id() + "");
+            tk.setHovaten(baibao.getTaikhoan().getHovaten());
+
+            u.setTaikhoan(tk);
+
+            DTOTheloai tl = new DTOTheloai();
+
+            tl.setTheloaiId(baibao.getTheloai().getId() + "");
+            tl.setTentheloai(baibao.getTheloai().getTenloai());
+
+            u.setTheloai(tl);
+
+            u.setBaibaoId(baibao.getId() + "");
+            u.setTieude(baibao.getTieude());
+            u.setNoidung(baibao.getNoidung());
+            u.setNgaytao(baibao.getNgaytao() + "");
+            u.setNgaydang(baibao.getNgaydang() + "");
+            u.setStatus(baibao.getStatus() + "");
+            u.setUrl(baibao.getUrl());
+            u.setFile(baibao.getFile());
+
+            int slike = 0;
+            for (Thich thich : baibao.getThichs()) {
+                if (thich.getStatus() == 1) {
+                    slike++;
+                }
+            }
+            u.setLuotthich(slike + "");
+
+            int sxem = 0;
+            if (baibao.getThichs() != null) {
+                if (baibao.getThichs().size() > 0) {
+                    sxem = baibao.getThichs().size();
+                }
+            }
+
+            u.setLuotxem(sxem + "");
+
+
+            List<KiemduyetED> lKiemduyets = new ArrayList<>();
+            for (Kiemduyet kditem : baibao.getKiemduyets()) {
+                KiemduyetED item = new KiemduyetED();
+                item.setId(String.valueOf(kditem.getId()));
+                item.setGhichu(kditem.getGhichu());
+                item.setStatus(kditem.getStatus());
+                TaikhoanED tEd = new TaikhoanED();
+                tEd.setId(String.valueOf(kditem.getTaikhoan().getTaikhoan_id()));
+                tEd.setHovaten(kditem.getTaikhoan().getHovaten());
+                item.setTaikhoan(tEd);
+
+                lKiemduyets.add(item);
+            }
+
+            u.setKiemduyet(lKiemduyets);
+
+            baibaos.add(u);
+        }
+
+        data.put("data", baibaos);
+
+        Map<String, Object> phantrang = new HashMap<>();
+        phantrang.put("totalPage", String.valueOf(list.getTotalPages()));
+        phantrang.put("pageNumber", String.valueOf(list.getNumber()));
+        phantrang.put("pageSize", String.valueOf(list.getSize()));
+        phantrang.put("totalElements", String.valueOf(list.getTotalElements()));
+        data.put("phantrang", phantrang);
+
+        ApiResponse<?> response = new ApiResponse<>(true, "Lay data thanh cong", data);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("update/baibao/status")
+    public ResponseEntity<?> updateBaibao(@RequestBody(required = false) DTOAdmin entity) {
+        // TODO: process POST request
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getADMINRole())) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (entity.getStatus() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getStatus().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (entity.getBaibaoId() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "BaibaoId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getBaibaoId().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "BaibaoId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        
+
+        int status = Integer.valueOf((entity.getStatus() + "").trim());
+        if (status < -1 || status > 7) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status khong hop le",
+                    null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        Baibao bb = null;
+        bb = baiBaoRepository.findById(Integer.valueOf((entity.getBaibaoId() + "").trim())).orElse(null);
+        if (bb == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Khong tim thay tk", "");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (bb.getStatus() == status) {
+            ApiResponse<?> response = new ApiResponse<>(true, "Status ko doi :>>", status);
+            return ResponseEntity.ok().body(response);
+        } else {
+            bb.setStatus(status);
+            baiBaoRepository.save(bb);
+            ApiResponse<?> response = new ApiResponse<>(true, "Cap nhat thanh cong", status);
+            return ResponseEntity.ok().body(response);
+        }
+
+    }
+
 
 }

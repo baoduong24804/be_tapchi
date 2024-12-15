@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,13 +32,10 @@ public class HopDong {
     @Column(name = "status")
     private int status;
 
-    @OneToMany(mappedBy = "quangcao_id", fetch = FetchType.LAZY)
-    private Set<QuangCao> QuangCao = new HashSet<>();
+    @OneToMany(mappedBy = "hopDong", fetch = FetchType.LAZY)
+    private Set<QuangCao> QuangCao;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "banggiaqc_id")
-    private BangGiaQC bgqc;
-
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hoadon_id", nullable = false)
     private HoaDon hoaDon;

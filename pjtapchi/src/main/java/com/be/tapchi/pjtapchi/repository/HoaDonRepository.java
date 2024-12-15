@@ -38,4 +38,6 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Long> {
     @Transactional
     @Query("SELECT h FROM HoaDon h WHERE h.taikhoan.taikhoan_id = :id")
     List<HoaDon> findHoaDonByTaikhoanTaikhoan_id(Long id);
+
+    
 }

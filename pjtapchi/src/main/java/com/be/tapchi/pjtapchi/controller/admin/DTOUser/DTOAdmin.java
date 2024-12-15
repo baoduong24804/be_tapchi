@@ -12,4 +12,5 @@ public class DTOAdmin {
     private String status;
     private String taikhoanId;
     private String role;
+    private String baibaoId;
 }

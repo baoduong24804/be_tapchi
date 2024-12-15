@@ -15,12 +15,16 @@ public class DTOBaiBaoAuthor {
     private String tieude;
     private String noidung;
     private String tukhoa;
-    private LocalDate ngaytao;
-    private LocalDate ngaydang;
+    private String ngaytao;
+    private String ngaydang;
     private Integer status;
     private String file;
     private String url;
-    private List<KiemduyetAT> kiemduyet;
+    private String luotxem;
+    private String luotthich;
+    private String luotcmt;
+    private String lichsu;
+    private List<KiemduyetED> kiemduyet;
     //private String token;
     
     

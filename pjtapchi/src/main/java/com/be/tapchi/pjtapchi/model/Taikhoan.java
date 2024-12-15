@@ -93,9 +93,9 @@ public class Taikhoan {
     @JsonIgnore
     private List<Thich> thichs;
 
-    public Taikhoan(Long tkId) {
-        this.taikhoan_id = tkId;
-    }
+    // public Taikhoan(Long tkId) {
+    //     this.taikhoan_id = tkId;
+    // }
 
 
     // @OneToMany(fetch = FetchType.EAGER, mappedBy = "taikhoan")
