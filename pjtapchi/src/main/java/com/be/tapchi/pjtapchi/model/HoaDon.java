@@ -43,4 +43,8 @@ public class HoaDon {
     @JoinColumn(name = "Taikhoan_id")
     private Taikhoan taikhoan;
 
+    @Column(name = "banggiaqc_id")
+    private Long banggiaqc_id;
+    
+
 }

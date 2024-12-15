@@ -15,6 +15,7 @@ public class CreatePaymentLinkRequestBody {
     private int price;
     private String token;
     private Integer hopdong_id;
+    private Long banggiaqc_id;
     //    private String returnUrl = baseUrl + "/payOS/success";
 //    private String cancelUrl = baseUrl + "/cancel";
 
