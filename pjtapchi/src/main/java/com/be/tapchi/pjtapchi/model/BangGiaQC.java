@@ -25,12 +25,10 @@ public class BangGiaQC {
 
     @Column(name = "giatien")
     private Float giatien;
-
-    @Column(name = "tengoi")
-    private String tengoi;
-
     @OneToMany(mappedBy = "bgqc", fetch = FetchType.LAZY)
     private Set<HopDong> hopDongs = new HashSet<>();
+    @Column(name = "tengoi")
+    private String tengoi;
 
 
 //    @ManyToOne(fetch = FetchType.LAZY)
