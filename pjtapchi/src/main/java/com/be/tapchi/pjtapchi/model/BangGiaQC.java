@@ -6,6 +6,8 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,10 +27,13 @@ public class BangGiaQC {
 
     @Column(name = "giatien")
     private Float giatien;
-    @OneToMany(mappedBy = "bgqc", fetch = FetchType.LAZY)
-    private Set<HopDong> hopDongs = new HashSet<>();
+
     @Column(name = "tengoi")
     private String tengoi;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "bgqc", fetch = FetchType.LAZY)
+    private Set<QuangCao> QuangCao;
 
 
 //    @ManyToOne(fetch = FetchType.LAZY)

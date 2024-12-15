@@ -55,7 +55,7 @@ public class hoadonController {
         hopDongDTO.setNgayBatDauHD(hopDong.getNgayBatDauHD());
         hopDongDTO.setNgayKetThucHD(hopDong.getNgayKetThucHD());
         hopDongDTO.setStatus(hopDong.getStatus());
-        hopDongDTO.setBgqc((List<Object>) hopDong.getBgqc());
+        //hopDongDTO.setBgqc((List<Object>) hopDong.getBgqc());
         return hopDongDTO;
     }
 

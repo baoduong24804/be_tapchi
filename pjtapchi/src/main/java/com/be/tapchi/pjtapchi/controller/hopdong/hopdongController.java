@@ -57,7 +57,7 @@ public class hopdongController {
         contract.setNgayBatDauHD(Date.valueOf(LocalDate.now()));
         contract.setNgayKetThucHD(Date.valueOf(LocalDate.now().plusDays(bangGiaQC.getSongay())));
         contract.setStatus(0);
-        contract.setBgqc(bangGiaQC);
+        //contract.setBgqc(bangGiaQC);
         contract.setHoaDon(null);
 
 //        // Debugging statement to check bgqc data

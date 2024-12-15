@@ -49,6 +49,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -240,6 +241,24 @@ public class baibaoController {
     // }
     // }
 
+        public String formatDDMMYYYY(String inputDate) {
+        String formattedDate = "";
+        try {
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+            LocalDate date = LocalDate.parse(inputDate, inputFormatter);
+            formattedDate = date.format(outputFormatter);
+            return formattedDate;
+        } catch (Exception e) {
+            // TODO: handle exception
+            return formattedDate;
+        }
+
+        // System.out.println(formattedDate); // Output: 27-11-2024
+        
+    }
+
     @PostMapping("/get/baibao/author")
     public ResponseEntity<ApiResponse<?>> getBaiBaoFromToken(
             @RequestBody(required = false) DTOToKen entity,
@@ -275,24 +294,44 @@ public class baibaoController {
             dBaoEditor.setTieude(baibao.getTieude());
             dBaoEditor.setFile(baibao.getFile());
             dBaoEditor.setUrl(baibao.getUrl());
-            dBaoEditor.setNgaytao(baibao.getNgaytao());
-            dBaoEditor.setNgaydang(baibao.getNgaydang());
+            dBaoEditor.setNgaytao(formatDDMMYYYY(baibao.getNgaytao() + ""));
+            dBaoEditor.setNgaydang(formatDDMMYYYY(baibao.getNgaydang() + ""));
             dBaoEditor.setNoidung(baibao.getNoidung());
             dBaoEditor.setTukhoa(baibao.getKeyword());
+            
+            int slike = 0;
+            for (Thich thich : baibao.getThichs()) {
+                if (thich.getStatus() == 1) {
+                    slike++;
+                }
+            }
+            dBaoEditor.setLuotthich(slike + "");
+
+            int sxem = 0;
+            if (baibao.getThichs() != null) {
+                if (baibao.getThichs().size() > 0) {
+                    sxem = baibao.getThichs().size();
+                }
+            }
+
+            dBaoEditor.setLuotxem(sxem + "");
+            dBaoEditor.setLichsu(baibao.getLichsu());
+
             // TaikhoanED tked = new TaikhoanED();
             // tked.setId(String.valueOf(baibao.getTaikhoan().getTaikhoan_id()));
             // tked.setHovaten(baibao.getTaikhoan().getHovaten());
             // dBaoEditor.setTaikhoans(tked);
             dBaoEditor.setStatus(baibao.getStatus());
-            List<KiemduyetAT> lKiemduyets = new ArrayList<>();
+            List<KiemduyetED> lKiemduyets = new ArrayList<>();
             for (Kiemduyet kditem : baibao.getKiemduyets()) {
-                KiemduyetAT item = new KiemduyetAT();
+                KiemduyetED item = new KiemduyetED();
                 item.setId(String.valueOf(kditem.getId()));
                 item.setGhichu(kditem.getGhichu());
                 item.setStatus(kditem.getStatus());
                 TaikhoanED tEd = new TaikhoanED();
                 tEd.setId(String.valueOf(kditem.getTaikhoan().getTaikhoan_id()));
                 tEd.setHovaten(kditem.getTaikhoan().getHovaten());
+                item.setTaikhoan(tEd);
 
                 lKiemduyets.add(item);
             }
