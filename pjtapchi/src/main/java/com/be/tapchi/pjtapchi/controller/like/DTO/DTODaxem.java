@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DTOLike {
-    private String token;
+public class DTODaxem {
+    //private String token;
     private String baibaoId;
-    private String status;
-    
+    private String tendanhmuc;
+    private String tenbaibao;
+
 }

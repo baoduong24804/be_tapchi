@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DTOLikeRep {
+    //private String token;
     private String tenbaibao;
     private String thoigian;
+    private String baibaoId;
+    private String tendanhmuc;
 }
