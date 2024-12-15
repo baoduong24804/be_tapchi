@@ -298,6 +298,11 @@ public class baibaoController {
             dBaoEditor.setNgaydang(formatDDMMYYYY(baibao.getNgaydang() + ""));
             dBaoEditor.setNoidung(baibao.getNoidung());
             dBaoEditor.setTukhoa(baibao.getKeyword());
+            for (Danhmucbaibao dm : baibao.getDanhmucbaibaos()) {
+                dBaoEditor.setTendanhmuc(dm.getDanhmuc().getTieude());
+                break;
+            }
+            
             
             int slike = 0;
             for (Thich thich : baibao.getThichs()) {

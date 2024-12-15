@@ -3,6 +3,7 @@ package com.be.tapchi.pjtapchi.controller.like;
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
 import com.be.tapchi.pjtapchi.controller.baibao.baibaoController;
 import com.be.tapchi.pjtapchi.controller.like.DTO.DTOLike;
+import com.be.tapchi.pjtapchi.controller.like.DTO.DTOLikeRep;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
@@ -18,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +50,55 @@ public class likeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>(false, "No thich found", null));
         }
+    }
+
+    public String formatDate(String originalTimeStr){
+        
+        // Định dạng để phân tích chuỗi thời gian ban đầu
+        DateTimeFormatter originalFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+        
+        // Chuyển chuỗi thành đối tượng LocalDateTime
+        LocalDateTime dateTime = LocalDateTime.parse(originalTimeStr, originalFormatter);
+        
+        // Định dạng đầu ra mới
+        DateTimeFormatter newFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy");
+        
+        // Chuyển đổi sang định dạng mới
+        String formattedTime = dateTime.format(newFormatter);
+
+
+        return formattedTime;
+
+    }
+
+    @PostMapping("get/user/like")
+    public ResponseEntity<?> getlike(@RequestBody DTOLike entity) {
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) ==  false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        
+        
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getCUSTOMERRole())) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "Không được phép can CUSTOMER", null));
+        }
+
+        Taikhoan tk = null;
+        tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
+        if(tk == null){
+            ApiResponse<?> response = new ApiResponse<>(false, "Tai khoan trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        List<Thich> list = thichRepository.findByTaikhoanid(tk.getTaikhoan_id());
+        List<DTOLikeRep> data = new ArrayList<>();
+        for (Thich thich : list) {
+            DTOLikeRep item = new DTOLikeRep();
+            item.setTenbaibao(thich.getBaibao().getTieude());
+            item.setThoigian(formatDate(thich.getThoigianthich()+""));
+            data.add(item);
+        }
+        ApiResponse<?> response = new ApiResponse<>(true, "Fetch thich successful", data);
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/add/user")

@@ -24,6 +24,7 @@ public class DTOBaiBaoAuthor {
     private String luotthich;
     private String luotcmt;
     private String lichsu;
+    private String tendanhmuc;
     private List<KiemduyetED> kiemduyet;
     //private String token;
     

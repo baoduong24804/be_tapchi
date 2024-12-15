@@ -5,6 +5,8 @@ import com.be.tapchi.pjtapchi.model.HopDong;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -39,5 +41,7 @@ public interface HopDongRepository extends JpaRepository<HopDong, Long> {
 
     @Query("SELECT hd FROM HopDong hd JOIN hd.hoaDon h WHERE h.status = :status")
     List<HopDong> findHopDongsWithHoaDonStatus(@Param("status") int status);
+
+    Page<HopDong> findByStatus(int status, Pageable pageable);
 
 }

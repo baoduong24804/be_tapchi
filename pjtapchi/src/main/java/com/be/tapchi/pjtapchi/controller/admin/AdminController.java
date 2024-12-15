@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOAdmin;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOBaibao;
+import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOGoiQC;
+import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOQuangCao;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTORoles;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOTaikhoan;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOTheloai;
@@ -17,20 +19,27 @@ import com.be.tapchi.pjtapchi.controller.baibao.model.TaikhoanED;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
+import com.be.tapchi.pjtapchi.model.HopDong;
 import com.be.tapchi.pjtapchi.model.Kiemduyet;
+import com.be.tapchi.pjtapchi.model.QuangCao;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Thich;
 import com.be.tapchi.pjtapchi.model.Vaitro;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.HopDongRepository;
 import com.be.tapchi.pjtapchi.repository.QuangCaoRepository;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
 import com.be.tapchi.pjtapchi.repository.VaiTroRepository;
 import com.be.tapchi.pjtapchi.userRole.ManageRoles;
 
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,6 +69,9 @@ public class AdminController {
 
     @Autowired
     private VaiTroRepository vaiTroRepository;
+
+    @Autowired
+    private HopDongRepository hopDongRepository;
 
     @PostMapping("get/user")
     public ResponseEntity<?> postMethodName(@RequestBody(required = false) DTOAdmin entity,
@@ -420,6 +432,9 @@ public class AdminController {
 
         List<DTOBaibao> baibaos = new ArrayList<>();
         for (Baibao baibao : list.getContent()) {
+            if (baibao.getStatus() != 0 && baibao.getStatus() != 7) {
+                continue;
+            }
             DTOBaibao u = new DTOBaibao();
 
             DTOTaikhoan tk = new DTOTaikhoan();
@@ -460,7 +475,6 @@ public class AdminController {
             }
 
             u.setLuotxem(sxem + "");
-
 
             List<KiemduyetED> lKiemduyets = new ArrayList<>();
             for (Kiemduyet kditem : baibao.getKiemduyets()) {
@@ -525,8 +539,6 @@ public class AdminController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        
-
         int status = Integer.valueOf((entity.getStatus() + "").trim());
         if (status < -1 || status > 7) {
             ApiResponse<?> response = new ApiResponse<>(false, "Status khong hop le",
@@ -553,5 +565,149 @@ public class AdminController {
 
     }
 
+    public static String formatToVND(double amount) {
+        // Tạo định dạng tiền tệ Việt Nam
+        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+        // Trả về chuỗi định dạng số tiền
+        return vndFormat.format(amount);
+    }
+
+    public static String formatDateTime(String inputDateTime) {
+        // Định dạng đầu vào (phù hợp với chuỗi ban đầu)
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+
+        // Định dạng đầu ra
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        // Chuyển chuỗi đầu vào thành LocalDateTime
+        LocalDateTime dateTime = LocalDateTime.parse(inputDateTime, inputFormatter);
+
+        // Định dạng lại và trả kết quả
+        return dateTime.format(outputFormatter);
+    }
+
+    @PostMapping("get/quangcao")
+    public ResponseEntity<?> getquanfcao(@RequestBody(required = false) DTOAdmin entity,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+        // TODO: process POST request
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getADMINRole())) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<HopDong> list = hopDongRepository.findByStatus(1, pageable);
+        Map<Object, Object> data = new HashMap<>();
+        if (list.getContent().size() <= 0) {
+            data.put("data", null);
+            ApiResponse<?> response = new ApiResponse<>(true, "Ko co du lieu", null);
+            return ResponseEntity.ok().body(response);
+        }
+        List<DTOQuangCao> listqc = new ArrayList<>();
+        for (HopDong hopDong : list.getContent()) {
+            // System.out.println(hopDong.getQuangCao()+"awdo;jawdwajdojo");
+            if (hopDong.getQuangCao() == null) {
+                continue;
+            }
+            for (QuangCao qcc : hopDong.getQuangCao()) {
+                DTOQuangCao item = new DTOQuangCao();
+                item.setQuangcaoId(qcc.getQuangcao_id() + "");
+                item.setTieude(qcc.getTieude());
+                item.setStatus(qcc.getStatus() + "");
+                item.setUrl(qcc.getUrl());
+                item.setLink(qcc.getLink());
+                item.setNgaybd(formatDateTime(qcc.getHopDong().getNgayBatDauHD() + ""));
+                item.setNgaykt(formatDateTime(qcc.getHopDong().getNgayKetThucHD() + ""));
+                DTOGoiQC dtoGoiQC = new DTOGoiQC();
+                dtoGoiQC.setBgqc_id(qcc.getBgqc().getBanggiaqc_id() + "");
+                dtoGoiQC.setTengoi(qcc.getBgqc().getTengoi());
+                dtoGoiQC.setSongay(qcc.getBgqc().getSongay() + "");
+                dtoGoiQC.setGiagoi(formatToVND(qcc.getBgqc().getGiatien()));
+                item.setBgqc(dtoGoiQC);
+                DTOTaikhoan dtoTaikhoan = new DTOTaikhoan();
+                dtoTaikhoan.setTaikhoanId(qcc.getTaikhoan().getTaikhoan_id() + "");
+                dtoTaikhoan.setHovaten(qcc.getTaikhoan().getHovaten());
+                item.setTaikhoan(dtoTaikhoan);
+                listqc.add(item);
+            }
+
+        }
+
+        data.put("data", listqc);
+
+        Map<String, Object> phantrang = new HashMap<>();
+        phantrang.put("totalPage", String.valueOf(list.getTotalPages()));
+        phantrang.put("pageNumber", String.valueOf(list.getNumber()));
+        phantrang.put("pageSize", String.valueOf(list.getSize()));
+        phantrang.put("totalElements", String.valueOf(list.getTotalElements()));
+        data.put("phantrang", phantrang);
+
+        ApiResponse<?> response = new ApiResponse<>(true, "Lay data thanh cong", data);
+        return ResponseEntity.ok().body(response);
+
+    }
+
+    @PostMapping("update/quangcao/status")
+    public ResponseEntity<?> updateqc(@RequestBody(required = false) DTOAdmin entity) {
+        // TODO: process POST request
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getADMINRole())) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (entity.getStatus() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getStatus().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (entity.getQuangcaoId() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getQuangcaoId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getQuangcaoId().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getQuangcaoId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        int status = Integer.valueOf((entity.getStatus() + "").trim());
+        if (status < -1 || status > 2) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status khong hop le",
+                    "0 la het han, 1 la hoat dong, 2 la bi admin xoa");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        QuangCao qc = quangCaoRepository.findById(Long.valueOf(entity.getQuangcaoId())).orElse(null);
+        if (qc == null) {
+            ApiResponse<?> response = new ApiResponse<>(true, "Ko tim thay qc", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (qc.getStatus() == status) {
+            ApiResponse<?> response = new ApiResponse<>(true, "Cap nhat thanh cong :>>", null);
+            return ResponseEntity.ok().body(response);
+        }
+
+        qc.setStatus(status);
+        quangCaoRepository.save(qc);
+        ApiResponse<?> response = new ApiResponse<>(true, "Cap nhat thanh cong", null);
+        return ResponseEntity.ok().body(response);
+
+    }
 
 }
