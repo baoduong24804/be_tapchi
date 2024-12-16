@@ -217,8 +217,7 @@ public class EmailService {
                     + "</h1>" +
                     "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">" + content
                     + "</p>" +
-                    "          <a style=\"color: #212529; font-weight: bold;\" href=\"" + token
-                    + "\" class=\"button\">Reset Password</a>" +
+                    "          <span style=\"color: #212529; font-weight: bold;\">"+token+"</span>" +
                     "          <p style=\"font-family: Arial, Helvetica; font-size: 14px; color: #5B6987;\">Hỗ trợ 24/7, gửi email qua <a style=\"color: #007BFF;\" href=\"mailto:dthaibao2482004@gmail.com\">dthaibao2482004@gmail.com</a></p>"
                     +
                     "        </td>" +

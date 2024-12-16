@@ -99,6 +99,9 @@ public class BGQCController {
         if (bgqc1 != null) {
             for (QuangCao qc : bgqc1.getQuangCao()) {
                 // System.out.println(qc.getHopDong().getNgayKetThucHD());
+                if(qc.getHopDong() == null){
+                    continue;
+                }
                 if (qc.getHopDong().getStatus() == 1) {
                     if (isTimeOverdue(qc.getHopDong().getNgayKetThucHD().toString())) {
                         qc1 = 1;
@@ -114,6 +117,9 @@ public class BGQCController {
         if (bgqc2 != null) {
             for (QuangCao qc : bgqc2.getQuangCao()) {
                 // System.out.println(qc.getHopDong().getNgayKetThucHD());
+                if(qc.getHopDong() == null){
+                    continue;
+                }
                 if (qc.getHopDong().getStatus() == 1) {
                     if (isTimeOverdue(qc.getHopDong().getNgayKetThucHD().toString())) {
                         qc2 = 1;
@@ -128,6 +134,9 @@ public class BGQCController {
         BangGiaQC bgqc3 = bangGiaQCRepository.findById(Long.valueOf(3)).orElse(null);
         if (bgqc3 != null) {
             for (QuangCao qc : bgqc3.getQuangCao()) {
+                if(qc.getHopDong() == null){
+                    continue;
+                }
                 // System.out.println(qc.getHopDong().getNgayKetThucHD());
                 if (qc.getHopDong().getStatus() == 1) {
                     if (isTimeOverdue(qc.getHopDong().getNgayKetThucHD().toString())) {

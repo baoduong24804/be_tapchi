@@ -10,6 +10,7 @@ import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOGoiQC;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOQuangCao;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTORoles;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOTaikhoan;
+import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOTaikhoanCQ;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOTheloai;
 import com.be.tapchi.pjtapchi.controller.admin.DTOUser.DTOResponse.DTOUser;
 import com.be.tapchi.pjtapchi.controller.apiResponse.ApiResponse;
@@ -686,9 +687,9 @@ public class AdminController {
         }
 
         int status = Integer.valueOf((entity.getStatus() + "").trim());
-        if (status < -1 || status > 2) {
+        if (status < 0 || status > 3) {
             ApiResponse<?> response = new ApiResponse<>(false, "Status khong hop le",
-                    "0 la het han, 1 la hoat dong, 2 la bi admin xoa");
+                    "0 la het han, 1 cho duyet, 2 admin da duyet");
             return ResponseEntity.badRequest().body(response);
         }
 
@@ -706,6 +707,130 @@ public class AdminController {
         qc.setStatus(status);
         quangCaoRepository.save(qc);
         ApiResponse<?> response = new ApiResponse<>(true, "Cap nhat thanh cong", null);
+        return ResponseEntity.ok().body(response);
+
+    }
+
+    @PostMapping("get/user/capquyen")
+    public ResponseEntity<?> capquyen(@RequestBody(required = false) DTOAdmin entity,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+        // TODO: process POST request
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getADMINRole())) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Taikhoan> list = taiKhoanRepository.findByStatus(2, pageable);
+        if (list == null) {
+            ApiResponse<?> response = new ApiResponse<>(true, "Data null", null);
+            return ResponseEntity.ok().body(response);
+        }
+
+        Map<Object, Object> data = new HashMap<>();
+        if (list.getContent().size() <= 0) {
+            data.put("data", null);
+            ApiResponse<?> response = new ApiResponse<>(true, "Ko co du lieu", null);
+            return ResponseEntity.ok().body(response);
+        }
+
+        List<DTOTaikhoanCQ> ldata = new ArrayList<>();
+
+        for (Taikhoan taikhoan : list) {
+            DTOTaikhoanCQ tkcq = new DTOTaikhoanCQ();
+            tkcq.setTaikhoanId(taikhoan.getTaikhoan_id() + "");
+            tkcq.setHovaten(taikhoan.getHovaten());
+            tkcq.setEmail(taikhoan.getEmail());
+            tkcq.setStatus(taikhoan.getStatus() + "");
+            ldata.add(tkcq);
+        }
+
+        data.put("data", ldata);
+
+        Map<String, Object> phantrang = new HashMap<>();
+        phantrang.put("totalPage", String.valueOf(list.getTotalPages()));
+        phantrang.put("pageNumber", String.valueOf(list.getNumber()));
+        phantrang.put("pageSize", String.valueOf(list.getSize()));
+        phantrang.put("totalElements", String.valueOf(list.getTotalElements()));
+        data.put("phantrang", phantrang);
+
+        ApiResponse<?> response = new ApiResponse<>(true, "Lay data thanh cong", data);
+        return ResponseEntity.ok().body(response);
+
+    }
+
+    @PostMapping("update/user/capquyen")
+    public ResponseEntity<?> xacnhancapquyen(@RequestBody(required = false) DTOAdmin entity) {
+        // TODO: process POST request
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (!jwtUtil.checkRolesFromToken(entity.getToken(), ManageRoles.getADMINRole())) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Can admin", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (entity.getTaikhoanId() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getTaikhoanId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getTaikhoanId().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "getTaikhoanId trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (entity.getStatus() == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+        if (entity.getStatus().isEmpty()) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status trong", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        int status = Integer.valueOf((entity.getStatus() + "").trim());
+        if (status < 0 || status > 1) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Status khong hop le",
+                    "0: ko chap nhan, 1: chap nhan");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+
+
+        Taikhoan tk = null;
+        tk = taiKhoanRepository.findById(Long.valueOf((entity.getTaikhoanId() + "").trim())).orElse(null);
+        if (tk == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Khong tim thay tk", "");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (status == 0) {
+            tk.setStatus(1);
+            taiKhoanRepository.save(tk);
+            ApiResponse<?> response = new ApiResponse<>(true, "Ko cho phep quyen", null);
+            return ResponseEntity.ok().body(response);
+        }
+
+        Set<Vaitro> svaitro = tk.getVaitro();
+        Vaitro vt = vaiTroRepository.findBytenrole(ManageRoles.getAUTHORRole().toString());
+        if (vt != null) {
+            svaitro.add(vt);
+        }
+        tk.setStatus(1);
+        tk.setVaitro(svaitro);
+
+
+
+        taiKhoanRepository.save(tk);
+
+        ApiResponse<?> response = new ApiResponse<>(true, "Cap quyen thanh cong", null);
         return ResponseEntity.ok().body(response);
 
     }

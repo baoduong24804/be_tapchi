@@ -11,6 +11,7 @@ import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Thich;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
 import com.be.tapchi.pjtapchi.userRole.ManageRoles;
 
 import java.time.LocalDate;
@@ -53,7 +54,41 @@ public class AuthorController {
         }
 
         // System.out.println(formattedDate); // Output: 27-11-2024
-        
+
+    }
+
+    @Autowired
+    private TaiKhoanRepository taiKhoanRepository;
+
+    @PostMapping("capquyen/author")
+    public ResponseEntity<?> capquyenauthor(@RequestBody(required = false) DTOAuthor entity) {
+        if (jwtUtil.checkTokenAndTaiKhoan(entity.getToken()) == false) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tài khoản không hợp lệ", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        // if (!jwtUtil.checkRolesFromToken(entity.getToken(),
+        // ManageRoles.getCUSTOMERRole(), ManageRoles.getAUTHORRole())) {
+        // ApiResponse<?> response = new ApiResponse<>(false, "Can customer", null);
+        // return ResponseEntity.badRequest().body(response);
+        // }
+
+        Taikhoan tk = null;
+        tk = jwtUtil.getTaikhoanFromToken(entity.getToken());
+        if (tk == null) {
+            ApiResponse<?> response = new ApiResponse<>(false, "Tai khoan null", null);
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (tk.getStatus() == 1) {
+            tk.setStatus(2);
+            taiKhoanRepository.save(tk);
+            ApiResponse<?> response = new ApiResponse<>(true, "Xin cap quyen author thanh cong", null);
+            return ResponseEntity.ok().body(response);
+        }
+
+        ApiResponse<?> response = new ApiResponse<>(true, "Tai khoan dang khong hop le", null);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @PostMapping("get/baibao")

@@ -1,5 +1,7 @@
 package com.be.tapchi.pjtapchi.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +30,10 @@ public interface TaiKhoanRepository extends JpaRepository<Taikhoan,Long>{
     boolean existsByGoogleId(String google_id);
 
     List<Taikhoan> findByVaitro(Set<Vaitro> vaitro);
+
+    Page<Taikhoan> findByStatus(int status, Pageable pageable);
+
+    
 
 
 }
