@@ -36,7 +36,7 @@ public class OrderController {
     private final HopDongService hopDongService;
     private final QuangCaoService quangCaoService;
     private final BangGiaQCService bgqcService;
-    String baseURL = "congnghetoday.click"; // URL của BE
+    String baseURL = "http://localhost:9000"; // URL của BE
     @Autowired
     HoaDonService hoaDonService;
     @Autowired
@@ -206,7 +206,7 @@ public class OrderController {
                     "hopDong", hopDong
             );
 
-            String redirectURL = "http:/congnghetoday.com/order/success?" +
+            String redirectURL = "http://localhost:5173/order/success?" +
                     "code=" + code +
                     "&id=" + id +
                     "&cancel=" + cancel +
@@ -252,7 +252,7 @@ public class OrderController {
                     "hopDong", hopDongService.getHopDongById(hopdongId)
             );
 
-            String redirectURL = "http://congnghetoday.com/order/cancel?" +
+            String redirectURL = "http://localhost:5173/order/cancel?" +
                     "code=" + code +
                     "&id=" + id +
                     "&cancel=" + cancel +
