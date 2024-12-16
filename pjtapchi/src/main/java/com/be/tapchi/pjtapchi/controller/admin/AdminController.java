@@ -20,6 +20,7 @@ import com.be.tapchi.pjtapchi.controller.baibao.model.TaikhoanED;
 import com.be.tapchi.pjtapchi.jwt.JwtUtil;
 import com.be.tapchi.pjtapchi.model.Baibao;
 import com.be.tapchi.pjtapchi.model.DanhMuc;
+import com.be.tapchi.pjtapchi.model.HoaDon;
 import com.be.tapchi.pjtapchi.model.HopDong;
 import com.be.tapchi.pjtapchi.model.Kiemduyet;
 import com.be.tapchi.pjtapchi.model.QuangCao;
@@ -27,6 +28,7 @@ import com.be.tapchi.pjtapchi.model.Taikhoan;
 import com.be.tapchi.pjtapchi.model.Thich;
 import com.be.tapchi.pjtapchi.model.Vaitro;
 import com.be.tapchi.pjtapchi.repository.BaiBaoRepository;
+import com.be.tapchi.pjtapchi.repository.HoaDonRepository;
 import com.be.tapchi.pjtapchi.repository.HopDongRepository;
 import com.be.tapchi.pjtapchi.repository.QuangCaoRepository;
 import com.be.tapchi.pjtapchi.repository.TaiKhoanRepository;
@@ -61,6 +63,9 @@ public class AdminController {
 
     @Autowired
     private TaiKhoanRepository taiKhoanRepository;
+
+    @Autowired
+    private HoaDonRepository hoaDonRepository;
 
     @Autowired
     private BaiBaoRepository baiBaoRepository;
@@ -392,6 +397,24 @@ public class AdminController {
         long sltaikhoan = taiKhoanRepository.count();
         long slquangcao = quangCaoRepository.count();
         double doanhthu = 0.0;
+        List<HoaDon> list = null;
+        try {
+            list = hoaDonRepository.findAll();
+        } catch (Exception e) {
+            // TODO: handle exception
+            
+        }
+        if(list != null){
+            for (HoaDon hd : list) {
+                if(hd.getTongTien() == null){
+                    continue;
+                }
+                doanhthu = doanhthu + hd.getTongTien();
+            }
+        }
+
+        
+        
 
         Map<Object, Object> data = new HashMap<>();
 
